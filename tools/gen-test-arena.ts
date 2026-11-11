@@ -1,6 +1,6 @@
 /**
  * Generates data/maps/test-arena.json: a 40x30 Tiled map (32 px tiles) using the LPC terrain atlas,
- * with grass, a crossing dirt path, a stone border and six 2x2 stone pillars.
+ * with grass, a crossing dirt path, a stone border and eight 2x2 stone pillars off the paths.
  * Run with: npx tsx tools/gen-test-arena.ts
  */
 import { writeFileSync } from 'node:fs';
@@ -17,8 +17,8 @@ const GRASS_VARIANTS = [gid(21, 5), gid(22, 5), gid(23, 5)];
 const DIRT = gid(16, 3);
 const WALL = gid(17, 24);
 const PILLARS: [number, number][] = [
-  [8, 7], [19, 7], [30, 7],
-  [8, 21], [19, 21], [30, 21],
+  [8, 7], [13, 7], [26, 7], [31, 7],
+  [8, 21], [13, 21], [26, 21], [31, 21],
 ];
 
 /** Small deterministic PRNG so the map is identical on every run. */

@@ -74,7 +74,13 @@ function startGame(conn: Connection, name: string, host: WorkerHostHandle | null
     onChat: (text) => session.sendChat(text),
     onLeave: () => backToMenu(),
   });
-  game.scene.start('game', { session, map, selfName: name, isTyping: () => overlay.chatOpen });
+  game.scene.start('game', {
+    session,
+    mapId: MAP_ID,
+    mapJson,
+    self: { name, classId: 'warrior', appearance: defaultAppearance('warrior') },
+    isTyping: () => overlay.chatOpen,
+  });
 }
 
 function onPlay(rawName: string): void {

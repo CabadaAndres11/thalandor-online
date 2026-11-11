@@ -103,8 +103,8 @@ test('renders self from prediction and others from snapshots; emits joined, left
   expect(received.at(-1)).toEqual({ t: 'input', input: { seq: 1, moveX: 1, moveY: 0, aimX: 0, aimY: 0 } });
   clock += 1000;
   const r = session.renderState(clock);
-  expect(r.self).toEqual({ x: 56, y: 50 });
-  expect(r.others.get(2)).toEqual({ name: 'Beto', pos: { x: 10, y: 10 } });
+  expect(r.self).toEqual({ pos: { x: 56, y: 50 }, facing: 3, moving: true });
+  expect(r.others.get(2)).toMatchObject({ name: 'Beto', pos: { x: 10, y: 10 }, facing: 2, moving: false });
   expect(r.others.has(1)).toBe(false);
   await send({ t: 'left', playerId: 3, name: 'Cira' });
   await send({ t: 'chat', from: 'Beto', text: 'hola' });
@@ -113,4 +113,51 @@ test('renders self from prediction and others from snapshots; emits joined, left
   session.sendChat('  hey ');
   await vi.runAllTimersAsync();
   expect(received.at(-1)).toEqual({ t: 'chat', text: 'hey' });
+});
+
+test('hello carries character', async () => {
+  const { received } = await setup();
+  expect(received[0]).toMatchObject({ t: 'hello', character: { name: 'Ana', classId: 'warrior' } });
+});
+
+test('roster event and others carry classId/appearance', async () => {
+  const { session, send } = await setup();
+  const rosters: unknown[] = [];
+  session.on('roster', (p) => rosters.push(p));
+  await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
+  const mageLook = { body: 'female', skin: 'olive', hairStyle: 'long', hairColor: 'blonde' };
+  const roster = [
+    { id: 1, name: 'Ana', classId: 'warrior' as const, appearance: netChar('Ana').appearance },
+    { id: 2, name: 'Beto', classId: 'mage' as const, appearance: mageLook },
+  ];
+  await send({ t: 'roster', players: roster });
+  await send({ t: 'snapshot', s: { tick: 1, players: [{ id: 2, name: 'Beto', x: 10, y: 10, lastInputSeq: 0, facing: 1, moving: true }] } });
+  expect(rosters).toEqual([{ players: roster }]);
+  expect(session.renderState(clock + 1000).others.get(2)).toEqual({
+    name: 'Beto',
+    pos: { x: 10, y: 10 },
+    facing: 1,
+    moving: true,
+    classId: 'mage',
+    appearance: mageLook,
+  });
+});
+
+test('self facing follows last input: movement first, then aim when still', async () => {
+  const { session, send } = await setup();
+  await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
+  await send({ t: 'snapshot', s: { tick: 1, players: [{ id: 1, name: 'Ana', x: 50, y: 50, lastInputSeq: 0, facing: 2, moving: false }] } });
+  session.sendInput({ moveX: 0, moveY: -1, aimX: 0, aimY: 0 });
+  expect(session.renderState(clock).self).toMatchObject({ facing: 0, moving: true });
+  session.sendInput({ moveX: 0, moveY: 0, aimX: 0, aimY: 44 });
+  expect(session.renderState(clock).self).toMatchObject({ facing: 1, moving: false });
+});
+
+test('selfLocation returns authoritative snapshot position, not the prediction', async () => {
+  const { session, send } = await setup();
+  expect(session.selfLocation()).toBeNull();
+  await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
+  await send({ t: 'snapshot', s: { tick: 1, players: [{ id: 1, name: 'Ana', x: 50, y: 70, lastInputSeq: 0, facing: 2, moving: false }] } });
+  session.sendInput({ moveX: 1, moveY: 0, aimX: 0, aimY: 0 });
+  expect(session.selfLocation()).toEqual({ x: 50, y: 70 });
 });

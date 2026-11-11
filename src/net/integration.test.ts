@@ -64,7 +64,7 @@ test('predicted position converges to host within 0.5px after inputs stop', asyn
   moving = false;
   await vi.advanceTimersByTimeAsync(1000);
   for (const c of clients) {
-    const self = c.renderState(Date.now()).self!;
+    const self = c.renderState(Date.now()).self!.pos;
     const hostPos = world.getPlayer(c.playerId!)!.pos;
     expect(Math.abs(self.x - hostPos.x)).toBeLessThan(0.5);
     expect(Math.abs(self.y - hostPos.y)).toBeLessThan(0.5);
