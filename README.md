@@ -4,7 +4,7 @@ RPG de acción 2D en pixel art, con vista cenital, para jugar online con hasta 4
 
 ## Cómo jugar
 
-1. Abre el juego en el navegador (Chrome, Edge o Firefox en PC). El enlace de GitHub Pages se añadirá aquí al publicar.
+1. Abre **https://cabadaandres11.github.io/thalandor-online/** en el navegador (Chrome, Edge o Firefox en PC).
 2. Escribe tu nombre y pulsa **Jugar**. Entras a tu propia partida.
 3. Para jugar con amigos, pulsa **Abrir grupo** (arriba a la derecha) y pásales el código de 6 caracteres. Al pulsar el código se copia.
 4. Tus amigos escriben el código en **Código de grupo** y pulsan **Unirse a un amigo**.

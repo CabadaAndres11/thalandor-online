@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 0.3 |
+| Versión del documento | 0.4 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.1.0 (Plan 1: fundaciones y red) |
 
@@ -359,7 +359,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ---
 
-## 13. Distribución **[En curso]** (workflow listo; falta publicar el repositorio)
+## 13. Distribución **[Implementado]** (https://cabadaandres11.github.io/thalandor-online/)
 
 - **Repositorio:** **público** en GitHub, desplegado automáticamente en **GitHub Pages**.
 - **Versión visible:** cada versión del juego lleva su número en la pantalla de título.
@@ -517,3 +517,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 0.1 | 2026-11-11 | Primera versión del GDD a partir de la sesión de diseño inicial. |
 | 0.2 | 2026-11-11 | Misiones en la tecla J. Pasa de 3 a 4 zonas (bosque, desierto, cementerio, volcán) más la ciudad. Anexo A de habilidades. La historia queda como guion conjunto. |
 | 0.3 | 2026-11-11 | Plan 1 implementado: simulación host-autoritativa en Web Worker, predicción e interpolación, grupo por código con PeerJS/WebRTC, chat, mapa de prueba y despliegue en GitHub Pages. Las entradas se envían a 20/s con un temporizador fijo, independiente de los FPS. |
+| 0.4 | 2026-11-11 | Juego publicado en GitHub Pages (repositorio público CabadaAndres11/thalandor-online). Primera prueba manual del equipo en solitario y en grupo: correcta. |
