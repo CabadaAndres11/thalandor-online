@@ -61,5 +61,7 @@
   "name.invalidChars": "Usa solo letras, números, espacios, guiones y apóstrofos",
   "name.duplicate": "Ya tienes un personaje con ese nombre",
   "import.invalid": "El archivo no es un personaje válido de Thalandor",
-  "import.future": "Este personaje es de una versión más nueva del juego. Actualiza la página."
+  "import.future": "Este personaje es de una versión más nueva del juego. Actualiza la página.",
+  "import.full": "Ya tienes 8 personajes. Borra uno para importar otro.",
+  "import.replaceConfirm": "Ya tienes este personaje ({name}). ¿Sustituirlo por el del archivo?"
 }
