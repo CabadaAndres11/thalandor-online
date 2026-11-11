@@ -1,56 +1,7 @@
-import { expect, test, type Browser, type BrowserContext, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { closeContextsAfterEach, holdKey, hostGame, joinGame, readyToJoin } from './helpers';
 
-interface Hooks {
-  playerCount(): number;
-  selfPos(): { x: number; y: number } | null;
-  others(): { name: string; x: number; y: number }[];
-  game: { loop: { sleep(): void } };
-}
-declare global {
-  interface Window {
-    __thalandor: Hooks;
-  }
-}
-
-const contexts: BrowserContext[] = [];
-test.afterEach(async () => {
-  await Promise.all(contexts.splice(0).map((c) => c.close()));
-});
-
-async function openMenu(browser: Browser): Promise<Page> {
-  const ctx = await browser.newContext();
-  contexts.push(ctx);
-  const page = await ctx.newPage();
-  await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Jugar' })).toBeVisible();
-  return page;
-}
-
-async function hostGame(browser: Browser, name: string): Promise<{ page: Page; code: string }> {
-  const page = await openMenu(browser);
-  await page.getByLabel('Nombre').fill(name);
-  await page.getByRole('button', { name: 'Jugar' }).click();
-  await page.getByRole('button', { name: 'Abrir grupo' }).click();
-  const groupBtn = page.locator('[data-testid=group]');
-  await expect(groupBtn).toHaveText(/Código: [A-Z2-9]{6}/, { timeout: 15_000 });
-  const code = (await groupBtn.getAttribute('data-code'))!;
-  return { page, code };
-}
-
-async function joinGame(browser: Browser, name: string, code: string): Promise<Page> {
-  const page = await openMenu(browser);
-  await page.getByLabel('Nombre').fill(name);
-  await page.getByLabel('Código de grupo').fill(code);
-  await page.getByRole('button', { name: 'Unirse a un amigo' }).click();
-  await expect(page.getByRole('button', { name: 'Salir' })).toBeVisible({ timeout: 15_000 });
-  return page;
-}
-
-async function holdKey(page: Page, key: string, ms: number): Promise<void> {
-  await page.keyboard.down(key);
-  await page.waitForTimeout(ms);
-  await page.keyboard.up(key);
-}
+closeContextsAfterEach();
 
 test('four players join one group and see each other', async ({ browser }) => {
   const { page: host, code } = await hostGame(browser, 'Ana');
@@ -66,7 +17,7 @@ test('four players join one group and see each other', async ({ browser }) => {
 test('fifth player is rejected because the group is full', async ({ browser }) => {
   const { code } = await hostGame(browser, 'Ana');
   for (const name of ['Beto', 'Cira', 'Dani']) await joinGame(browser, name, code);
-  const fifth = await openMenu(browser);
+  const fifth = await readyToJoin(browser, 'Eva');
   await fifth.getByLabel('Código de grupo').fill(code);
   await fifth.getByRole('button', { name: 'Unirse a un amigo' }).click();
   await expect(fifth.getByText('La partida está llena (máximo 4 jugadores)')).toBeVisible({ timeout: 15_000 });
@@ -92,14 +43,14 @@ test('host tab throttled keeps world ticking', async ({ browser }) => {
 });
 
 test('wrong code shows room not found', async ({ browser }) => {
-  const page = await openMenu(browser);
+  const page = await readyToJoin(browser, 'Zoe');
   await page.getByLabel('Código de grupo').fill('ZZZZZZ');
   await page.getByRole('button', { name: 'Unirse a un amigo' }).click();
   await expect(page.getByText('No se encontró la partida')).toBeVisible({ timeout: 10_000 });
 });
 
 test('bad code format shows a hint without connecting', async ({ browser }) => {
-  const page = await openMenu(browser);
+  const page = await readyToJoin(browser, 'Zoe');
   await page.getByLabel('Código de grupo').fill('ABC10');
   await page.getByRole('button', { name: 'Unirse a un amigo' }).click();
   await expect(page.getByText('El código debe tener 6 caracteres')).toBeVisible();
@@ -120,8 +71,7 @@ test('chat message reaches all players', async ({ browser }) => {
 
 test('pressing Enter twice in the code field joins only once', async ({ browser }) => {
   const { page: host, code } = await hostGame(browser, 'Ana');
-  const guest = await openMenu(browser);
-  await guest.getByLabel('Nombre').fill('Beto');
+  const guest = await readyToJoin(browser, 'Beto');
   await guest.getByLabel('Código de grupo').fill(code);
   await guest.getByLabel('Código de grupo').press('Enter');
   await guest.getByLabel('Código de grupo').press('Enter');

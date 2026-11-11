@@ -5,9 +5,9 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 0.5 |
+| Versión del documento | 0.6 |
 | Fecha | 2026-11-11 |
-| Versión del juego | 0.1.0 (Plan 1: fundaciones y red) |
+| Versión del juego | 0.2.0 (Plan 2: personajes y estilo visual) |
 
 ---
 
@@ -63,7 +63,7 @@ Busca la sensación de un MMO clásico (personajes persistentes, clases con role
 - **Interpolación:** el resto de entidades se dibujan suavizadas entre instantáneas.
 - **El host también juega:** usa la misma interfaz de cliente, conectada a la simulación local por un transporte en memoria.
 
-### 2.3 Propiedad de los datos **[Diseñado]** (llega con el Plan 3)
+### 2.3 Propiedad de los datos **[En curso]** (el personaje vive en el PC y viaja al host; que el host devuelva experiencia y botín llega con el combate)
 - **El personaje vive en el PC de su jugador:** nivel, atributos, talentos, equipo, inventario, oro, misiones y última ubicación.
 - **Al unirse** a una partida, el invitado envía su personaje al host.
 - **El host devuelve el personaje actualizado** periódicamente (cada 30 s), al cambiar de zona y al salir. El cliente lo guarda.
@@ -88,7 +88,7 @@ La interfaz `Transport` permite cambiar en el futuro a un servidor dedicado sin 
 4. Si la conexión directa falla, se reintenta con un relay TURN gratuito con límite de uso. El plan B documentado es una VPN gratuita tipo Tailscale.
 5. **Control de versiones:** si el host y el invitado tienen versiones distintas, se rechaza la conexión con un aviso para recargar.
 
-### 2.6 Rendimiento y escalabilidad del contenido **[En curso]** (worker implementado; carga por zonas en el Plan 5)
+### 2.6 Rendimiento y escalabilidad del contenido **[En curso]** (worker implementado; carga por zonas en el Plan 6, Mundo y misiones)
 - **Carga por zona:** solo se cargan los assets de la zona actual, y los de la anterior se liberan.
 - **Simulación multizona:** el host simula solo las zonas con al menos un jugador presente.
 - **Memoria:** en el bucle de juego se reutilizan objetos (pools) para evitar tirones por la recolección de basura.
@@ -204,7 +204,7 @@ final = (base de clase + atributos repartidos + suma de bonos planos) × (1 + su
   - En grupo, la experiencia de cada muerte se reparte entre los miembros cercanos, con un bonus por jugar en grupo.
 - **Curva de experiencia:** definida en `data/balance.json`.
 
-### 4.8 Creación de personaje
+### 4.8 Creación de personaje **[Implementado]**
 - Hasta **8 personajes** por jugador.
 - Se eligen nombre, clase y apariencia.
 - **Apariencia (capas LPC):** tipo de cuerpo (masculino o femenino), tono de piel, peinado y color de pelo.
@@ -304,7 +304,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ## 9. Interfaz y flujo
 
-### 9.1 Flujo **[En curso]** (jugar, abrir grupo, unirse y salir; sin selección de personaje)
+### 9.1 Flujo **[En curso]** (selección y creación de personaje, jugar, abrir grupo, unirse y salir)
 1. **Pantalla de título.**
 2. **Selección de personaje:** opciones de crear, borrar, exportar e importar personajes.
 3. **Jugar:** entra al mundo como host de su propia partida.
@@ -330,7 +330,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ---
 
-## 10. Guardado
+## 10. Guardado **[Implementado]** (IndexedDB, autoguardado de posición, exportar e importar, migraciones)
 
 - **Autoguardado:** cada 30 s, al cambiar de zona y al salir.
 - **Almacenamiento:** en **IndexedDB**.
@@ -339,7 +339,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ---
 
-## 11. Arte y audio
+## 11. Arte y audio **[En curso]** (personajes y tiles LPC; falta audio)
 
 - **Estilo:** pixel art **LPC (Liberated Pixel Cup)**. Personajes de 64×64 por capas (cuerpo, pelo, ropa, armas) y tiles de **32×32**.
 - **Animaciones LPC:** andar, tajo, estocada, lanzar hechizo, disparar, recibir daño y morir, en 4 direcciones.
@@ -523,3 +523,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 0.3 | 2026-11-11 | Plan 1 implementado: simulación host-autoritativa en Web Worker, predicción e interpolación, grupo por código con PeerJS/WebRTC, chat, mapa de prueba y despliegue en GitHub Pages. Las entradas se envían a 20/s con un temporizador fijo, independiente de los FPS. |
 | 0.4 | 2026-11-11 | Juego publicado en GitHub Pages (repositorio público CabadaAndres11/thalandor-online). Primera prueba manual del equipo en solitario y en grupo: correcta. |
 | 0.5 | 2026-11-11 | Arte: se elige LPC (capas, 64×64, tiles de 32). Apariencia: cuerpo, piel, peinado y color de pelo. Reglas de nombre. Nuevo orden de planes: el Plan 2 pasa a ser personajes y estilo visual, antes que el combate. |
+| 0.6 | 2026-11-11 | Plan 2 implementado: creación y selección de hasta 8 personajes con arte LPC por capas (pieles y pelo por recoloreado de paleta), guardado en IndexedDB con autoguardado y reaparición, exportar e importar, tiles de 32 px y mapa de prueba LPC. El explorador lleva carcaj al andar; el arco llegará con las animaciones de combate. |

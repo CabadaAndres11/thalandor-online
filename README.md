@@ -5,9 +5,11 @@ RPG de acción 2D en pixel art, con vista cenital, para jugar online con hasta 4
 ## Cómo jugar
 
 1. Abre **https://cabadaandres11.github.io/thalandor-online/** en el navegador (Chrome, Edge o Firefox en PC).
-2. Escribe tu nombre y pulsa **Jugar**. Entras a tu propia partida.
+2. Crea tu personaje: nombre, clase y apariencia. Puedes tener hasta 8. Selecciónalo y pulsa **Jugar** para entrar en tu propia partida.
 3. Para jugar con amigos, pulsa **Abrir grupo** (arriba a la derecha) y pásales el código de 6 caracteres. Al pulsar el código se copia.
 4. Tus amigos escriben el código en **Código de grupo** y pulsan **Unirse a un amigo**.
+
+**Tus personajes** se guardan en tu navegador y reapareces donde los dejaste. Con **Exportar** guardas una copia en un archivo, que también sirve para llevarlo a otro PC; con **Importar** la recuperas.
 
 **Controles:** WASD para moverse y Enter para abrir o enviar el chat (Esc lo cierra).
 
@@ -31,6 +33,14 @@ npm run build      # build de producción en dist/
 ```
 
 Si se cambia el mapa de prueba, se regenera con `npx tsx tools/gen-test-arena.ts`.
+
+### Arte LPC
+
+El arte de personajes y tiles procede de [Liberated Pixel Cup](https://lpc.opengameart.org/), con licencias CC-BY-SA, OGA-BY o GPL según cada pieza; la atribución completa está en [CREDITS.md](CREDITS.md). Las capas usadas se listan en `tools/lpc-selection.json`. Para reimportarlas después de cambiar esa lista:
+
+```bash
+npx tsx tools/import-lpc.ts <clon del repo LPC> <carpeta con atlas/terrain_atlas.png>
+```
 
 ## Estructura
 
