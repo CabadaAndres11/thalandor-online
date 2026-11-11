@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 0.4 |
+| Versión del documento | 0.5 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.1.0 (Plan 1: fundaciones y red) |
 
@@ -206,7 +206,10 @@ final = (base de clase + atributos repartidos + suma de bonos planos) × (1 + su
 
 ### 4.8 Creación de personaje
 - Hasta **8 personajes** por jugador.
-- Se eligen nombre, clase y apariencia (variaciones de paleta del sprite de la clase).
+- Se eligen nombre, clase y apariencia.
+- **Apariencia (capas LPC):** tipo de cuerpo (masculino o femenino), tono de piel, peinado y color de pelo.
+- **Ropa inicial:** la decide la clase. Después cambia con el equipo, porque cada pieza equipada es una capa visible del personaje.
+- **Nombres:** de 2 a 16 caracteres (letras con tildes, números, espacios, `-` y `'`), sin repetir entre los personajes del mismo jugador.
 
 ---
 
@@ -338,11 +341,12 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ## 11. Arte y audio
 
-- **Estilo:** pixel art con un tamaño de tile único, por definir entre 16×16 y 32×32 según los packs elegidos.
+- **Estilo:** pixel art **LPC (Liberated Pixel Cup)**. Personajes de 64×64 por capas (cuerpo, pelo, ropa, armas) y tiles de **32×32**.
+- **Animaciones LPC:** andar, tajo, estocada, lanzar hechizo, disparar, recibir daño y morir, en 4 direcciones.
 - **Fuentes de assets:**
   - Solo packs gratuitos con licencia que permita uso y modificación (CC0, CC-BY o licencias equivalentes de itch.io), por ejemplo de Kenney, OpenGameArt o itch.io.
   - Antes de descargar, se proponen 2 o 3 packs candidatos de estilo coherente para su aprobación.
-- **Créditos:** cada asset queda registrado con autor y licencia en `CREDITS.md`.
+- **Créditos:** las licencias LPC (CC-BY-SA, OGA-BY o GPL) obligan a acreditar a cada autor. `CREDITS.md` se genera automáticamente con el script de importación a partir de los datos de licencia de cada capa usada.
 - **Gráficos provisionales:** se generan por código hasta tener los definitivos.
 - **Audio:** música y efectos de sonido de packs gratuitos con licencia libre.
 
@@ -518,3 +522,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 0.2 | 2026-11-11 | Misiones en la tecla J. Pasa de 3 a 4 zonas (bosque, desierto, cementerio, volcán) más la ciudad. Anexo A de habilidades. La historia queda como guion conjunto. |
 | 0.3 | 2026-11-11 | Plan 1 implementado: simulación host-autoritativa en Web Worker, predicción e interpolación, grupo por código con PeerJS/WebRTC, chat, mapa de prueba y despliegue en GitHub Pages. Las entradas se envían a 20/s con un temporizador fijo, independiente de los FPS. |
 | 0.4 | 2026-11-11 | Juego publicado en GitHub Pages (repositorio público CabadaAndres11/thalandor-online). Primera prueba manual del equipo en solitario y en grupo: correcta. |
+| 0.5 | 2026-11-11 | Arte: se elige LPC (capas, 64×64, tiles de 32). Apariencia: cuerpo, piel, peinado y color de pelo. Reglas de nombre. Nuevo orden de planes: el Plan 2 pasa a ser personajes y estilo visual, antes que el combate. |
