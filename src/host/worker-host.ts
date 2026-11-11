@@ -64,7 +64,7 @@ export function startWorkerHost(opts: WorkerHostOptions): WorkerHostHandle {
         closeCbs.forEach((cb) => cb());
       };
       endpoints.set(LOCAL_ID, { send: (d) => !closed && msgCbs.forEach((cb) => cb(d)), close: markClosed });
-      post({ k: 'open', connId: LOCAL_ID });
+      post({ k: 'open', connId: LOCAL_ID, local: true });
       return {
         id: LOCAL_ID,
         send: (data) => {

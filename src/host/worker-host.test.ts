@@ -55,6 +55,17 @@ test('remote connection via memory HostTransport is relayed', async () => {
   handle.stop();
 });
 
+test('local player survives long silence (throttled background tab)', async () => {
+  const { handle } = start();
+  const client = new ClientSession(handle.connectLocal(), { version: '0.1.0', name: 'Host', map, now: () => Date.now() });
+  let disconnected = false;
+  client.on('disconnected', () => (disconnected = true));
+  await vi.advanceTimersByTimeAsync(10_000); // no inputs at all for 10 s
+  expect(disconnected).toBe(false);
+  expect(client.playerId).toBe(1);
+  handle.stop();
+});
+
 test('stop terminates worker and closes connections', async () => {
   const { handle, worker } = start();
   const net = createMemoryNetwork();

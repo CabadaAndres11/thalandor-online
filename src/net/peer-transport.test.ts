@@ -27,7 +27,12 @@ class FakeConn extends Emitter {
   send(d: unknown) {
     this.sent.push(d);
   }
-  close() {
+  closeArgs: unknown[] = [];
+  dataChannel = { bufferedAmount: 0 };
+  close(opts?: unknown) {
+    this.closeArgs.push(opts);
+    // PeerJS 1.5.5: close({flush:true}) only sends a control message and returns without closing.
+    if ((opts as { flush?: boolean } | undefined)?.flush) return;
     if (this.closed) return;
     this.closed = true;
     this.open = false;
@@ -139,6 +144,29 @@ test('pairs rel and unrel connections into one Connection on host', async () => 
   accepted[0]!.onMessage((d) => got.push(d));
   rel.emit('data', 'hello');
   expect(got).toEqual(['hello']);
+});
+
+test('host-side close really closes both channels after pending data drains', async () => {
+  const hp = createPeerHost();
+  FakePeer.instances[0]!.emit('open', FakePeer.instances[0]!.id);
+  const host = await hp;
+  const accepted: Connection[] = [];
+  host.onConnection((c) => accepted.push(c));
+  const rel = new FakeConn('guest-1', 'rel', true);
+  const unrel = new FakeConn('guest-1', 'unrel', false);
+  FakePeer.instances[0]!.emit('connection', rel);
+  FakePeer.instances[0]!.emit('connection', unrel);
+  rel.doOpen();
+  unrel.doOpen();
+  rel.dataChannel.bufferedAmount = 100; // the reject message is still in flight
+  accepted[0]!.send('{"t":"reject","reason":"full"}', 'reliable');
+  accepted[0]!.close();
+  expect(rel.closed).toBe(false);
+  rel.dataChannel.bufferedAmount = 0;
+  await vi.advanceTimersByTimeAsync(200);
+  expect(rel.closed).toBe(true);
+  expect(unrel.closed).toBe(true);
+  expect(rel.sent).toEqual(['{"t":"reject","reason":"full"}']);
 });
 
 test('retries with a new code on unavailable-id', async () => {

@@ -22,6 +22,7 @@ interface Peer {
   name: string;
   lastSeen: number;
   gone: boolean;
+  noTimeout: boolean;
 }
 
 const clampAxis = (v: number) => (Number.isFinite(v) ? Math.max(-1, Math.min(1, v)) : 0);
@@ -44,8 +45,12 @@ export class HostSession {
     return n;
   }
 
-  attach(conn: Connection): void {
-    const peer: Peer = { conn, playerId: null, name: '', lastSeen: this.now(), gone: false };
+  /**
+   * noTimeout: for the host's own in-process player. Its keep-alive runs on main-thread timers,
+   * which browsers throttle hard in background tabs; it can never "drop off the network".
+   */
+  attach(conn: Connection, opts: { noTimeout?: boolean } = {}): void {
+    const peer: Peer = { conn, playerId: null, name: '', lastSeen: this.now(), gone: false, noTimeout: opts.noTimeout ?? false };
     this.peers.add(peer);
     conn.onMessage((raw) => this.onMessage(peer, raw));
     conn.onClose(() => this.drop(peer));
@@ -56,7 +61,7 @@ export class HostSession {
     const snap = encode({ t: 'snapshot', s: this.world.snapshot() });
     const t = this.now();
     for (const p of this.peers) {
-      if (t - p.lastSeen > CONN_TIMEOUT_MS) {
+      if (!p.noTimeout && t - p.lastSeen > CONN_TIMEOUT_MS) {
         p.conn.close();
         this.drop(p);
       } else if (p.playerId !== null) {

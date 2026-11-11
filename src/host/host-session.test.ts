@@ -158,3 +158,22 @@ test('drops silent connection after timeout', async () => {
   expect(ofType(b, 'left')).toEqual([{ t: 'left', playerId: 1, name: 'Ana' }]);
   expect(session.playerCount).toBe(1);
 });
+
+test('local connection is exempt from the silence timeout', async () => {
+  const { session } = setup();
+  const net = createMemoryNetwork();
+  const host = net.createHost('LOCAL1');
+  host.onConnection((c) => session.attach(c, { noTimeout: true }));
+  const p = net.createClient().connect('LOCAL1');
+  await vi.runAllTimersAsync();
+  const conn = await p;
+  let closed = false;
+  conn.onClose(() => (closed = true));
+  conn.send(encode({ t: 'hello', version: '0.1.0', name: 'Host' }), 'reliable');
+  await vi.runAllTimersAsync();
+  clock = 10 * 60 * 1000; // 10 minutes of silence (background tab, throttled timers)
+  session.tick();
+  await vi.runAllTimersAsync();
+  expect(closed).toBe(false);
+  expect(session.playerCount).toBe(1);
+});

@@ -47,11 +47,17 @@ function backToMenu(error?: string): void {
 function startGame(conn: Connection, name: string, host: WorkerHostHandle | null): void {
   const session = new ClientSession(conn, { version: GAME_VERSION, name, map });
   current = { session, host };
-  session.on('rejected', ({ reason }) => backToMenu(reason === 'version' ? t('error.version') : t('error.full')));
-  session.on('disconnected', () => backToMenu(t('error.hostClosed')));
-  session.on('chat', ({ from, text }) => overlay.addChat(from, text));
-  session.on('joined', ({ name: n }) => overlay.addChat(null, t('chat.joined', { name: n })));
-  session.on('left', ({ name: n }) => overlay.addChat(null, t('chat.left', { name: n })));
+  // Events from a session that is no longer current must never touch the UI or the active game.
+  const live =
+    <A extends unknown[]>(fn: (...a: A) => void) =>
+    (...a: A) => {
+      if (current?.session === session) fn(...a);
+    };
+  session.on('rejected', live(({ reason }) => backToMenu(reason === 'version' ? t('error.version') : t('error.full'))));
+  session.on('disconnected', live(() => backToMenu(t('error.hostClosed'))));
+  session.on('chat', live(({ from, text }) => overlay.addChat(from, text)));
+  session.on('joined', live(({ name: n }) => overlay.addChat(null, t('chat.joined', { name: n }))));
+  session.on('left', live(({ name: n }) => overlay.addChat(null, t('chat.left', { name: n }))));
   overlay.showGame({
     isHost: host !== null,
     onOpenGroup: async () => {
@@ -70,9 +76,13 @@ function onPlay(rawName: string): void {
   startGame(host.connectLocal(), playerName(rawName), host);
 }
 
+let joining = false;
+
 async function onJoin(rawName: string, rawCode: string): Promise<void> {
+  if (joining || current) return; // e.g. Enter pressed twice in the code field
   const code = normalizeRoomCode(rawCode);
   if (!code) return overlay.setMenuError(t('error.badCode'));
+  joining = true;
   overlay.setMenuError('');
   overlay.setMenuBusy(true);
   try {
@@ -81,6 +91,8 @@ async function onJoin(rawName: string, rawCode: string): Promise<void> {
   } catch (e) {
     overlay.setMenuBusy(false);
     overlay.setMenuError(e instanceof TransportError && e.kind === 'room-not-found' ? t('error.roomNotFound') : t('error.timeout'));
+  } finally {
+    joining = false;
   }
 }
 

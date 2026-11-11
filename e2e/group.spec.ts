@@ -118,6 +118,21 @@ test('chat message reaches all players', async ({ browser }) => {
   }
 });
 
+test('pressing Enter twice in the code field joins only once', async ({ browser }) => {
+  const { page: host, code } = await hostGame(browser, 'Ana');
+  const guest = await openMenu(browser);
+  await guest.getByLabel('Nombre').fill('Beto');
+  await guest.getByLabel('Código de grupo').fill(code);
+  await guest.getByLabel('Código de grupo').press('Enter');
+  await guest.getByLabel('Código de grupo').press('Enter');
+  await expect(guest.getByRole('button', { name: 'Salir' })).toBeVisible({ timeout: 15_000 });
+  // Past the host's 5 s silence timeout: a ghost session would have been kicked by now.
+  await guest.waitForTimeout(7000);
+  expect(await host.evaluate(() => window.__thalandor.others().map((o) => o.name))).toEqual(['Beto']);
+  await expect(guest.getByRole('button', { name: 'Salir' })).toBeVisible();
+  await expect(host.locator('.chat-line', { hasText: 'Beto se ha unido' })).toHaveCount(1);
+});
+
 test('guest returns to menu when host leaves', async ({ browser }) => {
   const { page: host, code } = await hostGame(browser, 'Ana');
   const guest = await joinGame(browser, 'Beto', code);

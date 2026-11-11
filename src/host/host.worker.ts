@@ -71,7 +71,7 @@ export function createWorkerHandler(post: (m: WorkerToMain) => void, opts: { now
       case 'open': {
         const c = virtualConn(m.connId);
         conns.set(m.connId, c);
-        session?.attach(c);
+        session?.attach(c, { noTimeout: m.local === true });
         break;
       }
       case 'msg':

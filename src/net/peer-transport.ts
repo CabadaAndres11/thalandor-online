@@ -13,6 +13,8 @@ export interface PeerOpts {
 const REL = 'rel';
 const UNREL = 'unrel';
 const MAX_ID_ATTEMPTS = 3;
+const DRAIN_POLL_MS = 50;
+const DRAIN_TIMEOUT_MS = 1000;
 
 /** Signaling server settings: env vars point at a local server for E2E; default is the free public PeerJS cloud. */
 function peerOptions(opts: PeerOpts = {}): Partial<PeerOptions> {
@@ -63,10 +65,20 @@ function pairConnection(id: string, rel: DataConnection, unrel: DataConnection, 
     close() {
       if (closed) return;
       closed = true;
-      // Flush so a final message (e.g. a reject reason) still reaches the peer.
-      rel.close({ flush: true });
       unrel.close();
-      onClosed?.();
+      // Let a final reliable message (e.g. a reject reason) drain before closing. PeerJS's
+      // close({ flush: true }) does not close a 'raw' connection, so wait on bufferedAmount instead.
+      const started = Date.now();
+      const closeWhenDrained = () => {
+        const pending = (rel as { dataChannel?: { bufferedAmount?: number } }).dataChannel?.bufferedAmount ?? 0;
+        if (pending > 0 && Date.now() - started < DRAIN_TIMEOUT_MS) {
+          setTimeout(closeWhenDrained, DRAIN_POLL_MS);
+          return;
+        }
+        rel.close();
+        onClosed?.();
+      };
+      closeWhenDrained();
     },
   };
 }
