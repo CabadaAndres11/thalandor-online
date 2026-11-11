@@ -10,6 +10,7 @@ import {
   readCredits,
   readPalettes,
   renderCreditsMd,
+  stripColorChunks,
   type LpcSelection,
 } from './lpc-import-lib';
 
@@ -107,4 +108,26 @@ test('import fails when a selected sheet has no credit', () => {
   const out = mkdtempSync(join(tmpdir(), 'lpc-out-'));
   const bad: LpcSelection = { ...selection, hairStyles: [{ id: 'x', src: 'torso/unknown/walk.png', z: 1 }] };
   expect(() => importLpc({ repoDir: REPO, tilesDir: REPO, outRoot: out, selection: bad })).toThrow(/torso\/unknown\/walk\.png/);
+});
+
+function chunk(type: string, data: number[] = []): Buffer {
+  const len = Buffer.alloc(4);
+  len.writeUInt32BE(data.length);
+  return Buffer.concat([len, Buffer.from(type, 'ascii'), Buffer.from(data), Buffer.from([1, 2, 3, 4])]);
+}
+const SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+test('stripColorChunks removes colour-management chunks and keeps the image data', () => {
+  const png = Buffer.concat([SIG, chunk('IHDR', [0, 0, 0, 1]), chunk('cHRM', [9, 9]), chunk('gAMA', [7]), chunk('iCCP', [5]), chunk('sRGB', [0]), chunk('IDAT', [42, 43]), chunk('IEND')]);
+  const out = stripColorChunks(png);
+  expect(out.subarray(0, 8)).toEqual(SIG);
+  const s = out.toString('latin1');
+  for (const t of ['cHRM', 'gAMA', 'iCCP', 'sRGB']) expect(s).not.toContain(t);
+  for (const t of ['IHDR', 'IDAT', 'IEND']) expect(s).toContain(t);
+  expect(out.length).toBe(8 + chunk('IHDR', [0, 0, 0, 1]).length + chunk('IDAT', [42, 43]).length + chunk('IEND').length);
+});
+
+test('stripColorChunks leaves non-PNG data untouched', () => {
+  const data = Buffer.from('not a png');
+  expect(stripColorChunks(data)).toEqual(data);
 });

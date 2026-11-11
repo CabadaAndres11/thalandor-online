@@ -70,12 +70,14 @@ export class Screens {
       if (e.key === 'Enter' && !this.busy) this.handlers.onJoin(selected, code.value);
     };
     const exportBtn = button('btn small', t('select.export'), () => downloadCharacter(selected));
-    const del = button('btn small danger', t('select.delete'), async () => {
-      if (!confirm(t('select.deleteConfirm', { name: selected.name }))) return;
-      await this.store.delete(selected.id);
-      this.selectedId = null;
-      await this.showSelection();
-    });
+    const del: HTMLButtonElement = button('btn small danger', t('select.delete'), () =>
+      this.guarded(del, async () => {
+        if (!confirm(t('select.deleteConfirm', { name: selected.name }))) return;
+        await this.store.delete(selected.id);
+        this.selectedId = null;
+        await this.showSelection();
+      }),
+    );
     this.busyButtons = [play, join];
 
     const codeLabel = el('label', 'label', t('menu.code'));
@@ -94,7 +96,7 @@ export class Screens {
     file.onchange = () => {
       const f = file.files?.[0];
       file.value = '';
-      if (f) void this.importFile(f);
+      if (f) void this.guarded(importBtn, () => this.importFile(f));
     };
     const importBtn = button('btn', t('select.import'), () => file.click());
     const footer = el('div', 'row');
@@ -172,19 +174,21 @@ export class Screens {
       return l;
     };
 
-    const submit = button('btn primary', t('create.submit'), async () => {
-      const list = await this.store.list();
-      if (list.length >= MAX_CHARACTERS) return this.setError(t('import.full'));
-      const v = validateName(name.value, list.map((c) => c.name));
-      if (!v.ok) {
-        nameError.textContent = t(v.error);
-        return;
-      }
-      const c = createCharacter({ name: v.name, classId, appearance: { ...look } });
-      await this.store.put(c);
-      this.select(c.id);
-      await this.showSelection();
-    });
+    const submit: HTMLButtonElement = button('btn primary', t('create.submit'), () =>
+      this.guarded(submit, async () => {
+        const list = await this.store.list();
+        if (list.length >= MAX_CHARACTERS) return this.setError(t('import.full'));
+        const v = validateName(name.value, list.map((c) => c.name));
+        if (!v.ok) {
+          nameError.textContent = t(v.error);
+          return;
+        }
+        const c = createCharacter({ name: v.name, classId, appearance: { ...look } });
+        await this.store.put(c);
+        this.select(c.id);
+        await this.showSelection();
+      }),
+    );
     const back = button('btn', t('create.back'), () => void this.showSelection());
     void this.store.list().then((l) => (back.hidden = l.length === 0));
 
@@ -238,6 +242,24 @@ export class Screens {
     await this.store.put(plan.character);
     this.select(plan.character.id);
     await this.showSelection();
+  }
+
+  /**
+   * Runs a storage action at most once at a time (double clicks are ignored) and reports failures
+   * (quota exceeded, evicted storage) instead of failing silently.
+   */
+  private async guarded(btn: HTMLButtonElement, action: () => Promise<void>): Promise<void> {
+    if (btn.disabled) return;
+    btn.disabled = true;
+    try {
+      this.setError('');
+      await action();
+    } catch (e) {
+      console.warn('[screens] storage action failed', e);
+      this.setError(t('save.failed'));
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   private storageWarning(): HTMLElement {

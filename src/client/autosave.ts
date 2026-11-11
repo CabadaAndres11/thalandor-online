@@ -37,8 +37,11 @@ export class AutoSaver {
   async saveNow(): Promise<void> {
     const loc = this.opts.getLocation();
     if (!loc) return;
-    this.character = { ...this.character, lastLocation: { mapId: this.opts.mapId, x: loc.x, y: loc.y }, updatedAt: this.now() };
     try {
+      // Read-patch-write: another tab may have deleted or replaced (imported) this character meanwhile.
+      const stored = await this.opts.store.get(this.character.id);
+      if (!stored) return;
+      this.character = { ...stored, lastLocation: { mapId: this.opts.mapId, x: loc.x, y: loc.y }, updatedAt: this.now() };
       await this.opts.store.put(this.character);
     } catch (e) {
       console.warn('[autosave] could not save character', e);

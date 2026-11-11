@@ -2,7 +2,7 @@
  * Pure helpers for importing a curated subset of the LPC (Liberated Pixel Cup) art.
  * Source: https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator
  */
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import type { AppearanceCatalog, LayerRef, Material, PaletteSet } from '../src/appearance/catalog-types';
 
@@ -165,6 +165,26 @@ export function renderCreditsMd(entries: { file: string; credit: LpcCredit }[], 
   return lines.join('\n');
 }
 
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+/** Colour-management chunks: browsers may apply them on decode, which breaks exact palette matching. */
+const COLOR_CHUNKS = new Set(['cHRM', 'gAMA', 'iCCP', 'sRGB']);
+
+/** Returns the PNG without colour-management chunks (other chunks are copied byte for byte). */
+export function stripColorChunks(png: Buffer): Buffer {
+  if (png.length < 8 || !png.subarray(0, 8).equals(PNG_SIGNATURE)) return png;
+  const parts: Buffer[] = [PNG_SIGNATURE];
+  let off = 8;
+  while (off + 12 <= png.length) {
+    const len = png.readUInt32BE(off);
+    const type = png.toString('ascii', off + 4, off + 8);
+    const end = off + 12 + len;
+    if (end > png.length) return png; // malformed: leave untouched
+    if (!COLOR_CHUNKS.has(type)) parts.push(png.subarray(off, end));
+    off = end;
+  }
+  return Buffer.concat(parts);
+}
+
 function allSources(sel: LpcSelection): string[] {
   const set = new Set<string>();
   for (const b of sel.bodies) for (const l of b.layers) set.add(l.src);
@@ -188,11 +208,11 @@ export function importLpc(opts: { repoDir: string; tilesDir: string; outRoot: st
   for (const { file } of entries) {
     const dest = join(outRoot, 'public', CHAR_PREFIX, file);
     mkdirSync(dirname(dest), { recursive: true });
-    copyFileSync(join(repoDir, 'spritesheets', file), dest);
+    writeFileSync(dest, stripColorChunks(readFileSync(join(repoDir, 'spritesheets', file))));
   }
   const tileDest = join(outRoot, 'public', catalog.tileset);
   mkdirSync(dirname(tileDest), { recursive: true });
-  copyFileSync(join(tilesDir, selection.tiles.file), tileDest);
+  writeFileSync(tileDest, stripColorChunks(readFileSync(join(tilesDir, selection.tiles.file))));
   const catalogPath = join(outRoot, 'data/appearance/catalog.json');
   mkdirSync(dirname(catalogPath), { recursive: true });
   writeFileSync(catalogPath, JSON.stringify(catalog, null, 2) + '\n');

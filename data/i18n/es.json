@@ -80,5 +80,6 @@
   "create.rotate": "Girar",
   "create.submit": "Crear",
   "create.back": "Volver",
-  "save.unavailable": "Tu progreso no se guardará en este navegador"
+  "save.unavailable": "Tu progreso no se guardará en este navegador",
+  "save.failed": "No se pudo guardar. Comprueba el espacio del navegador e inténtalo de nuevo."
 }

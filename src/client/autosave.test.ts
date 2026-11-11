@@ -64,3 +64,22 @@ test('save errors are swallowed (a failed save must not break the game)', async 
   await expect(saver.saveNow()).resolves.toBeUndefined();
   warn.mockRestore();
 });
+
+test('does not resurrect a character deleted elsewhere (e.g. another tab)', async () => {
+  const { store, saver } = await setup();
+  await store.delete('id-1');
+  await saver.saveNow();
+  expect(await store.get('id-1')).toBeUndefined();
+});
+
+test('keeps newer fields written elsewhere and only patches the location', async () => {
+  const { store, saver } = await setup();
+  const imported = { ...(await store.get('id-1'))!, xp: 500, level: 4, appearance: { ...(await store.get('id-1'))!.appearance, hairColor: 'white' } };
+  await store.put(imported);
+  await saver.saveNow();
+  const saved = (await store.get('id-1'))!;
+  expect(saved.xp).toBe(500);
+  expect(saved.level).toBe(4);
+  expect(saved.appearance.hairColor).toBe('white');
+  expect(saved.lastLocation).toEqual({ mapId: 'test-arena', x: 100, y: 200 });
+});

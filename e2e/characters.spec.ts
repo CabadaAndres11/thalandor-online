@@ -89,3 +89,25 @@ test('invalid name shows live validation error and is not created', async ({ bro
   await expect(page.locator('.form')).toBeVisible();
   await expect(page.locator('[data-testid=char-card]')).toHaveCount(0);
 });
+
+test('double-clicking Crear creates only one character', async ({ browser }) => {
+  const page = await openPage(browser);
+  await page.getByLabel('Nombre').fill('Doble');
+  await page.getByRole('button', { name: 'Crear', exact: true }).dblclick();
+  await expect(page.locator('[data-testid=char-card]', { hasText: 'Doble' })).toBeVisible();
+  await page.waitForTimeout(500);
+  await expect(page.locator('[data-testid=char-card]')).toHaveCount(1);
+});
+
+test('a failed save shows an error instead of failing silently', async ({ browser }) => {
+  const page = await openPage(browser);
+  await page.evaluate(() => {
+    IDBObjectStore.prototype.put = () => {
+      throw new DOMException('Quota exceeded', 'QuotaExceededError');
+    };
+  });
+  await page.getByLabel('Nombre').fill('Lleno');
+  await page.getByRole('button', { name: 'Crear', exact: true }).click();
+  await expect(page.getByText('No se pudo guardar. Comprueba el espacio del navegador e inténtalo de nuevo.')).toBeVisible();
+  await expect(page.locator('.form')).toBeVisible();
+});
