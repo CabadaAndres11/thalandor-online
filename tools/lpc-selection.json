@@ -1,0 +1,113 @@
+{
+  "palettes": {
+    "body": { "file": "palette_definitions/body/body_ulpc.json", "base": "light", "choices": ["light", "amber", "olive", "taupe", "bronze", "brown", "black"] },
+    "hair": { "file": "palette_definitions/hair/hair_ulpc.json", "base": "orange", "choices": ["black", "dark_brown", "chestnut", "light_brown", "blonde", "ginger", "gray", "white"] },
+    "cloth": { "file": "palette_definitions/cloth/cloth_ulpc.json", "base": "white", "choices": [] }
+  },
+  "bodies": [
+    { "id": "male", "layers": [
+      { "src": "body/bodies/male/walk.png", "z": 10, "recolor": "body" },
+      { "src": "head/heads/human/male/walk.png", "z": 100, "recolor": "body" }
+    ] },
+    { "id": "female", "layers": [
+      { "src": "body/bodies/female/walk.png", "z": 10, "recolor": "body" },
+      { "src": "head/heads/human/female/walk.png", "z": 100, "recolor": "body" }
+    ] }
+  ],
+  "hairStyles": [
+    { "id": "plain", "src": "hair/plain/adult/walk.png", "z": 120 },
+    { "id": "bangs", "src": "hair/bangs/adult/walk.png", "z": 120 },
+    { "id": "bob", "src": "hair/bob/adult/walk.png", "z": 120 },
+    { "id": "pixie", "src": "hair/pixie/adult/walk.png", "z": 120 },
+    { "id": "spiked", "src": "hair/spiked/adult/walk.png", "z": 120 },
+    { "id": "messy1", "src": "hair/messy1/adult/walk.png", "z": 120 },
+    { "id": "long", "src": "hair/long/adult/walk.png", "z": 120 },
+    { "id": "curly_short", "src": "hair/curly_short/adult/walk.png", "z": 120 }
+  ],
+  "outfits": {
+    "warrior": {
+      "male": [
+        { "src": "weapon/sword/arming/universal/bg/walk/steel.png", "z": 9 },
+        { "src": "legs/pants/male/walk.png", "z": 20, "cloth": "brown" },
+        { "src": "feet/boots/basic/male/walk.png", "z": 25 },
+        { "src": "torso/armour/leather/male/walk.png", "z": 60 },
+        { "src": "weapon/sword/arming/universal/fg/walk/steel.png", "z": 140 }
+      ],
+      "female": [
+        { "src": "weapon/sword/arming/universal/bg/walk/steel.png", "z": 9 },
+        { "src": "legs/pants/thin/walk.png", "z": 20, "cloth": "brown" },
+        { "src": "feet/boots/basic/thin/walk.png", "z": 25 },
+        { "src": "torso/armour/leather/female/walk.png", "z": 60 },
+        { "src": "weapon/sword/arming/universal/fg/walk/steel.png", "z": 140 }
+      ]
+    },
+    "cleric": {
+      "male": [
+        { "src": "weapon/blunt/mace/universal_behind/walk/mace.png", "z": 9 },
+        { "src": "feet/shoes/basic/male/walk.png", "z": 15 },
+        { "src": "legs/pants/male/walk.png", "z": 20, "cloth": "white" },
+        { "src": "torso/clothes/longsleeve/longsleeve/male/walk.png", "z": 35, "cloth": "white" },
+        { "src": "weapon/blunt/mace/walk/mace.png", "z": 140 }
+      ],
+      "female": [
+        { "src": "weapon/blunt/mace/universal_behind/walk/mace.png", "z": 9 },
+        { "src": "feet/shoes/basic/thin/walk.png", "z": 15 },
+        { "src": "torso/clothes/robe/female/walk/white.png", "z": 35 },
+        { "src": "weapon/blunt/mace/walk/mace.png", "z": 140 }
+      ]
+    },
+    "mage": {
+      "male": [
+        { "src": "weapon/magic/simple/background/walk/simple.png", "z": 9 },
+        { "src": "feet/shoes/basic/male/walk.png", "z": 15 },
+        { "src": "legs/pants/male/walk.png", "z": 20, "cloth": "purple" },
+        { "src": "torso/clothes/longsleeve/longsleeve/male/walk.png", "z": 35, "cloth": "purple" },
+        { "src": "weapon/magic/simple/foreground/walk/simple.png", "z": 140 }
+      ],
+      "female": [
+        { "src": "weapon/magic/simple/background/walk/simple.png", "z": 9 },
+        { "src": "feet/shoes/basic/thin/walk.png", "z": 15 },
+        { "src": "torso/clothes/robe/female/walk/purple.png", "z": 35 },
+        { "src": "weapon/magic/simple/foreground/walk/simple.png", "z": 140 }
+      ]
+    },
+    "explorer": {
+      "male": [
+        { "src": "weapon/ranged/bow/normal/walk/background.png", "z": -1 },
+        { "src": "legs/pants/male/walk.png", "z": 20, "cloth": "leather" },
+        { "src": "feet/boots/basic/male/walk.png", "z": 25 },
+        { "src": "torso/clothes/longsleeve/longsleeve/male/walk.png", "z": 35, "cloth": "forest" },
+        { "src": "hat/cloth/hood/adult/walk.png", "z": 130, "cloth": "forest" },
+        { "src": "weapon/ranged/bow/normal/walk/foreground.png", "z": 141 }
+      ],
+      "female": [
+        { "src": "weapon/ranged/bow/normal/walk/background.png", "z": -1 },
+        { "src": "legs/pants/thin/walk.png", "z": 20, "cloth": "leather" },
+        { "src": "feet/boots/basic/thin/walk.png", "z": 25 },
+        { "src": "torso/clothes/longsleeve/longsleeve/female/walk.png", "z": 35, "cloth": "forest" },
+        { "src": "hat/cloth/hood/adult/walk.png", "z": 130, "cloth": "forest" },
+        { "src": "weapon/ranged/bow/normal/walk/foreground.png", "z": 141 }
+      ]
+    }
+  },
+  "tiles": {
+    "file": "atlas/terrain_atlas.png",
+    "credit": {
+      "file": "tiles/terrain_atlas.png",
+      "authors": [
+        "Lanea Zimmerman (Sharm)",
+        "Daniel Eddeland",
+        "Casper Nilsson",
+        "Johann Charlot",
+        "Skyler Robert Colladay",
+        "Daniel Armstrong (HughSpectrum)",
+        "Stephen Challener (Redshrike)",
+        "Charles Sanchez (CharlesGabriel)",
+        "Manuel Riecke (MrBeast)",
+        "adrix89 (atlas)"
+      ],
+      "licenses": ["CC-BY-SA 3.0", "GPL 3.0", "LGPL 3.0 (partes de Johann Charlot)"],
+      "urls": ["https://opengameart.org/content/lpc-tile-atlas"]
+    }
+  }
+}

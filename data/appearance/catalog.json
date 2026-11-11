@@ -1,0 +1,652 @@
+{
+  "palettes": {
+    "body": {
+      "base": [
+        "#271920",
+        "#99423c",
+        "#cc8665",
+        "#e4a47c",
+        "#f9d5ba",
+        "#faece7"
+      ],
+      "colors": {
+        "light": [
+          "#271920",
+          "#99423c",
+          "#cc8665",
+          "#e4a47c",
+          "#f9d5ba",
+          "#faece7"
+        ],
+        "amber": [
+          "#281716",
+          "#9e3e37",
+          "#d28144",
+          "#ea9f54",
+          "#fdd082",
+          "#fbe7a4"
+        ],
+        "olive": [
+          "#271920",
+          "#442725",
+          "#7f4c31",
+          "#ae6b3f",
+          "#d38b59",
+          "#e4a47c"
+        ],
+        "taupe": [
+          "#271920",
+          "#503734",
+          "#785946",
+          "#936849",
+          "#ba8454",
+          "#c7935f"
+        ],
+        "bronze": [
+          "#1a1213",
+          "#442725",
+          "#644133",
+          "#7f4c31",
+          "#ae6b3f",
+          "#d38b59"
+        ],
+        "brown": [
+          "#120e10",
+          "#412b29",
+          "#5f4539",
+          "#76513a",
+          "#9c663e",
+          "#b8773f"
+        ],
+        "black": [
+          "#000000",
+          "#1a1213",
+          "#2e1f1c",
+          "#442725",
+          "#603429",
+          "#7f4c31"
+        ]
+      }
+    },
+    "hair": {
+      "base": [
+        "#260d14",
+        "#6a1108",
+        "#a42600",
+        "#bf4000",
+        "#e55600",
+        "#ff8a00"
+      ],
+      "colors": {
+        "black": [
+          "#000000",
+          "#080a0a",
+          "#101414",
+          "#1c2222",
+          "#31313e",
+          "#4a5057"
+        ],
+        "dark_brown": [
+          "#050100",
+          "#160701",
+          "#290e02",
+          "#421603",
+          "#5f1f04",
+          "#792806"
+        ],
+        "chestnut": [
+          "#200c0d",
+          "#3a130e",
+          "#63200b",
+          "#81310a",
+          "#b6550e",
+          "#d28102"
+        ],
+        "light_brown": [
+          "#1a0e04",
+          "#301b07",
+          "#60350f",
+          "#7d4513",
+          "#ae682a",
+          "#c88d58"
+        ],
+        "blonde": [
+          "#331313",
+          "#552b15",
+          "#ac5d1f",
+          "#e09e2b",
+          "#fccf56",
+          "#ffe67d"
+        ],
+        "ginger": [
+          "#300500",
+          "#6a1a00",
+          "#9c3b01",
+          "#cc6901",
+          "#faa301",
+          "#ffe01e"
+        ],
+        "gray": [
+          "#0e0e0e",
+          "#292929",
+          "#4b4b4b",
+          "#777777",
+          "#aaaaaa",
+          "#d9d9d9"
+        ],
+        "white": [
+          "#1d1d21",
+          "#484e57",
+          "#8b9498",
+          "#b8bbbc",
+          "#d8dcdc",
+          "#ffffff"
+        ]
+      }
+    },
+    "cloth": {
+      "base": [
+        "#281820",
+        "#4d4a5d",
+        "#958080",
+        "#c4b59f",
+        "#e5e6c7",
+        "#ffffff"
+      ],
+      "colors": {
+        "brown": [
+          "#1d131e",
+          "#411e05",
+          "#4b2b13",
+          "#62351c",
+          "#744b30",
+          "#996b4a"
+        ],
+        "white": [
+          "#281820",
+          "#4d4a5d",
+          "#958080",
+          "#c4b59f",
+          "#e5e6c7",
+          "#ffffff"
+        ],
+        "purple": [
+          "#180716",
+          "#13112d",
+          "#261044",
+          "#411357",
+          "#621e78",
+          "#813089"
+        ],
+        "leather": [
+          "#2b1c1d",
+          "#311210",
+          "#4b2b13",
+          "#704325",
+          "#75502d",
+          "#9a6f37"
+        ],
+        "forest": [
+          "#09131d",
+          "#07391d",
+          "#0b1f25",
+          "#0b2b28",
+          "#134507",
+          "#1b5502"
+        ]
+      }
+    }
+  },
+  "bodies": [
+    {
+      "id": "male",
+      "labelKey": "appearance.body.male"
+    },
+    {
+      "id": "female",
+      "labelKey": "appearance.body.female"
+    }
+  ],
+  "skins": [
+    {
+      "id": "light",
+      "labelKey": "appearance.skin.light",
+      "swatch": "#e4a47c"
+    },
+    {
+      "id": "amber",
+      "labelKey": "appearance.skin.amber",
+      "swatch": "#ea9f54"
+    },
+    {
+      "id": "olive",
+      "labelKey": "appearance.skin.olive",
+      "swatch": "#ae6b3f"
+    },
+    {
+      "id": "taupe",
+      "labelKey": "appearance.skin.taupe",
+      "swatch": "#936849"
+    },
+    {
+      "id": "bronze",
+      "labelKey": "appearance.skin.bronze",
+      "swatch": "#7f4c31"
+    },
+    {
+      "id": "brown",
+      "labelKey": "appearance.skin.brown",
+      "swatch": "#76513a"
+    },
+    {
+      "id": "black",
+      "labelKey": "appearance.skin.black",
+      "swatch": "#442725"
+    }
+  ],
+  "hairStyles": [
+    {
+      "id": "plain",
+      "labelKey": "appearance.hair.plain"
+    },
+    {
+      "id": "bangs",
+      "labelKey": "appearance.hair.bangs"
+    },
+    {
+      "id": "bob",
+      "labelKey": "appearance.hair.bob"
+    },
+    {
+      "id": "pixie",
+      "labelKey": "appearance.hair.pixie"
+    },
+    {
+      "id": "spiked",
+      "labelKey": "appearance.hair.spiked"
+    },
+    {
+      "id": "messy1",
+      "labelKey": "appearance.hair.messy1"
+    },
+    {
+      "id": "long",
+      "labelKey": "appearance.hair.long"
+    },
+    {
+      "id": "curly_short",
+      "labelKey": "appearance.hair.curly_short"
+    }
+  ],
+  "hairColors": [
+    {
+      "id": "black",
+      "labelKey": "appearance.hairColor.black",
+      "swatch": "#1c2222"
+    },
+    {
+      "id": "dark_brown",
+      "labelKey": "appearance.hairColor.dark_brown",
+      "swatch": "#421603"
+    },
+    {
+      "id": "chestnut",
+      "labelKey": "appearance.hairColor.chestnut",
+      "swatch": "#81310a"
+    },
+    {
+      "id": "light_brown",
+      "labelKey": "appearance.hairColor.light_brown",
+      "swatch": "#7d4513"
+    },
+    {
+      "id": "blonde",
+      "labelKey": "appearance.hairColor.blonde",
+      "swatch": "#e09e2b"
+    },
+    {
+      "id": "ginger",
+      "labelKey": "appearance.hairColor.ginger",
+      "swatch": "#cc6901"
+    },
+    {
+      "id": "gray",
+      "labelKey": "appearance.hairColor.gray",
+      "swatch": "#777777"
+    },
+    {
+      "id": "white",
+      "labelKey": "appearance.hairColor.white",
+      "swatch": "#b8bbbc"
+    }
+  ],
+  "layers": {
+    "body": {
+      "male": [
+        {
+          "sheet": "assets/lpc/characters/body/bodies/male/walk.png",
+          "zIndex": 10,
+          "recolor": {
+            "material": "body"
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/head/heads/human/male/walk.png",
+          "zIndex": 100,
+          "recolor": {
+            "material": "body"
+          }
+        }
+      ],
+      "female": [
+        {
+          "sheet": "assets/lpc/characters/body/bodies/female/walk.png",
+          "zIndex": 10,
+          "recolor": {
+            "material": "body"
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/head/heads/human/female/walk.png",
+          "zIndex": 100,
+          "recolor": {
+            "material": "body"
+          }
+        }
+      ]
+    },
+    "hair": {
+      "plain": {
+        "sheet": "assets/lpc/characters/hair/plain/adult/walk.png",
+        "zIndex": 120,
+        "recolor": {
+          "material": "hair"
+        }
+      },
+      "bangs": {
+        "sheet": "assets/lpc/characters/hair/bangs/adult/walk.png",
+        "zIndex": 120,
+        "recolor": {
+          "material": "hair"
+        }
+      },
+      "bob": {
+        "sheet": "assets/lpc/characters/hair/bob/adult/walk.png",
+        "zIndex": 120,
+        "recolor": {
+          "material": "hair"
+        }
+      },
+      "pixie": {
+        "sheet": "assets/lpc/characters/hair/pixie/adult/walk.png",
+        "zIndex": 120,
+        "recolor": {
+          "material": "hair"
+        }
+      },
+      "spiked": {
+        "sheet": "assets/lpc/characters/hair/spiked/adult/walk.png",
+        "zIndex": 120,
+        "recolor": {
+          "material": "hair"
+        }
+      },
+      "messy1": {
+        "sheet": "assets/lpc/characters/hair/messy1/adult/walk.png",
+        "zIndex": 120,
+        "recolor": {
+          "material": "hair"
+        }
+      },
+      "long": {
+        "sheet": "assets/lpc/characters/hair/long/adult/walk.png",
+        "zIndex": 120,
+        "recolor": {
+          "material": "hair"
+        }
+      },
+      "curly_short": {
+        "sheet": "assets/lpc/characters/hair/curly_short/adult/walk.png",
+        "zIndex": 120,
+        "recolor": {
+          "material": "hair"
+        }
+      }
+    },
+    "outfit": {
+      "warrior": {
+        "male": [
+          {
+            "sheet": "assets/lpc/characters/weapon/sword/arming/universal/bg/walk/steel.png",
+            "zIndex": 9
+          },
+          {
+            "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
+            "zIndex": 20,
+            "recolor": {
+              "material": "cloth",
+              "palette": "brown"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/feet/boots/basic/male/walk.png",
+            "zIndex": 25
+          },
+          {
+            "sheet": "assets/lpc/characters/torso/armour/leather/male/walk.png",
+            "zIndex": 60
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/sword/arming/universal/fg/walk/steel.png",
+            "zIndex": 140
+          }
+        ],
+        "female": [
+          {
+            "sheet": "assets/lpc/characters/weapon/sword/arming/universal/bg/walk/steel.png",
+            "zIndex": 9
+          },
+          {
+            "sheet": "assets/lpc/characters/legs/pants/thin/walk.png",
+            "zIndex": 20,
+            "recolor": {
+              "material": "cloth",
+              "palette": "brown"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/feet/boots/basic/thin/walk.png",
+            "zIndex": 25
+          },
+          {
+            "sheet": "assets/lpc/characters/torso/armour/leather/female/walk.png",
+            "zIndex": 60
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/sword/arming/universal/fg/walk/steel.png",
+            "zIndex": 140
+          }
+        ]
+      },
+      "cleric": {
+        "male": [
+          {
+            "sheet": "assets/lpc/characters/weapon/blunt/mace/universal_behind/walk/mace.png",
+            "zIndex": 9
+          },
+          {
+            "sheet": "assets/lpc/characters/feet/shoes/basic/male/walk.png",
+            "zIndex": 15
+          },
+          {
+            "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
+            "zIndex": 20,
+            "recolor": {
+              "material": "cloth",
+              "palette": "white"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "zIndex": 35,
+            "recolor": {
+              "material": "cloth",
+              "palette": "white"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/blunt/mace/walk/mace.png",
+            "zIndex": 140
+          }
+        ],
+        "female": [
+          {
+            "sheet": "assets/lpc/characters/weapon/blunt/mace/universal_behind/walk/mace.png",
+            "zIndex": 9
+          },
+          {
+            "sheet": "assets/lpc/characters/feet/shoes/basic/thin/walk.png",
+            "zIndex": 15
+          },
+          {
+            "sheet": "assets/lpc/characters/torso/clothes/robe/female/walk/white.png",
+            "zIndex": 35
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/blunt/mace/walk/mace.png",
+            "zIndex": 140
+          }
+        ]
+      },
+      "mage": {
+        "male": [
+          {
+            "sheet": "assets/lpc/characters/weapon/magic/simple/background/walk/simple.png",
+            "zIndex": 9
+          },
+          {
+            "sheet": "assets/lpc/characters/feet/shoes/basic/male/walk.png",
+            "zIndex": 15
+          },
+          {
+            "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
+            "zIndex": 20,
+            "recolor": {
+              "material": "cloth",
+              "palette": "purple"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "zIndex": 35,
+            "recolor": {
+              "material": "cloth",
+              "palette": "purple"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/walk/simple.png",
+            "zIndex": 140
+          }
+        ],
+        "female": [
+          {
+            "sheet": "assets/lpc/characters/weapon/magic/simple/background/walk/simple.png",
+            "zIndex": 9
+          },
+          {
+            "sheet": "assets/lpc/characters/feet/shoes/basic/thin/walk.png",
+            "zIndex": 15
+          },
+          {
+            "sheet": "assets/lpc/characters/torso/clothes/robe/female/walk/purple.png",
+            "zIndex": 35
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/walk/simple.png",
+            "zIndex": 140
+          }
+        ]
+      },
+      "explorer": {
+        "male": [
+          {
+            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/walk/background.png",
+            "zIndex": -1
+          },
+          {
+            "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
+            "zIndex": 20,
+            "recolor": {
+              "material": "cloth",
+              "palette": "leather"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/feet/boots/basic/male/walk.png",
+            "zIndex": 25
+          },
+          {
+            "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "zIndex": 35,
+            "recolor": {
+              "material": "cloth",
+              "palette": "forest"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/hat/cloth/hood/adult/walk.png",
+            "zIndex": 130,
+            "recolor": {
+              "material": "cloth",
+              "palette": "forest"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/walk/foreground.png",
+            "zIndex": 141
+          }
+        ],
+        "female": [
+          {
+            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/walk/background.png",
+            "zIndex": -1
+          },
+          {
+            "sheet": "assets/lpc/characters/legs/pants/thin/walk.png",
+            "zIndex": 20,
+            "recolor": {
+              "material": "cloth",
+              "palette": "leather"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/feet/boots/basic/thin/walk.png",
+            "zIndex": 25
+          },
+          {
+            "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "zIndex": 35,
+            "recolor": {
+              "material": "cloth",
+              "palette": "forest"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/hat/cloth/hood/adult/walk.png",
+            "zIndex": 130,
+            "recolor": {
+              "material": "cloth",
+              "palette": "forest"
+            }
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/walk/foreground.png",
+            "zIndex": 141
+          }
+        ]
+      }
+    }
+  },
+  "tileset": "assets/lpc/tiles/terrain_atlas.png"
+}
