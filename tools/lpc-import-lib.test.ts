@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -91,6 +91,16 @@ test('importLpc copies sheets and writes catalog and credits', () => {
   const cat = JSON.parse(readFileSync(join(out, 'data/appearance/catalog.json'), 'utf8'));
   expect(cat.bodies[0].id).toBe('male');
   expect(readFileSync(join(out, 'CREDITS.md'), 'utf8')).toContain('Dave');
+});
+
+test('importLpc removes sheets that are no longer selected', () => {
+  const out = mkdtempSync(join(tmpdir(), 'lpc-out-'));
+  importLpc({ repoDir: REPO, tilesDir: REPO, outRoot: out, selection });
+  const stale = join(out, 'public/assets/lpc/characters/old/walk.png');
+  mkdirSync(join(out, 'public/assets/lpc/characters/old'), { recursive: true });
+  writeFileSync(stale, 'x');
+  importLpc({ repoDir: REPO, tilesDir: REPO, outRoot: out, selection });
+  expect(existsSync(stale)).toBe(false);
 });
 
 test('import fails when a selected sheet has no credit', () => {

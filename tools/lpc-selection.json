@@ -73,20 +73,18 @@
     },
     "explorer": {
       "male": [
-        { "src": "weapon/ranged/bow/normal/walk/background.png", "z": -1 },
+        { "src": "quiver/walk/quiver.png", "z": 8 },
         { "src": "legs/pants/male/walk.png", "z": 20, "cloth": "leather" },
         { "src": "feet/boots/basic/male/walk.png", "z": 25 },
         { "src": "torso/clothes/longsleeve/longsleeve/male/walk.png", "z": 35, "cloth": "forest" },
-        { "src": "hat/cloth/hood/adult/walk.png", "z": 130, "cloth": "forest" },
-        { "src": "weapon/ranged/bow/normal/walk/foreground.png", "z": 141 }
+        { "src": "hat/cloth/hood/adult/walk.png", "z": 130, "cloth": "forest" }
       ],
       "female": [
-        { "src": "weapon/ranged/bow/normal/walk/background.png", "z": -1 },
+        { "src": "quiver/walk/quiver.png", "z": 8 },
         { "src": "legs/pants/thin/walk.png", "z": 20, "cloth": "leather" },
         { "src": "feet/boots/basic/thin/walk.png", "z": 25 },
         { "src": "torso/clothes/longsleeve/longsleeve/female/walk.png", "z": 35, "cloth": "forest" },
-        { "src": "hat/cloth/hood/adult/walk.png", "z": 130, "cloth": "forest" },
-        { "src": "weapon/ranged/bow/normal/walk/foreground.png", "z": 141 }
+        { "src": "hat/cloth/hood/adult/walk.png", "z": 130, "cloth": "forest" }
       ]
     }
   },

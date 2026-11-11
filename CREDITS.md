@@ -100,6 +100,11 @@ Arte del proyecto [Liberated Pixel Cup (LPC)](https://lpc.opengameart.org/) y de
 - **Licencias:** OGA-BY 3.0, GPL 3.0, CC-BY-SA 3.0
 - **Fuentes:** <https://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles> · <https://opengameart.org/content/lpc-medieval-fantasy-character-sprites> · <http://opengameart.org/content/lpc-clothing-updates> · <https://opengameart.org/content/lpc-expanded-pants>
 
+### `quiver/walk/quiver.png`
+- **Autores:** Johannes Sjölund (wulax)
+- **Licencias:** OGA-BY 3.0, CC-BY-SA 3.0, GPL 3.0
+- **Fuentes:** <https://opengameart.org/content/lpc-medieval-fantasy-character-sprites>
+
 ### `torso/armour/leather/female/walk.png`
 - **Autores:** Michael Whitlock (bigbeargames), Matthew Krohn (makrohn), Johannes Sjölund (wulax), bluecarrot16, JaidynReiman
 - **Licencias:** OGA-BY 3.0, CC-BY-SA 3.0, GPL 3.0
@@ -149,16 +154,6 @@ Arte del proyecto [Liberated Pixel Cup (LPC)](https://lpc.opengameart.org/) y de
 - **Autores:** bluecarrot16, Dr. Jamgo
 - **Licencias:** CC0
 - **Fuentes:** <https://opengameart.org/content/lpc-simple-staff>
-
-### `weapon/ranged/bow/normal/walk/background.png`
-- **Autores:** Johannes Sjölund (wulax), Pierre Vigier (pvigier)
-- **Licencias:** OGA-BY 3.0+, GPL 3.0, CC-BY 4.0
-- **Fuentes:** <https://opengameart.org/content/lpc-medieval-fantasy-character-sprites> · <https://opengameart.org/content/lpc-walk-animations-for-bows>
-
-### `weapon/ranged/bow/normal/walk/foreground.png`
-- **Autores:** Johannes Sjölund (wulax), Pierre Vigier (pvigier)
-- **Licencias:** OGA-BY 3.0+, GPL 3.0, CC-BY 4.0
-- **Fuentes:** <https://opengameart.org/content/lpc-medieval-fantasy-character-sprites> · <https://opengameart.org/content/lpc-walk-animations-for-bows>
 
 ### `weapon/sword/arming/universal/bg/walk/steel.png`
 - **Autores:** ElizaWy; walk and down by JaidynReiman

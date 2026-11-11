@@ -2,7 +2,7 @@
  * Pure helpers for importing a curated subset of the LPC (Liberated Pixel Cup) art.
  * Source: https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator
  */
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import type { AppearanceCatalog, LayerRef, Material, PaletteSet } from '../src/appearance/catalog-types';
 
@@ -183,6 +183,8 @@ export function importLpc(opts: { repoDir: string; tilesDir: string; outRoot: st
     return { file, credit };
   });
   const catalog = buildCatalog(selection, readPalettes(repoDir, selection));
+  // The output folder is fully generated: start clean so deselected sheets do not linger.
+  rmSync(join(outRoot, 'public', 'assets', 'lpc'), { recursive: true, force: true });
   for (const { file } of entries) {
     const dest = join(outRoot, 'public', CHAR_PREFIX, file);
     mkdirSync(dirname(dest), { recursive: true });

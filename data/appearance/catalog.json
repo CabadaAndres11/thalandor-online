@@ -571,8 +571,8 @@
       "explorer": {
         "male": [
           {
-            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/walk/background.png",
-            "zIndex": -1
+            "sheet": "assets/lpc/characters/quiver/walk/quiver.png",
+            "zIndex": 8
           },
           {
             "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
@@ -601,16 +601,12 @@
               "material": "cloth",
               "palette": "forest"
             }
-          },
-          {
-            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/walk/foreground.png",
-            "zIndex": 141
           }
         ],
         "female": [
           {
-            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/walk/background.png",
-            "zIndex": -1
+            "sheet": "assets/lpc/characters/quiver/walk/quiver.png",
+            "zIndex": 8
           },
           {
             "sheet": "assets/lpc/characters/legs/pants/thin/walk.png",
@@ -639,10 +635,6 @@
               "material": "cloth",
               "palette": "forest"
             }
-          },
-          {
-            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/walk/foreground.png",
-            "zIndex": 141
           }
         ]
       }
