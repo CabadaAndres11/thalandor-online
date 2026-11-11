@@ -1,6 +1,5 @@
 {
   "menu.title": "Thalandor Online",
-  "menu.name": "Nombre",
   "menu.play": "Jugar",
   "menu.join": "Unirse a un amigo",
   "menu.code": "Código de grupo",
@@ -63,5 +62,23 @@
   "import.invalid": "El archivo no es un personaje válido de Thalandor",
   "import.future": "Este personaje es de una versión más nueva del juego. Actualiza la página.",
   "import.full": "Ya tienes 8 personajes. Borra uno para importar otro.",
-  "import.replaceConfirm": "Ya tienes este personaje ({name}). ¿Sustituirlo por el del archivo?"
+  "import.replaceConfirm": "Ya tienes este personaje ({name}). ¿Sustituirlo por el del archivo?",
+  "select.title": "Tus personajes",
+  "select.create": "Crear personaje",
+  "select.import": "Importar",
+  "select.export": "Exportar",
+  "select.delete": "Borrar",
+  "select.deleteConfirm": "¿Borrar a {name}? No se puede deshacer. Si quieres conservarlo, expórtalo antes.",
+  "select.level": "Nivel {level}",
+  "create.title": "Nuevo personaje",
+  "create.name": "Nombre",
+  "create.class": "Clase",
+  "create.body": "Cuerpo",
+  "create.skin": "Piel",
+  "create.hair": "Peinado",
+  "create.hairColor": "Color de pelo",
+  "create.rotate": "Girar",
+  "create.submit": "Crear",
+  "create.back": "Volver",
+  "save.unavailable": "Tu progreso no se guardará en este navegador"
 }

@@ -1,9 +1,5 @@
 import { t } from '../i18n';
-
-export interface MenuHandlers {
-  onPlay(name: string): void;
-  onJoin(name: string, code: string): void;
-}
+import { el } from './dom';
 
 export interface GameUiOptions {
   isHost: boolean;
@@ -13,56 +9,24 @@ export interface GameUiOptions {
   onLeave: () => void;
 }
 
-const NAME_KEY = 'thalandor.name';
-
-function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: string): HTMLElementTagNameMap[K] {
-  const e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (text !== undefined) e.textContent = text;
-  return e;
-}
-
-function loadName(): string {
-  try {
-    return localStorage.getItem(NAME_KEY) ?? '';
-  } catch {
-    return '';
-  }
-}
-
-function saveName(name: string): void {
-  try {
-    localStorage.setItem(NAME_KEY, name);
-  } catch {
-    /* storage unavailable: ignore */
-  }
-}
-
 /**
- * HTML layer over the canvas: menu, group button and chat.
+ * In-game HTML layer over the canvas: group button, leave button and chat.
  * All player-provided text is inserted with textContent, never innerHTML.
  */
 export class Overlay {
-  private readonly menu = el('div', 'menu');
   private readonly hud = el('div', 'hud');
   private readonly chat = el('div', 'chat');
   private readonly chatLog = el('div', 'chat-log');
   private readonly chatInput = el('input', 'chat-input');
-  private readonly playBtn = el('button', 'btn primary', t('menu.play'));
-  private readonly joinBtn = el('button', 'btn', t('menu.join'));
-  private readonly nameInput = el('input', 'field');
-  private readonly codeInput = el('input', 'field code');
-  private readonly menuError = el('p', 'error');
   private game: GameUiOptions | null = null;
   private chatIsOpen = false;
 
-  constructor(root: HTMLElement, version: string) {
-    this.buildMenu(version);
+  constructor(root: HTMLElement) {
     this.chatInput.placeholder = t('chat.placeholder');
     this.chatInput.maxLength = 200;
     this.chat.append(this.chatLog, this.chatInput);
-    root.append(this.menu, this.hud, this.chat);
-    this.hideGame();
+    root.append(this.hud, this.chat);
+    this.hide();
     document.addEventListener('keydown', (e) => this.onKey(e));
   }
 
@@ -70,31 +34,8 @@ export class Overlay {
     return this.chatIsOpen;
   }
 
-  showMenu(h: MenuHandlers, error?: string): void {
-    this.hideGame();
-    this.menu.hidden = false;
-    this.setMenuBusy(false);
-    this.menuError.textContent = error ?? '';
-    this.playBtn.onclick = () => h.onPlay(this.currentName());
-    this.joinBtn.onclick = () => h.onJoin(this.currentName(), this.codeInput.value);
-    this.codeInput.onkeydown = (e) => {
-      if (e.key === 'Enter') h.onJoin(this.currentName(), this.codeInput.value);
-    };
-  }
-
-  setMenuError(msg: string): void {
-    this.menuError.textContent = msg;
-  }
-
-  setMenuBusy(busy: boolean): void {
-    this.playBtn.disabled = busy;
-    this.joinBtn.disabled = busy;
-    this.joinBtn.textContent = busy ? t('menu.connecting') : t('menu.join');
-  }
-
-  showGame(opts: GameUiOptions): void {
+  show(opts: GameUiOptions): void {
     this.game = opts;
-    this.menu.hidden = true;
     this.hud.hidden = false;
     this.chat.hidden = false;
     this.chatLog.replaceChildren();
@@ -105,6 +46,13 @@ export class Overlay {
     this.hud.append(leave);
   }
 
+  hide(): void {
+    this.game = null;
+    this.closeChat();
+    this.hud.hidden = true;
+    this.chat.hidden = true;
+  }
+
   addChat(from: string | null, text: string): void {
     const line = el('div', from === null ? 'chat-line system' : 'chat-line');
     if (from !== null) line.append(el('span', 'chat-from', `${from}: `));
@@ -112,44 +60,6 @@ export class Overlay {
     this.chatLog.append(line);
     while (this.chatLog.childElementCount > 50) this.chatLog.firstElementChild?.remove();
     this.chatLog.scrollTop = this.chatLog.scrollHeight;
-  }
-
-  private hideGame(): void {
-    this.game = null;
-    this.closeChat();
-    this.hud.hidden = true;
-    this.chat.hidden = true;
-  }
-
-  private currentName(): string {
-    const name = this.nameInput.value.trim();
-    saveName(name);
-    return name;
-  }
-
-  private buildMenu(version: string): void {
-    const card = el('div', 'card');
-    const label = (text: string, input: HTMLInputElement) => {
-      const l = el('label', 'label', text);
-      l.append(input);
-      return l;
-    };
-    this.nameInput.maxLength = 16;
-    this.nameInput.value = loadName();
-    this.nameInput.autocomplete = 'off';
-    this.codeInput.maxLength = 8;
-    this.codeInput.autocomplete = 'off';
-    this.codeInput.placeholder = 'ABC234';
-    card.append(
-      el('h1', 'title', t('menu.title')),
-      label(t('menu.name'), this.nameInput),
-      this.playBtn,
-      el('div', 'or', t('menu.or')),
-      label(t('menu.code'), this.codeInput),
-      this.joinBtn,
-      this.menuError,
-    );
-    this.menu.append(card, el('div', 'version', t('menu.version', { version })));
   }
 
   private groupButton(opts: GameUiOptions): HTMLButtonElement {
