@@ -5,9 +5,9 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 0.2 |
+| Versión del documento | 0.3 |
 | Fecha | 2026-11-11 |
-| Versión del juego | — (sin implementar) |
+| Versión del juego | 0.1.0 (Plan 1: fundaciones y red) |
 
 ---
 
@@ -43,7 +43,7 @@ Busca la sensación de un MMO clásico (personajes persistentes, clases con role
 
 ## 2. Arquitectura técnica
 
-### 2.1 Stack
+### 2.1 Stack **[Implementado]**
 | Pieza | Tecnología | Coste |
 |---|---|---|
 | Lenguaje | TypeScript | Gratis |
@@ -55,7 +55,7 @@ Busca la sensación de un MMO clásico (personajes persistentes, clases con role
 | Tests | Vitest (lógica), Playwright (navegador) | Gratis |
 | Hosting | GitHub Pages (repositorio público) | Gratis |
 
-### 2.2 Modelo host-autoritativo
+### 2.2 Modelo host-autoritativo **[Implementado]**
 - **Siempre hay un host.** Al jugar solo, tu PC es el host y no hay invitados. En grupo, un jugador es el host y el resto se conecta a él. Hay un único camino de código para ambos casos.
 - **Simulación.** El host ejecuta la simulación del mundo a **20 ticks/s** dentro de un **Web Worker**, para que no se ralentice si la pestaña pierde el foco.
 - **Invitados.** Envían solo **entradas** (movimiento, dirección de apuntado, habilidad usada) y reciben **instantáneas del estado** del host.
@@ -63,13 +63,13 @@ Busca la sensación de un MMO clásico (personajes persistentes, clases con role
 - **Interpolación:** el resto de entidades se dibujan suavizadas entre instantáneas.
 - **El host también juega:** usa la misma interfaz de cliente, conectada a la simulación local por un transporte en memoria.
 
-### 2.3 Propiedad de los datos
+### 2.3 Propiedad de los datos **[Diseñado]** (llega con el Plan 3)
 - **El personaje vive en el PC de su jugador:** nivel, atributos, talentos, equipo, inventario, oro, misiones y última ubicación.
 - **Al unirse** a una partida, el invitado envía su personaje al host.
 - **El host devuelve el personaje actualizado** periódicamente (cada 30 s), al cambiar de zona y al salir. El cliente lo guarda.
 - **El estado del mundo es temporal:** monstruos vivos, objetos en el suelo y temporizadores de reaparición no se guardan.
 
-### 2.4 Organización del código
+### 2.4 Organización del código **[Implementado]**
 | Módulo | Responsabilidad | Depende de |
 |---|---|---|
 | `src/sim/` | Reglas del juego: entidades, movimiento, colisiones, combate, amenaza, IA, misiones, botín, progresión. TypeScript puro, sin gráficos, con tests. | `data/` |
@@ -81,21 +81,21 @@ Busca la sensación de un MMO clásico (personajes persistentes, clases con role
 
 La interfaz `Transport` permite cambiar en el futuro a un servidor dedicado sin tocar `sim/` ni `client/`.
 
-### 2.5 Conexión
+### 2.5 Conexión **[Implementado]** (TURN opcional configurable; sin relay por defecto)
 1. El host pulsa **"Abrir grupo"** y obtiene un código corto.
 2. Los invitados lo introducen en **"Unirse a un amigo"**.
 3. PeerJS gestiona la señalización y la conexión WebRTC directa entre el host y cada invitado (topología en estrella).
 4. Si la conexión directa falla, se reintenta con un relay TURN gratuito con límite de uso. El plan B documentado es una VPN gratuita tipo Tailscale.
 5. **Control de versiones:** si el host y el invitado tienen versiones distintas, se rechaza la conexión con un aviso para recargar.
 
-### 2.6 Rendimiento y escalabilidad del contenido
+### 2.6 Rendimiento y escalabilidad del contenido **[En curso]** (worker implementado; carga por zonas en el Plan 5)
 - **Carga por zona:** solo se cargan los assets de la zona actual, y los de la anterior se liberan.
 - **Simulación multizona:** el host simula solo las zonas con al menos un jugador presente.
 - **Memoria:** en el bucle de juego se reutilizan objetos (pools) para evitar tirones por la recolección de basura.
 
 ---
 
-## 3. Controles
+## 3. Controles **[En curso]** (solo movimiento WASD y chat con Enter)
 
 | Acción | Tecla |
 |---|---|
@@ -301,7 +301,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ## 9. Interfaz y flujo
 
-### 9.1 Flujo
+### 9.1 Flujo **[En curso]** (jugar, abrir grupo, unirse y salir; sin selección de personaje)
 1. **Pantalla de título.**
 2. **Selección de personaje:** opciones de crear, borrar, exportar e importar personajes.
 3. **Jugar:** entra al mundo como host de su propia partida.
@@ -321,7 +321,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 - Personaje (equipo y reparto de atributos), Inventario, Talentos, Diario de misiones y Mapa del mundo.
 - Opciones: controles, volumen y pantalla completa.
 
-### 9.4 Social
+### 9.4 Social **[Implementado]**
 - Chat de texto de grupo.
 - Para la voz se usa Discord, que es externo y gratuito.
 
@@ -359,7 +359,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ---
 
-## 13. Distribución
+## 13. Distribución **[En curso]** (workflow listo; falta publicar el repositorio)
 
 - **Repositorio:** **público** en GitHub, desplegado automáticamente en **GitHub Pages**.
 - **Versión visible:** cada versión del juego lleva su número en la pantalla de título.
@@ -516,3 +516,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 |---|---|---|
 | 0.1 | 2026-11-11 | Primera versión del GDD a partir de la sesión de diseño inicial. |
 | 0.2 | 2026-11-11 | Misiones en la tecla J. Pasa de 3 a 4 zonas (bosque, desierto, cementerio, volcán) más la ciudad. Anexo A de habilidades. La historia queda como guion conjunto. |
+| 0.3 | 2026-11-11 | Plan 1 implementado: simulación host-autoritativa en Web Worker, predicción e interpolación, grupo por código con PeerJS/WebRTC, chat, mapa de prueba y despliegue en GitHub Pages. Las entradas se envían a 20/s con un temporizador fijo, independiente de los FPS. |
