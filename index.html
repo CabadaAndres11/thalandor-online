@@ -4,10 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thalandor Online</title>
-    <style>html,body{margin:0;height:100%;background:#111;overflow:hidden}#game{width:100%;height:100%}</style>
+    <style>
+      :root {
+        --bg: #0d0f0c;
+        --panel: rgba(20, 18, 14, 0.92);
+        --line: #5b4a2f;
+        --gold: #d8b25a;
+        --text: #f1e9d2;
+        --muted: #a39a85;
+        --error: #ff8a7a;
+        --font: Georgia, 'Times New Roman', serif;
+      }
+      html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; color: var(--text); font-family: var(--font); }
+      #game { position: absolute; inset: 0; }
+      #ui { position: absolute; inset: 0; pointer-events: none; }
+      #ui > * { pointer-events: auto; }
+      [hidden] { display: none !important; }
+
+      .menu { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(circle at 50% 35%, #1f2418 0%, var(--bg) 70%); }
+      .card { width: min(340px, calc(100vw - 32px)); padding: 28px 24px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 0 0 4px #00000066, 0 20px 60px #000c; display: flex; flex-direction: column; gap: 12px; }
+      .title { margin: 0 0 8px; text-align: center; font-size: 30px; letter-spacing: 1px; color: var(--gold); text-shadow: 0 2px 0 #000; font-weight: normal; }
+      .label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+      .field { font: inherit; font-size: 16px; padding: 8px 10px; color: var(--text); background: #0b0a08; border: 1px solid var(--line); outline: none; }
+      .field:focus { border-color: var(--gold); }
+      .field.code { text-transform: uppercase; letter-spacing: 3px; }
+      .btn { font: inherit; font-size: 16px; padding: 9px 12px; color: var(--text); background: #2a241a; border: 1px solid var(--line); cursor: pointer; }
+      .btn:hover:not(:disabled) { border-color: var(--gold); }
+      .btn:disabled { opacity: 0.6; cursor: default; }
+      .btn.primary { background: #5a4520; border-color: var(--gold); }
+      .btn.small { font-size: 14px; padding: 6px 10px; }
+      .or { text-align: center; color: var(--muted); font-size: 13px; }
+      .error { min-height: 1.2em; margin: 0; color: var(--error); font-size: 14px; text-align: center; }
+      .version { position: absolute; right: 12px; bottom: 8px; font-size: 12px; color: var(--muted); }
+
+      .hud { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
+      .chat { position: absolute; left: 12px; bottom: 12px; width: min(360px, calc(100vw - 24px)); display: flex; flex-direction: column; gap: 4px; }
+      .chat-log { max-height: 180px; overflow-y: auto; font-size: 14px; text-shadow: 0 1px 2px #000; }
+      .chat-line { padding: 1px 0; overflow-wrap: anywhere; }
+      .chat-line.system { color: var(--gold); font-style: italic; }
+      .chat-from { color: var(--gold); }
+      .chat-input { font: inherit; font-size: 14px; padding: 6px 8px; color: var(--text); background: var(--panel); border: 1px solid var(--line); outline: none; opacity: 0; pointer-events: none; }
+      .chat.open .chat-input { opacity: 1; pointer-events: auto; }
+    </style>
   </head>
   <body>
     <div id="game"></div>
+    <div id="ui"></div>
     <script type="module" src="/src/client/main.ts"></script>
   </body>
 </html>
