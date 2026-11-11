@@ -55,5 +55,11 @@
   "appearance.hairColor.blonde": "Rubio",
   "appearance.hairColor.ginger": "Pelirrojo",
   "appearance.hairColor.gray": "Gris",
-  "appearance.hairColor.white": "Blanco"
+  "appearance.hairColor.white": "Blanco",
+  "name.tooShort": "El nombre debe tener al menos 2 caracteres",
+  "name.tooLong": "El nombre puede tener como máximo 16 caracteres",
+  "name.invalidChars": "Usa solo letras, números, espacios, guiones y apóstrofos",
+  "name.duplicate": "Ya tienes un personaje con ese nombre",
+  "import.invalid": "El archivo no es un personaje válido de Thalandor",
+  "import.future": "Este personaje es de una versión más nueva del juego. Actualiza la página."
 }
