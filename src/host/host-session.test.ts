@@ -1,3 +1,5 @@
+import { defaultAppearance } from '../appearance/catalog';
+import { netChar } from '../test-fixtures';
 import { CollisionMap } from '../sim/collision-map';
 import { World } from '../sim/world';
 import { createMemoryNetwork } from '../net/memory-transport';
@@ -28,14 +30,18 @@ interface TestClient {
   send(m: ClientMessage): void;
 }
 
-async function join(net: ReturnType<typeof createMemoryNetwork>, hello?: Partial<{ version: string; name: string }>): Promise<TestClient> {
+async function join(
+  net: ReturnType<typeof createMemoryNetwork>,
+  hello?: Partial<{ version: string; name: string; character: Record<string, unknown> }>,
+): Promise<TestClient> {
   const p = net.createClient().connect('ABC234');
   await vi.runAllTimersAsync();
   const conn = await p;
   const c: TestClient = { conn, msgs: [], closed: false, send: (m) => conn.send(encode(m), 'reliable') };
   conn.onMessage((d) => c.msgs.push(decodeHost(d)!));
   conn.onClose(() => (c.closed = true));
-  if (hello !== null) c.send({ t: 'hello', version: '0.1.0', name: 'Ana', ...hello });
+  const character = { ...netChar('Ana'), ...(hello?.name !== undefined ? { name: hello.name } : {}), ...(hello?.character ?? {}) };
+  conn.send(JSON.stringify({ t: 'hello', version: hello?.version ?? '0.1.0', character }), 'reliable');
   await vi.runAllTimersAsync();
   return c;
 }
@@ -91,7 +97,7 @@ test('sanitizes input', async () => {
   await vi.runAllTimersAsync();
   const snap = ofType(c, 'snapshot').at(-1)!.s.players[0]!;
   expect(Number.isFinite(snap.x) && Number.isFinite(snap.y)).toBe(true);
-  expect(snap.x).toBeCloseTo(80 + 4, 6);
+  expect(snap.x).toBeCloseTo(80 + 6, 6);
   expect(snap.y).toBeCloseTo(80, 6);
 });
 
@@ -169,11 +175,51 @@ test('local connection is exempt from the silence timeout', async () => {
   const conn = await p;
   let closed = false;
   conn.onClose(() => (closed = true));
-  conn.send(encode({ t: 'hello', version: '0.1.0', name: 'Host' }), 'reliable');
+  conn.send(encode({ t: 'hello', version: '0.1.0', character: netChar('Host') }), 'reliable');
   await vi.runAllTimersAsync();
   clock = 10 * 60 * 1000; // 10 minutes of silence (background tab, throttled timers)
   session.tick();
   await vi.runAllTimersAsync();
   expect(closed).toBe(false);
   expect(session.playerCount).toBe(1);
+});
+
+test('invalid classId and appearance are replaced by defaults', async () => {
+  const { net } = setup();
+  const c = await join(net, { character: { classId: 'bard', appearance: { body: 'dragon', skin: 'x', hairStyle: 'y', hairColor: 'z' } } });
+  const roster = ofType(c, 'roster').at(-1)!;
+  expect(roster.players[0]).toEqual({ id: 1, name: 'Ana', classId: 'warrior', appearance: defaultAppearance('warrior') });
+});
+
+test('roster broadcast on join and on leave', async () => {
+  const { net } = setup();
+  const a = await join(net, { name: 'Ana', character: { classId: 'mage' } });
+  const b = await join(net, { name: 'Beto', character: { classId: 'cleric' } });
+  expect(ofType(a, 'roster').at(-1)!.players.map((p) => [p.name, p.classId])).toEqual([
+    ['Ana', 'mage'],
+    ['Beto', 'cleric'],
+  ]);
+  expect(ofType(b, 'roster').at(-1)!.players).toHaveLength(2);
+  b.conn.close();
+  await vi.runAllTimersAsync();
+  expect(ofType(a, 'roster').at(-1)!.players.map((p) => p.name)).toEqual(['Ana']);
+});
+
+test('spawns at saved location when valid', async () => {
+  const { net, world } = setup();
+  await join(net, { character: { lastLocation: { mapId: 'test-arena', x: 300, y: 200 } } });
+  expect(world.getPlayer(1)!.pos).toEqual({ x: 300, y: 200 });
+});
+
+test('spawns at map spawn when saved location is solid or other map', async () => {
+  const solid = new Uint8Array(400);
+  solid[6 * 20 + 9] = 1; // tile (9,6) covers x 288..320, y 192..224
+  const world = new World(new CollisionMap(20, 20, solid), { x: 80, y: 80 });
+  const session = new HostSession(world, { version: '0.1.0', mapId: 'test-arena', defaultName: 'Aventurero', now: () => clock });
+  const net = createMemoryNetwork();
+  net.createHost('ABC234').onConnection((c) => session.attach(c));
+  await join(net, { character: { lastLocation: { mapId: 'test-arena', x: 300, y: 200 } } });
+  await join(net, { name: 'Beto', character: { lastLocation: { mapId: 'other-map', x: 300, y: 300 } } });
+  expect(world.getPlayer(1)!.pos).toEqual({ x: 80, y: 80 });
+  expect(world.getPlayer(2)!.pos).toEqual({ x: 80, y: 80 });
 });

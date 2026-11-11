@@ -1,7 +1,8 @@
+import { defaultAppearance, isClassId, isValidAppearance } from '../appearance/catalog';
 import { MAX_PLAYERS } from '../sim/constants';
 import type { EntityId, PlayerInput } from '../sim/types';
 import type { World } from '../sim/world';
-import { decodeClient, encode, type HostMessage } from '../net/protocol';
+import { decodeClient, encode, type HostMessage, type NetCharacter, type RosterEntry } from '../net/protocol';
 import type { Channel, Connection } from '../net/transport';
 
 export const CONN_TIMEOUT_MS = 5000;
@@ -76,7 +77,7 @@ export class HostSession {
     const msg = decodeClient(raw);
     if (!msg) return;
     if (peer.playerId === null) {
-      if (msg.t === 'hello') this.handleHello(peer, msg.version, msg.name);
+      if (msg.t === 'hello') this.handleHello(peer, msg.version, msg.character);
       return;
     }
     if (msg.t === 'input') this.handleInput(peer.playerId, msg.input);
@@ -86,14 +87,26 @@ export class HostSession {
     }
   }
 
-  private handleHello(peer: Peer, version: string, rawName: string): void {
+  private handleHello(peer: Peer, version: string, c: NetCharacter): void {
     if (version !== this.opts.version) return this.reject(peer, 'version');
     if (this.playerCount >= MAX_PLAYERS) return this.reject(peer, 'full');
-    const name = rawName.trim().slice(0, MAX_NAME_LENGTH) || this.opts.defaultName;
-    const player = this.world.addPlayer(name);
+    const name = c.name.trim().slice(0, MAX_NAME_LENGTH) || this.opts.defaultName;
+    const classId = isClassId(c.classId) ? c.classId : 'warrior';
+    const appearance = isValidAppearance(c.appearance) ? { ...c.appearance } : defaultAppearance(classId);
+    const saved = c.lastLocation;
+    const at = saved && saved.mapId === this.opts.mapId && this.world.isSpawnable(saved) ? { x: saved.x, y: saved.y } : undefined;
+    const player = this.world.addPlayer({ name, classId, appearance }, at);
     peer.playerId = player.id;
     peer.name = name;
     this.sendTo(peer, { t: 'welcome', playerId: player.id, mapId: this.opts.mapId }, 'reliable');
+    this.broadcastRoster();
+  }
+
+  private broadcastRoster(): void {
+    const players: RosterEntry[] = this.world
+      .allPlayers()
+      .map((p) => ({ id: p.id, name: p.name, classId: p.classId, appearance: p.appearance }));
+    this.broadcast({ t: 'roster', players }, 'reliable');
   }
 
   private handleInput(id: EntityId, input: PlayerInput): void {
@@ -122,6 +135,7 @@ export class HostSession {
     if (peer.playerId !== null) {
       this.world.removePlayer(peer.playerId);
       this.broadcast({ t: 'left', playerId: peer.playerId, name: peer.name }, 'reliable');
+      this.broadcastRoster();
     }
   }
 

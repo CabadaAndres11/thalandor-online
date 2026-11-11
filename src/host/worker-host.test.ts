@@ -1,3 +1,4 @@
+import { netChar } from '../test-fixtures';
 import arena from '../../data/maps/test-arena.json';
 import type { TiledMap } from '../sim/collision-map';
 import { CollisionMap } from '../sim/collision-map';
@@ -33,7 +34,7 @@ function start() {
 
 test('local client joins through worker and receives snapshots', async () => {
   const { handle } = start();
-  const client = new ClientSession(handle.connectLocal(), { version: '0.1.0', name: 'Host', map, now: () => Date.now() });
+  const client = new ClientSession(handle.connectLocal(), { version: '0.1.0', character: netChar('Host'), map, now: () => Date.now() });
   await vi.advanceTimersByTimeAsync(300);
   expect(client.playerId).toBe(1);
   expect(client.renderState(Date.now()).self).not.toBeNull();
@@ -42,12 +43,12 @@ test('local client joins through worker and receives snapshots', async () => {
 
 test('remote connection via memory HostTransport is relayed', async () => {
   const { handle } = start();
-  const local = new ClientSession(handle.connectLocal(), { version: '0.1.0', name: 'Host', map, now: () => Date.now() });
+  const local = new ClientSession(handle.connectLocal(), { version: '0.1.0', character: netChar('Host'), map, now: () => Date.now() });
   const net = createMemoryNetwork({ latencyMs: 20 });
   handle.addTransport(net.createHost('ABC234'));
   const p = net.createClient().connect('ABC234');
   await vi.advanceTimersByTimeAsync(50);
-  const remote = new ClientSession(await p, { version: '0.1.0', name: 'Amigo', map, now: () => Date.now() });
+  const remote = new ClientSession(await p, { version: '0.1.0', character: netChar('Amigo'), map, now: () => Date.now() });
   await vi.advanceTimersByTimeAsync(500);
   expect(remote.playerId).toBe(2);
   expect(local.renderState(Date.now()).others.get(2)?.name).toBe('Amigo');
@@ -57,7 +58,7 @@ test('remote connection via memory HostTransport is relayed', async () => {
 
 test('local player survives long silence (throttled background tab)', async () => {
   const { handle } = start();
-  const client = new ClientSession(handle.connectLocal(), { version: '0.1.0', name: 'Host', map, now: () => Date.now() });
+  const client = new ClientSession(handle.connectLocal(), { version: '0.1.0', character: netChar('Host'), map, now: () => Date.now() });
   let disconnected = false;
   client.on('disconnected', () => (disconnected = true));
   await vi.advanceTimersByTimeAsync(10_000); // no inputs at all for 10 s
@@ -72,7 +73,7 @@ test('stop terminates worker and closes connections', async () => {
   handle.addTransport(net.createHost('ABC234'));
   const p = net.createClient().connect('ABC234');
   await vi.advanceTimersByTimeAsync(10);
-  const remote = new ClientSession(await p, { version: '0.1.0', name: 'Amigo', map, now: () => Date.now() });
+  const remote = new ClientSession(await p, { version: '0.1.0', character: netChar('Amigo'), map, now: () => Date.now() });
   let disconnected = false;
   remote.on('disconnected', () => (disconnected = true));
   await vi.advanceTimersByTimeAsync(200);

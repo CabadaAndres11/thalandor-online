@@ -10,7 +10,7 @@ test('applyLocal moves immediately', () => {
   const p = new Predictor(map);
   p.reconcile({ x: 100, y: 100 }, 0);
   p.applyLocal(inp(1));
-  expect(p.pos).toEqual({ x: 104, y: 100 });
+  expect(p.pos).toEqual({ x: 106, y: 100 });
 });
 
 test('reconcile replays unacked inputs', () => {

@@ -20,7 +20,7 @@ test('diagonal speed is normalized', () => {
   const end = stepPlayerMovement(start, input(1, 1), openMap());
   const dist = Math.hypot(end.x - start.x, end.y - start.y);
   expect(dist).toBeCloseTo((PLAYER_SPEED * TICK_MS) / 1000, 6);
-  expect((PLAYER_SPEED * TICK_MS) / 1000).toBe(4);
+  expect((PLAYER_SPEED * TICK_MS) / 1000).toBe(6);
 });
 
 test('cannot enter solid tile', () => {

@@ -1,4 +1,5 @@
 import { CollisionMap, type TiledMap } from './collision-map';
+import { TILE_SIZE } from './constants';
 
 function tiled(data: number[], w = 3, h = 2, layer = 'collision'): TiledMap {
   return { width: w, height: h, tilewidth: 16, tileheight: 16, layers: [{ name: layer, type: 'tilelayer', data }] };
@@ -17,8 +18,8 @@ test('fromTiled reads collision layer', () => {
   const map = CollisionMap.fromTiled(tiled([0, 1, 0, 0, 0, 0]));
   expect(map.isSolidTile(1, 0)).toBe(true);
   expect(map.isSolidTile(0, 0)).toBe(false);
-  expect(map.isSolidAt(16 + 3, 5)).toBe(true);
-  expect(map.isSolidAt(3, 20)).toBe(false);
+  expect(map.isSolidAt(TILE_SIZE + 3, 5)).toBe(true);
+  expect(map.isSolidAt(3, TILE_SIZE + 4)).toBe(false);
 });
 
 test('fromTiled throws if layer missing', () => {

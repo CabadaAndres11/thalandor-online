@@ -1,3 +1,4 @@
+import { netChar } from '../test-fixtures';
 import { CollisionMap } from '../sim/collision-map';
 import { World } from '../sim/world';
 import { HostSession } from '../host/host-session';
@@ -30,7 +31,7 @@ async function startGame() {
   for (const name of ['Ana', 'Beto', 'Cira']) {
     const p = net.createClient().connect('ABC234');
     await vi.advanceTimersByTimeAsync(150);
-    clients.push(new ClientSession(await p, { version: '0.1.0', name, map, now: () => Date.now() }));
+    clients.push(new ClientSession(await p, { version: '0.1.0', character: netChar(name), map, now: () => Date.now() }));
   }
   await vi.advanceTimersByTimeAsync(500);
   return { world, clients, stop };

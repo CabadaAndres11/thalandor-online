@@ -2,7 +2,7 @@ import type { CollisionMap } from '../sim/collision-map';
 import { INTERP_DELAY_MS, TICK_MS } from '../sim/constants';
 import type { EntityId, PlayerInput, Vec2 } from '../sim/types';
 import type { WorldSnapshot } from '../sim/world';
-import { decodeHost, encode, type RejectReason } from '../net/protocol';
+import { decodeHost, encode, type NetCharacter, type RejectReason } from '../net/protocol';
 import type { Connection } from '../net/transport';
 import { Predictor } from './prediction';
 import { SnapshotBuffer } from './interpolation';
@@ -26,7 +26,7 @@ export interface RenderState {
 
 export interface ClientSessionOptions {
   version: string;
-  name: string;
+  character: NetCharacter;
   map: CollisionMap;
   now?: () => number;
 }
@@ -59,7 +59,7 @@ export class ClientSession {
     this.lastSnapshotAt = this.now();
     conn.onMessage((raw) => this.onMessage(raw));
     conn.onClose(() => this.end());
-    conn.send(encode({ t: 'hello', version: opts.version, name: opts.name }), 'reliable');
+    conn.send(encode({ t: 'hello', version: opts.version, character: opts.character }), 'reliable');
   }
 
   on<K extends keyof ClientEvents>(event: K, cb: (payload: ClientEvents[K]) => void): void {

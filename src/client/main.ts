@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import arena from '../../data/maps/test-arena.json';
 import { GAME_VERSION } from '../version';
+import { defaultAppearance } from '../appearance/catalog';
 import { CollisionMap, type TiledMap } from '../sim/collision-map';
 import { MAX_NAME_LENGTH } from '../host/host-session';
 import { startWorkerHost, type WorkerHostHandle } from '../host/worker-host';
@@ -45,7 +46,12 @@ function backToMenu(error?: string): void {
 }
 
 function startGame(conn: Connection, name: string, host: WorkerHostHandle | null): void {
-  const session = new ClientSession(conn, { version: GAME_VERSION, name, map });
+  const session = new ClientSession(conn, {
+    version: GAME_VERSION,
+    // Temporary until the character screens (Plan 2, Task 8) provide the real character.
+    character: { name, classId: 'warrior', appearance: defaultAppearance('warrior'), lastLocation: null },
+    map,
+  });
   current = { session, host };
   // Events from a session that is no longer current must never touch the UI or the active game.
   const live =

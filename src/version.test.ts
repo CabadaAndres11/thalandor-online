@@ -1,5 +1,5 @@
 import { GAME_VERSION } from './version';
 
 test('GAME_VERSION matches package.json', () => {
-  expect(GAME_VERSION).toBe('0.1.0');
+  expect(GAME_VERSION).toBe('0.2.0');
 });
