@@ -121,6 +121,8 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
     freezes: () => host !== null && othersInGame === 0,
     onPause: (paused) => host?.setPaused(paused),
     onCharacter: () => windows.show('character'),
+    onInventory: () => items.toggleInventory(),
+    onAbilities: () => windows.show('abilities'),
     onTalents: () => windows.show('talents'),
     onLeave: () => backToMenu(),
     busy: () => overlay.chatOpen || windows.current !== null || items.inventoryOpen || items.merchantOpen,

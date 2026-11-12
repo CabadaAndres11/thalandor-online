@@ -4,6 +4,7 @@ import type { CharacterStore } from '../../save/store';
 import { downloadCharacter, planImport, readCharacterFile } from '../../save/transfer';
 import { t } from '../i18n';
 import { PreviewCanvas } from '../render/preview';
+import { equipmentLooks } from '../../sim/items/stats';
 import { button, el, prefs } from './dom';
 
 export interface ScreenHandlers {
@@ -227,7 +228,7 @@ export class Screens {
     if (c.id === this.selectedId) b.classList.add('on');
     const canvas = el('canvas', 'preview');
     const preview = new PreviewCanvas(canvas, 1.5);
-    void preview.setCharacter(c.classId, c.appearance);
+    void preview.setCharacter(c.classId, c.appearance, equipmentLooks(c.equipment));
     preview.start();
     this.previews.push(preview);
     b.append(canvas, el('strong', 'char-name', c.name), el('span', 'muted', t(`class.${c.classId}`)), el('span', 'muted', t('select.level', { level: c.level })));

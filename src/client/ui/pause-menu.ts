@@ -6,6 +6,8 @@ export interface PauseMenuOptions {
   freezes: () => boolean;
   onPause: (paused: boolean) => void;
   onCharacter: () => void;
+  onInventory: () => void;
+  onAbilities: () => void;
   onTalents: () => void;
   onLeave: () => void;
   /** True while something else uses Escape (chat, game windows). */
@@ -29,6 +31,14 @@ export class PauseMenu {
       button('btn', t('pause.character'), () => {
         this.close();
         opts.onCharacter();
+      }),
+      button('btn', t('pause.inventory'), () => {
+        this.close();
+        opts.onInventory();
+      }),
+      button('btn', t('pause.abilities'), () => {
+        this.close();
+        opts.onAbilities();
       }),
       button('btn', t('pause.talents'), () => {
         this.close();

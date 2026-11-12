@@ -1,6 +1,6 @@
 import { EQUIP_SLOTS, isPotion, itemBase, LOOT, sellPrice, type EquipSlot, type Item } from '../../sim/items/defs';
 import type { InventoryInfo, ProgressRequest } from '../../sim/progression/requests';
-import { iconUrl } from '../hud/icons';
+import { itemImage } from '../render/item-icons';
 import { t } from '../i18n';
 import { button, el } from './dom';
 import { itemColor, itemIcon, itemTooltip, type TipLine } from './item-logic';
@@ -54,8 +54,9 @@ export function itemSlot(item: Item | null | undefined, tip: Tooltip, tipLines: 
   const box = el('div', `item-slot ${cls}`.trim());
   if (!item) return box;
   box.style.borderColor = itemColor(item);
-  const img = el('img', 'slot-icon');
-  img.src = iconUrl(itemIcon(item));
+  const pic = itemImage(item, itemIcon(item));
+  const img = el('img', pic.sprite ? 'slot-icon sprite' : 'slot-icon');
+  img.src = pic.src;
   img.alt = '';
   box.append(img);
   if (isPotion(item)) box.append(el('span', 'item-count', String(item.count)));

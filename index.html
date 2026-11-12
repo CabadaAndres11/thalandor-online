@@ -130,9 +130,13 @@
       .slot.potion .slot-icon { padding: 6px; box-sizing: border-box; }
       .side-window { left: auto; right: 12px; top: 60px; transform: none; width: min(330px, calc(100vw - 24px)); }
       .shop-window { right: auto; left: 12px; }
+      .side-window { z-index: 5; }
+      /* With the bag open, centred windows move left so both can be seen at once. */
+      .bag-window:not([hidden]) ~ .game-window:not(.side-window) { left: 12px; transform: translateY(-50%); }
       .bag-grid { display: grid; grid-template-columns: repeat(6, 44px); gap: 4px; justify-content: center; }
       .item-slot { position: relative; width: 44px; height: 44px; box-sizing: border-box; border: 2px solid #3a3226; background: #0e0c09; cursor: default; }
       .item-slot .slot-icon { padding: 5px; box-sizing: border-box; }
+      .item-slot .slot-icon.sprite { padding: 3px; object-fit: contain; image-rendering: pixelated; }
       .item-slot.broken { box-shadow: inset 0 0 0 2px #c03030; }
       .item-slot.broken .slot-icon { filter: sepia(1) hue-rotate(-40deg) saturate(3); }
       .item-count { position: absolute; right: 2px; bottom: 0; font-size: 11px; color: #fff; text-shadow: 0 1px 2px #000; }

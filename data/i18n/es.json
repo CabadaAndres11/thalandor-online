@@ -550,5 +550,7 @@
   "refused.far": "Tienes que estar junto al mercader.",
   "refused.cooldown": "Aún no puedes tomar otra poción.",
   "refused.none": "No hay nada que hacer.",
-  "abilities.title": "Habilidades"
+  "abilities.title": "Habilidades",
+  "pause.inventory": "Inventario (I)",
+  "pause.abilities": "Habilidades (K)"
 }
