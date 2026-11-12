@@ -14,6 +14,7 @@ import { t } from './i18n';
 import { Overlay } from './ui/overlay';
 import { Screens } from './ui/screens';
 import { ProgressWindows } from './ui/progress-windows';
+import { PauseMenu } from './ui/pause-menu';
 import { Hud } from './hud/hud';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
@@ -47,15 +48,17 @@ interface Current {
   saver: AutoSaver;
   character: Character;
   windows: ProgressWindows;
+  pause: PauseMenu;
 }
 let current: Current | null = null;
 let pendingSave: Promise<void> = Promise.resolve();
 
 function backToMenu(error?: string): void {
   if (current) {
-    const { session, host, saver, windows } = current;
+    const { session, host, saver, windows, pause } = current;
     current = null;
     windows.destroy();
+    pause.destroy();
     saver.stop();
     pendingSave = saver.saveNow();
     session.close();
@@ -91,9 +94,19 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
   const windows = new ProgressWindows(uiRoot, {
     classId: character.classId,
     request: (req) => session.requestProgress(req),
-    isTyping: () => overlay.chatOpen,
+    isTyping: () => overlay.chatOpen || pause.open,
   });
-  current = { session, host, saver, character, windows };
+  let othersInGame = 0;
+  const pause = new PauseMenu(uiRoot, {
+    freezes: () => host !== null && othersInGame === 0,
+    onPause: (paused) => host?.setPaused(paused),
+    onCharacter: () => windows.show('character'),
+    onTalents: () => windows.show('talents'),
+    onLeave: () => backToMenu(),
+    busy: () => overlay.chatOpen || windows.current !== null,
+  });
+  session.on('roster', ({ players }) => (othersInGame = players.length - 1));
+  current = { session, host, saver, character, windows, pause };
   saver.start();
   // Events from a session that is no longer current must never touch the UI or the active game.
   const live =
@@ -138,7 +151,7 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
     mapJson,
     self: { name: character.name, classId: character.classId, appearance: character.appearance },
     hud,
-    isTyping: () => overlay.chatOpen,
+    isTyping: () => overlay.chatOpen || pause.open,
   });
 }
 

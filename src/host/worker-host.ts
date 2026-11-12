@@ -21,6 +21,8 @@ export interface WorkerHostHandle {
   connectLocal(): Connection;
   /** Relays every connection accepted by this transport to the worker. */
   addTransport(t: HostTransport): void;
+  /** Pause menu of the host player: the world stops only while nobody else is in the game. */
+  setPaused(paused: boolean): void;
   stop(): void;
 }
 
@@ -93,6 +95,10 @@ export function startWorkerHost(opts: WorkerHostOptions): WorkerHostHandle {
           if (endpoints.delete(connId)) post({ k: 'close', connId });
         });
       });
+    },
+
+    setPaused(paused: boolean): void {
+      if (!stopped) post({ k: 'pause', paused });
     },
 
     stop(): void {

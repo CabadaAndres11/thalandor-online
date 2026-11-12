@@ -77,7 +77,8 @@ export class GameScene extends Phaser.Scene {
     }
     this.input.mouse?.disableContextMenu();
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
-      if (this.data_.isTyping()) return;
+      // Clicks on HTML windows over the canvas (e.g. the "+" of an attribute) are not attacks.
+      if (this.data_.isTyping() || !this.onCanvas(p)) return;
       this.pressSlot(p.rightButtonDown() ? 'rmb' : 'lmb');
     });
     const cam = this.cameras.main;
@@ -107,6 +108,11 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  /** Whether the pointer was pressed on the game canvas (not on HTML UI on top of it). */
+  private onCanvas(p: Phaser.Input.Pointer): boolean {
+    return !p.downElement || p.downElement === this.game.canvas;
+  }
+
   private aim(): Vec2 {
     const p = this.input.activePointer.positionToCamera(this.cameras.main) as Phaser.Math.Vector2;
     return { x: p.x, y: p.y };
@@ -124,8 +130,8 @@ export class GameScene extends Phaser.Scene {
     const pointer = this.input.activePointer;
     let buttons = 0;
     if (!typing) {
-      if (pointer.leftButtonDown()) buttons |= BUTTON.lmb;
-      if (pointer.rightButtonDown()) buttons |= BUTTON.rmb;
+      if (pointer.leftButtonDown() && this.onCanvas(pointer)) buttons |= BUTTON.lmb;
+      if (pointer.rightButtonDown() && this.onCanvas(pointer)) buttons |= BUTTON.rmb;
       if (this.keys.E.isDown) buttons |= BUTTON.interact;
     }
     const move = inputFromKeys(

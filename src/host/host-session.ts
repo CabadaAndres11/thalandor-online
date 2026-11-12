@@ -37,6 +37,7 @@ const clampAxis = (v: number) => (Number.isFinite(v) ? Math.max(-1, Math.min(1, 
 /** Wraps a World with connection handling: join/reject, inputs, snapshots, chat and timeouts. */
 export class HostSession {
   private readonly peers = new Set<Peer>();
+  private pauseRequested = false;
   private readonly now: () => number;
 
   constructor(
@@ -63,8 +64,18 @@ export class HostSession {
     conn.onClose(() => this.drop(peer));
   }
 
+  /** Solo pause: the world freezes only while the host is alone (a group game never stops). */
+  setPaused(paused: boolean): void {
+    this.pauseRequested = paused;
+  }
+
+  get paused(): boolean {
+    return this.pauseRequested && this.playerCount <= 1;
+  }
+
   tick(): void {
-    this.world.step();
+    // Snapshots keep flowing while paused so clients do not time out.
+    if (!this.paused) this.world.step();
     const events = this.world.drainEvents();
     const eventsMsg = events.length ? encode({ t: 'events', list: events }) : null;
     const dirty = new Set(this.world.drainProgress());
@@ -146,6 +157,7 @@ export class HostSession {
   }
 
   private handleInput(id: EntityId, input: PlayerInput): void {
+    if (this.paused) return;
     if (!Number.isFinite(input.seq)) return;
     const pos = this.world.getPlayer(id)?.pos ?? { x: 0, y: 0 };
     const aimOk = Number.isFinite(input.aimX) && Number.isFinite(input.aimY);

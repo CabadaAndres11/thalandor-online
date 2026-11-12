@@ -7,6 +7,7 @@ export type MainToWorker =
   | { k: 'open'; connId: string; local?: boolean }
   | { k: 'msg'; connId: string; data: string }
   | { k: 'close'; connId: string }
+  | { k: 'pause'; paused: boolean }
   | { k: 'stop' };
 
 /** Messages from the host worker to the main thread. */

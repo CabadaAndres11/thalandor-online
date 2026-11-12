@@ -343,3 +343,19 @@ describe('dev commands (development builds only)', () => {
     expect(ofType(c, 'chat')).toHaveLength(1);
   });
 });
+
+test('solo pause freezes the world but keeps snapshots; a group game never pauses', async () => {
+  const { net, session, world } = setup();
+  const a = await join(net);
+  session.setPaused(true);
+  const tick = world.snapshot().tick;
+  const before = ofType(a, 'snapshot').length;
+  session.tick();
+  session.tick();
+  await vi.runAllTimersAsync();
+  expect(world.snapshot().tick).toBe(tick);
+  expect(ofType(a, 'snapshot').length).toBeGreaterThan(before);
+  await join(net, { name: 'Beto' });
+  session.tick();
+  expect(world.snapshot().tick).toBe(tick + 1);
+});

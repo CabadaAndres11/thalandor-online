@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 1.0 |
+| Versión del documento | 1.1 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.3.0 (Plan 3: combate y clases) |
 
@@ -624,3 +624,4 @@ Completar una ruta cuesta 16 puntos. Los datos están en `data/talents.json`.
 | 0.8 | 2026-11-12 | Plan 3 implementado: combate en tiempo real con las 4 clases (kit base y pasivas), esquiva predicha, amenaza, derribo y levantar con E, 4 monstruos con IA (persecución con A*, retorno, manada, distancia) que reaparecen y escalan con el grupo, animaciones LPC de ataque y HUD con casillas de habilidad. |
 | 0.9 | 2026-11-12 | Diseño del Plan 4 (progresión): curva de experiencia, reparto en grupo, crecimiento por clase, bloqueo, anexo C con el árbol de talentos completo, desbloqueos por nivel y mecánicas de especialización. Reinicio y cambio de especialización gratis fuera de combate hasta que existan capital y oro. |
 | 1.0 | 2026-11-12 | Plan 4 implementado (versión 0.4.0): experiencia y niveles hasta el 30 con reparto en grupo, atributos con crecimiento por clase y bloqueo, árbol de talentos, desbloqueos por nivel, las 8 especializaciones con sus mecánicas (combo, sigilo, venenos, reflejo, zonas, canalizaciones, proyectiles que explotan o atraviesan, pasivas con disparadores), ventanas de Personaje, Talentos y Especialización, barra de experiencia y guardado v2. |
+| 1.1 | 2026-11-12 | Versión 0.4.1: menú con Esc (en solitario pausa el mundo; en grupo la partida sigue), los clics en las ventanas ya no lanzan el ataque básico. |

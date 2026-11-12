@@ -370,5 +370,12 @@
   "desc.mage_arcane_mind": "+10 % de maná máximo.",
   "desc.mage_concentration": "Tras 3 s sin recibir daño: +10 % de daño de hechizos.",
   "desc.explorer_reflexes": "+5 % de esquiva.",
-  "desc.explorer_light_feet": "+10 % de velocidad de movimiento."
+  "desc.explorer_light_feet": "+10 % de velocidad de movimiento.",
+  "pause.title": "Menú",
+  "pause.resume": "Continuar",
+  "pause.character": "Personaje (C)",
+  "pause.talents": "Talentos (N)",
+  "pause.leave": "Salir al menú de personajes",
+  "pause.frozen": "Partida en pausa.",
+  "pause.running": "Estás en grupo: la partida sigue en marcha."
 }

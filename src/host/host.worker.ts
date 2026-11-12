@@ -81,6 +81,9 @@ export function createWorkerHandler(post: (m: WorkerToMain) => void, opts: { now
       case 'close':
         conns.get(m.connId)?.remoteClosed();
         break;
+      case 'pause':
+        session?.setPaused(m.paused);
+        break;
       case 'stop':
         stopLoop?.();
         stopLoop = null;

@@ -101,6 +101,7 @@ export class Overlay {
       if (text) this.game.onChat(text);
       this.closeChat();
     } else if (e.key === 'Escape' && this.chatIsOpen) {
+      e.preventDefault();
       this.closeChat();
     }
   }
