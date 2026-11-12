@@ -1,7 +1,10 @@
 import { defaultAppearance, isClassId, isValidAppearance, type Appearance, type ClassId } from '../appearance/catalog';
 import type { Attributes } from '../sim/combat/defs';
+import { LOOT, type Item } from '../sim/items/defs';
+import type { Equipment } from '../sim/items/stats';
+import { sanitizeBelongings } from '../sim/items/validate';
 
-export const CURRENT_SCHEMA = 2;
+export const CURRENT_SCHEMA = 3;
 export const HOTBAR_SIZE = 4;
 const ATTRS: (keyof Attributes)[] = ['strength', 'agility', 'intellect', 'stamina', 'spirit'];
 export const MAX_CHARACTERS = 8;
@@ -26,6 +29,10 @@ export interface Progress {
   hotbar: (string | null)[];
 }
 
+export function emptyBelongings(): { gold: number; inventory: (Item | null)[]; equipment: Equipment } {
+  return { gold: 0, inventory: Array<Item | null>(LOOT.inventorySize).fill(null), equipment: {} };
+}
+
 export function emptyProgress(): Progress {
   return {
     attributes: { strength: 0, agility: 0, intellect: 0, stamina: 0, spirit: 0 },
@@ -36,7 +43,10 @@ export function emptyProgress(): Progress {
 }
 
 export interface Character extends Progress {
-  schemaVersion: 2;
+  schemaVersion: 3;
+  gold: number;
+  inventory: (Item | null)[];
+  equipment: Equipment;
   id: string;
   name: string;
   classId: ClassId;
@@ -56,6 +66,8 @@ type Migration = (c: Record<string, unknown>) => Record<string, unknown>;
 export const migrations: Record<number, Migration> = {
   // v2 (Plan 4): progress fields; parseCharacter fills them with defaults.
   1: (c) => ({ ...c, schemaVersion: 2 }),
+  // v3 (Plan 5): gold, inventory and equipment; parseCharacter fills them empty.
+  2: (c) => ({ ...c, schemaVersion: 3 }),
 };
 
 export function validateName(name: string, existingNames: string[]): { ok: true; name: string } | { ok: false; error: NameError } {
@@ -83,6 +95,7 @@ export function createCharacter(
     level: 1,
     xp: 0,
     ...emptyProgress(),
+    ...emptyBelongings(),
     lastLocation: null,
     createdAt: now,
     updatedAt: now,
@@ -138,6 +151,7 @@ export function parseCharacter(
       level: c.level,
       xp: c.xp,
       ...parseProgress(c),
+      ...sanitizeBelongings(c, c.classId, c.level),
       lastLocation: loc ? { mapId: loc.mapId, x: loc.x, y: loc.y } : null,
       createdAt: c.createdAt,
       updatedAt: c.updatedAt,

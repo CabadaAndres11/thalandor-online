@@ -12,6 +12,7 @@ import { applyDamage, applyHeal, type DamageOpts, monsterHpScale, rescaleMonster
 import type { Rng } from './combat/damage';
 import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, isStealthed, passiveValue, type PlayerProgress, type Unit } from './combat/unit';
 import { shareXp } from './progression/xp';
+import type { Belongings } from './items/validate';
 import { stepMonster } from './monsters/ai';
 
 /** Ticks without a moving input before a player counts as standing (hides single lost packets). */
@@ -26,6 +27,7 @@ export interface PlayerInfo {
   classId: ClassId;
   appearance: Appearance;
   progress?: PlayerProgress;
+  belongings?: Belongings;
 }
 
 /** Kept for code that only deals with players. */
@@ -119,6 +121,9 @@ export class World {
   zones: Zone[] = [];
   private events: CombatEvent[] = [];
   private progressDirty = new Set<EntityId>();
+  private inventoryDirty = new Set<EntityId>();
+  /** The temporary merchant (Plan 5; moves to the capital in Plan 6). */
+  merchant: { pos: Vec2; name: string } | null = null;
   private nextId = 1;
   private nextProj = 1;
   private readonly units = new Map<EntityId, Unit>();
@@ -148,6 +153,17 @@ export class World {
   /** A player's progress (xp, level, choices) changed and must be sent to it. */
   markProgress(id: EntityId): void {
     this.progressDirty.add(id);
+  }
+
+  /** A player's gold, bag or equipment changed and must be sent to it. */
+  markInventory(id: EntityId): void {
+    this.inventoryDirty.add(id);
+  }
+
+  drainInventory(): EntityId[] {
+    const out = [...this.inventoryDirty];
+    this.inventoryDirty.clear();
+    return out;
   }
 
   drainProgress(): EntityId[] {

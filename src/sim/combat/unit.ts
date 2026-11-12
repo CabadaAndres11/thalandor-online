@@ -7,6 +7,8 @@ import { BALANCE, CLASSES, MONSTERS, type Attributes, type PassiveDef, type Reso
 import { computeStats, monsterBaseStats, NO_ATTRS, playerBaseStats, type Stats } from './stats';
 import { talentMods, type TalentAlloc } from '../progression/talents';
 import { activePassives, loadout, type Loadout } from '../progression/unlocks';
+import { LOOT, type Item } from '../items/defs';
+import { equipmentBonuses, type Equipment } from '../items/stats';
 
 export type Team = 'players' | 'monsters';
 export type LifeState = 'alive' | 'downed' | 'dead';
@@ -129,6 +131,12 @@ export interface Unit {
   /** Internal cooldowns of passive procs, by passive id. */
   procCd: Record<string, number>;
   channel: Channel | null;
+  gold: number;
+  inventory: (Item | null)[];
+  equipment: Equipment;
+  potionCdUntil: number;
+  /** The merchant window is open (selling is allowed). */
+  atMerchant: boolean;
   ai?: MonsterAi;
 }
 
@@ -190,6 +198,11 @@ function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name'
     basicCount: 0,
     procCd: {},
     channel: null,
+    gold: 0,
+    inventory: Array<Item | null>(LOOT.inventorySize).fill(null),
+    equipment: {},
+    potionCdUntil: 0,
+    atMerchant: false,
   };
 }
 
@@ -204,7 +217,7 @@ export interface PlayerProgress {
 
 export function createPlayerUnit(
   id: EntityId,
-  info: { name: string; classId: ClassId; appearance: Appearance; progress?: PlayerProgress },
+  info: { name: string; classId: ClassId; appearance: Appearance; progress?: PlayerProgress; belongings?: { gold: number; inventory: (Item | null)[]; equipment: Equipment } },
   pos: Vec2,
 ): Unit {
   const c = CLASSES[info.classId]!;
@@ -229,6 +242,11 @@ export function createPlayerUnit(
     specId: info.progress?.specId ?? null,
     hotbar: [...(info.progress?.hotbar ?? [null, null, null, null])],
   };
+  if (info.belongings) {
+    u.gold = info.belongings.gold;
+    u.inventory = [...info.belongings.inventory];
+    u.equipment = { ...info.belongings.equipment };
+  }
   rebuildPlayer(u, 0);
   u.hp = u.stats.maxHp;
   u.resource = u.resourceKind === 'rage' ? 0 : u.stats.maxResource;
@@ -259,9 +277,12 @@ export function createMonsterUnit(id: EntityId, type: string, pos: Vec2, hpScale
 /** Rebuilds a player's stats, passives and slots after any progress change (level, attributes, talents, spec, hotbar). */
 export function rebuildPlayer(u: Unit, now: number): void {
   if (!u.classId) return;
-  u.baseStats = playerBaseStats(CLASSES[u.classId]!, u.level, u.attrs);
+  const gear = equipmentBonuses(u.equipment);
+  const attrs = { ...u.attrs };
+  for (const k of Object.keys(attrs) as (keyof typeof attrs)[]) attrs[k] += gear.attrs[k];
+  u.baseStats = playerBaseStats(CLASSES[u.classId]!, u.level, attrs);
   u.passives = activePassives(u.classId, u.specId, u.level);
-  u.mods = [...u.passives.flatMap((p) => p.mods ?? []), ...talentMods(u.talents)];
+  u.mods = [...u.passives.flatMap((p) => p.mods ?? []), ...talentMods(u.talents), ...gear.mods];
   u.slots = loadout(u.classId, u.specId, u.level, u.hotbar);
   recomputeStats(u, now);
 }
