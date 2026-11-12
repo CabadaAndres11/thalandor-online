@@ -1,4 +1,5 @@
 import { isClassId, type Appearance, type ClassId } from '../appearance/catalog';
+import type { ProgressInfo, ProgressRequest, RequestResult } from '../sim/progression/requests';
 import type { EntityId, PlayerInput, Press } from '../sim/types';
 import type { MeSnapshot, UnitSnapshot, WorldSnapshot } from '../sim/world';
 import type { CombatEvent } from '../sim/combat/events';
@@ -9,6 +10,8 @@ export interface NetCharacter {
   classId: string;
   appearance: Appearance;
   lastLocation: { mapId: string; x: number; y: number } | null;
+  /** Level, xp and choices; untrusted, the host sanitizes it (sanitizeProgress). */
+  progress?: unknown;
 }
 
 export interface RosterEntry {
@@ -21,7 +24,8 @@ export interface RosterEntry {
 export type ClientMessage =
   | { t: 'hello'; version: string; character: NetCharacter }
   | { t: 'input'; input: PlayerInput }
-  | { t: 'chat'; text: string };
+  | { t: 'chat'; text: string }
+  | { t: 'progress-req'; req: ProgressRequest };
 
 export type RejectReason = 'version' | 'full';
 
@@ -32,7 +36,11 @@ export type HostMessage =
   | { t: 'events'; list: CombatEvent[] }
   | { t: 'roster'; players: RosterEntry[] }
   | { t: 'chat'; from: string; text: string }
-  | { t: 'left'; playerId: EntityId; name: string };
+  | { t: 'left'; playerId: EntityId; name: string }
+  /** The receiving player's own progress (on join and whenever it changes). */
+  | { t: 'progress'; p: ProgressInfo }
+  /** Answer to a refused progress-req, for a message in the UI. */
+  | { t: 'progress-refused'; reason: Exclude<RequestResult, 'ok'> };
 
 export function encode(msg: ClientMessage | HostMessage): string {
   return JSON.stringify(msg);
@@ -102,6 +110,46 @@ const isSnapshot = (v: unknown): v is WorldSnapshot => isObj(v) && isNum(v.tick)
 const isMe = (v: unknown): v is MeSnapshot =>
   isObj(v) && isNum(v.resource) && isNum(v.maxResource) && isObj(v.cd) && isNum(v.gcd) && isNum(v.moveSpeed) && isBool(v.canMove) && isNum(v.lastPressSeq);
 
+const ATTRS = new Set(['strength', 'agility', 'intellect', 'stamina', 'spirit']);
+
+/** Shape only; the host decides whether the request is allowed. */
+function toRequest(v: unknown): ProgressRequest | null {
+  if (!isObj(v) || !isStr(v.k)) return null;
+  switch (v.k) {
+    case 'attr':
+      return isStr(v.attr) && ATTRS.has(v.attr) ? { k: 'attr', attr: v.attr as Extract<ProgressRequest, { k: 'attr' }>['attr'] } : null;
+    case 'talent':
+      return isStr(v.node) ? { k: 'talent', node: v.node } : null;
+    case 'spec':
+      return isStr(v.specId) ? { k: 'spec', specId: v.specId } : null;
+    case 'resetTalents':
+    case 'resetAttrs':
+      return { k: v.k };
+    case 'hotbar':
+      return isNum(v.slot) && (v.abilityId === null || isStr(v.abilityId)) ? { k: 'hotbar', slot: v.slot, abilityId: v.abilityId } : null;
+    default:
+      return null;
+  }
+}
+
+const isProgress = (v: unknown): v is ProgressInfo =>
+  isObj(v) &&
+  isNum(v.level) &&
+  isNum(v.xp) &&
+  isNum(v.xpToNext) &&
+  isObj(v.attributes) &&
+  isNum(v.freeAttrPoints) &&
+  isObj(v.talents) &&
+  isNum(v.freeTalentPoints) &&
+  (v.specId === null || isStr(v.specId)) &&
+  Array.isArray(v.hotbar) &&
+  isObj(v.slots) &&
+  Array.isArray(v.unlocked) &&
+  Array.isArray(v.passives) &&
+  isObj(v.stats);
+
+const REFUSALS = new Set(['invalid', 'points', 'combat', 'level']);
+
 const isEvents = (v: unknown): v is CombatEvent[] => Array.isArray(v) && v.every((e) => isObj(e) && isStr(e.e));
 
 const isRoster = (v: unknown): v is RosterEntry[] =>
@@ -117,6 +165,10 @@ export function decodeClient(raw: string): ClientMessage | null {
       return isInput(m.input) ? { t: 'input', input: m.input } : null;
     case 'chat':
       return isStr(m.text) ? { t: 'chat', text: m.text } : null;
+    case 'progress-req': {
+      const req = toRequest(m.req);
+      return req ? { t: 'progress-req', req } : null;
+    }
     default:
       return null;
   }
@@ -142,6 +194,10 @@ export function decodeHost(raw: string): HostMessage | null {
       return isStr(m.from) && isStr(m.text) ? { t: 'chat', from: m.from, text: m.text } : null;
     case 'left':
       return isNum(m.playerId) && isStr(m.name) ? { t: 'left', playerId: m.playerId, name: m.name } : null;
+    case 'progress':
+      return isProgress(m.p) ? { t: 'progress', p: m.p } : null;
+    case 'progress-refused':
+      return isStr(m.reason) && REFUSALS.has(m.reason) ? { t: 'progress-refused', reason: m.reason as Exclude<RequestResult, 'ok'> } : null;
     default:
       return null;
   }

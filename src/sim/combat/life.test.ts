@@ -1,7 +1,7 @@
 import { BALANCE } from './defs';
 import { BUTTON } from './unit';
 import { useAbility } from './actions';
-import { addPlayer, input, steps, testWorld } from './test-world';
+import { addPlayer, input, setLevel, steps, testWorld } from './test-world';
 
 const TPS = 20;
 
@@ -94,7 +94,7 @@ describe('resources and regeneration', () => {
 
   test('rage decays out of combat after the delay, slower with Contained Fury', () => {
     const w = testWorld();
-    const p = addPlayer(w, 'warrior', { x: 300, y: 300 });
+    const p = setLevel(w, addPlayer(w, 'warrior', { x: 300, y: 300 }), 15);
     p.resource = 50;
     steps(w, 3 * TPS);
     expect(p.resource).toBeCloseTo(50, 5);
@@ -112,7 +112,7 @@ describe('resources and regeneration', () => {
   test('mana: full regen out of combat, none in combat without Meditation, half with it', () => {
     const w = testWorld();
     const mage = addPlayer(w, 'mage', { x: 300, y: 300 });
-    const cleric = addPlayer(w, 'cleric', { x: 400, y: 300 });
+    const cleric = setLevel(w, addPlayer(w, 'cleric', { x: 400, y: 300 }), 15);
     mage.resource = 0;
     steps(w, TPS);
     const oocRegen = mage.resource;

@@ -4,7 +4,7 @@ import type { Vec2 } from '../types';
 import type { World } from '../world';
 import { checkUse, useAbility } from '../combat/actions';
 import { ability, BALANCE, MONSTERS } from '../combat/defs';
-import { cannotAct, cannotMove, type Unit } from '../combat/unit';
+import { cannotAct, cannotMove, isStealthed, type Unit } from '../combat/unit';
 import { findPath, lineOfSight } from './path';
 
 const TICK_SEC = 0.05;
@@ -56,7 +56,7 @@ export function stepMonster(world: World, m: Unit): void {
   if (ai.state === 'idle') {
     const seen = world
       .allPlayers()
-      .filter((p) => p.state === 'alive' && dist(p.pos, m.pos) <= def.aggroRange && lineOfSight(world.map, m.pos, p.pos))
+      .filter((p) => p.state === 'alive' && !isStealthed(p, world.now) && dist(p.pos, m.pos) <= def.aggroRange && lineOfSight(world.map, m.pos, p.pos))
       .sort((a, b) => dist(a.pos, m.pos) - dist(b.pos, m.pos))[0];
     if (seen) {
       world.addThreat(m, seen, 1);

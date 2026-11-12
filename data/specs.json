@@ -1,0 +1,320 @@
+{
+  "warrior_protection": {
+    "classId": "warrior",
+    "nameKey": "spec.warrior_protection",
+    "descKey": "spec.warrior_protection.desc",
+    "actives": [
+      "warrior_taunt",
+      "warrior_shield_wall",
+      "warrior_retaliation"
+    ],
+    "passives": [
+      {
+        "id": "warrior_defensive_stance",
+        "nameKey": "passive.warrior_defensive_stance",
+        "mods": [
+          {
+            "stat": "threatMultiplier",
+            "pct": 1
+          },
+          {
+            "stat": "maxHp",
+            "pct": 0.15
+          }
+        ]
+      },
+      {
+        "id": "warrior_expert_block",
+        "nameKey": "passive.warrior_expert_block",
+        "onBlock": {
+          "rage": 5,
+          "healPctMaxHp": 0.02
+        }
+      },
+      {
+        "id": "warrior_last_bastion",
+        "nameKey": "passive.warrior_last_bastion",
+        "onLowHp": {
+          "belowPct": 0.2,
+          "cooldownMs": 120000,
+          "abilityId": "warrior_last_bastion_buff"
+        }
+      }
+    ]
+  },
+  "warrior_arms": {
+    "classId": "warrior",
+    "nameKey": "spec.warrior_arms",
+    "descKey": "spec.warrior_arms.desc",
+    "actives": [
+      "warrior_mortal_strike",
+      "warrior_execute",
+      "warrior_recklessness"
+    ],
+    "passives": [
+      {
+        "id": "warrior_weapon_mastery",
+        "nameKey": "passive.warrior_weapon_mastery",
+        "damageBonuses": [
+          {
+            "pct": 0.1,
+            "school": "physical"
+          }
+        ]
+      },
+      {
+        "id": "warrior_bloodthirst",
+        "nameKey": "passive.warrior_bloodthirst",
+        "onCrit": {
+          "healPctMaxHp": 0.03
+        }
+      },
+      {
+        "id": "warrior_massacre",
+        "nameKey": "passive.warrior_massacre",
+        "onKill": {
+          "resetCooldown": "warrior_charge"
+        }
+      }
+    ]
+  },
+  "cleric_holy": {
+    "classId": "cleric",
+    "nameKey": "spec.cleric_holy",
+    "descKey": "spec.cleric_holy.desc",
+    "actives": [
+      "cleric_healing_circle",
+      "cleric_prayer_of_life",
+      "cleric_divine_hymn"
+    ],
+    "passives": [
+      {
+        "id": "cleric_grace",
+        "nameKey": "passive.cleric_grace",
+        "mods": [
+          {
+            "stat": "healingDone",
+            "pct": 0.2
+          }
+        ]
+      },
+      {
+        "id": "cleric_echo_of_light",
+        "nameKey": "passive.cleric_echo_of_light",
+        "healEcho": {
+          "pct": 0.2,
+          "durationMs": 4000,
+          "tickMs": 1000
+        }
+      },
+      {
+        "id": "cleric_guardian_angel",
+        "nameKey": "passive.cleric_guardian_angel",
+        "cheatDeath": {
+          "cooldownMs": 180000,
+          "hpPct": 0.25,
+          "allies": true
+        }
+      }
+    ]
+  },
+  "cleric_retribution": {
+    "classId": "cleric",
+    "nameKey": "spec.cleric_retribution",
+    "descKey": "spec.cleric_retribution.desc",
+    "actives": [
+      "cleric_holy_fire",
+      "cleric_judgement",
+      "cleric_light_spear"
+    ],
+    "passives": [
+      {
+        "id": "cleric_divine_wrath",
+        "nameKey": "passive.cleric_divine_wrath",
+        "damageBonuses": [
+          {
+            "pct": 0.15,
+            "school": "holy"
+          }
+        ]
+      },
+      {
+        "id": "cleric_atonement",
+        "nameKey": "passive.cleric_atonement",
+        "atonement": {
+          "pct": 0.3,
+          "range": 400
+        }
+      },
+      {
+        "id": "cleric_punisher",
+        "nameKey": "passive.cleric_punisher",
+        "onCrit": {
+          "cdReduce": {
+            "abilityId": "cleric_holy_fire",
+            "ms": 1000
+          }
+        }
+      }
+    ]
+  },
+  "mage_fire": {
+    "classId": "mage",
+    "nameKey": "spec.mage_fire",
+    "descKey": "spec.mage_fire.desc",
+    "actives": [
+      "mage_fireball",
+      "mage_flame_pillar",
+      "mage_meteor"
+    ],
+    "passives": [
+      {
+        "id": "mage_ignition",
+        "nameKey": "passive.mage_ignition",
+        "onCrit": {
+          "school": "fire",
+          "applyAbility": "mage_ignite_burn"
+        }
+      },
+      {
+        "id": "mage_combustion",
+        "nameKey": "passive.mage_combustion",
+        "damageBonuses": [
+          {
+            "pct": 0.1,
+            "vsDotSchool": "fire"
+          }
+        ]
+      },
+      {
+        "id": "mage_phoenix",
+        "nameKey": "passive.mage_phoenix",
+        "cheatDeath": {
+          "cooldownMs": 300000,
+          "hpPct": 0.3
+        }
+      }
+    ]
+  },
+  "mage_frost": {
+    "classId": "mage",
+    "nameKey": "spec.mage_frost",
+    "descKey": "spec.mage_frost.desc",
+    "actives": [
+      "mage_frostbolt",
+      "mage_blizzard",
+      "mage_ice_block"
+    ],
+    "passives": [
+      {
+        "id": "mage_piercing_cold",
+        "nameKey": "passive.mage_piercing_cold",
+        "damageBonuses": [
+          {
+            "pct": 0.3,
+            "vsStatus": [
+              "freeze",
+              "slow"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "mage_chill",
+        "nameKey": "passive.mage_chill",
+        "chill": {
+          "attackSlowPct": 0.15
+        }
+      },
+      {
+        "id": "mage_frozen_heart",
+        "nameKey": "passive.mage_frozen_heart",
+        "onFreeze": {
+          "cdReduce": {
+            "abilityId": "mage_frost_nova",
+            "ms": 2000
+          }
+        }
+      }
+    ]
+  },
+  "explorer_marksman": {
+    "classId": "explorer",
+    "nameKey": "spec.explorer_marksman",
+    "descKey": "spec.explorer_marksman.desc",
+    "actives": [
+      "explorer_aimed_shot",
+      "explorer_multishot",
+      "explorer_hunters_mark"
+    ],
+    "passives": [
+      {
+        "id": "explorer_hawk_eye",
+        "nameKey": "passive.explorer_hawk_eye",
+        "rangePct": 0.2,
+        "damageBonuses": [
+          {
+            "pct": 0.1,
+            "ranged": true
+          }
+        ]
+      },
+      {
+        "id": "explorer_lethal_range",
+        "nameKey": "passive.explorer_lethal_range",
+        "damageBonuses": [
+          {
+            "pct": 0.15,
+            "far": true
+          }
+        ]
+      },
+      {
+        "id": "explorer_volley",
+        "nameKey": "passive.explorer_volley",
+        "everyNthBasic": {
+          "n": 5
+        }
+      }
+    ]
+  },
+  "explorer_assassin": {
+    "classId": "explorer",
+    "nameKey": "spec.explorer_assassin",
+    "descKey": "spec.explorer_assassin.desc",
+    "actives": [
+      "explorer_eviscerate",
+      "explorer_stealth",
+      "explorer_deadly_poison"
+    ],
+    "passives": [
+      {
+        "id": "explorer_backstab",
+        "nameKey": "passive.explorer_backstab",
+        "damageBonuses": [
+          {
+            "pct": 0.2,
+            "fromBehind": true
+          }
+        ]
+      },
+      {
+        "id": "explorer_ambush",
+        "nameKey": "passive.explorer_ambush",
+        "ambush": {
+          "bonusPct": 0.5
+        }
+      },
+      {
+        "id": "explorer_deadly_evasion",
+        "nameKey": "passive.explorer_deadly_evasion",
+        "onDodge": {
+          "nextComboBonus": 1
+        }
+      }
+    ],
+    "replaces": {
+      "lmb": "explorer_cut"
+    }
+  }
+}

@@ -36,6 +36,18 @@ test('data persists across reopen with same factory', async () => {
   expect((await second.list()).map((c) => c.name)).toEqual(['Ana']);
 });
 
+test('old saved characters are migrated when read; corrupt ones are skipped', async () => {
+  const idb = new IDBFactory();
+  const store = await openCharacterStore(idb);
+  const a = mk('Ana', 1);
+  const { attributes: _a, talents: _t, specId: _s, hotbar: _h, ...v1 } = { ...a, level: 4 };
+  await store.put({ ...v1, schemaVersion: 1 } as never);
+  await store.put({ id: 'broken', createdAt: 2 } as never);
+  expect(await store.get('id-Ana')).toEqual({ ...a, level: 4 });
+  expect(await store.list()).toEqual([{ ...a, level: 4 }]);
+  expect(await store.get('broken')).toBeUndefined();
+});
+
 test('falls back to memory store when IndexedDB open fails', async () => {
   const failing = {
     open() {

@@ -1,42 +1,170 @@
 {
   "warrior": {
     "resource": "rage",
-    "attributes": { "strength": 15, "agility": 8, "intellect": 5, "stamina": 14, "spirit": 6 },
+    "attributes": {
+      "strength": 15,
+      "agility": 8,
+      "intellect": 5,
+      "stamina": 14,
+      "spirit": 6
+    },
     "armor": 60,
-    "slots": { "lmb": "warrior_slash", "rmb": "warrior_brutal_strike", "s1": "warrior_charge", "s2": "warrior_battle_shout", "s3": "warrior_whirlwind", "s4": null },
+    "slots": {
+      "lmb": "warrior_slash",
+      "rmb": "warrior_brutal_strike",
+      "s1": "warrior_charge",
+      "s2": "warrior_battle_shout",
+      "s3": "warrior_whirlwind",
+      "s4": null
+    },
     "passives": [
-      { "id": "warrior_contained_fury", "nameKey": "passive.warrior_contained_fury", "rageDecayFactor": 0.5 },
-      { "id": "warrior_hardened_skin", "nameKey": "passive.warrior_hardened_skin", "mods": [{ "stat": "armor", "pct": 0.1 }] }
-    ]
+      {
+        "id": "warrior_contained_fury",
+        "nameKey": "passive.warrior_contained_fury",
+        "rageDecayFactor": 0.5
+      },
+      {
+        "id": "warrior_hardened_skin",
+        "nameKey": "passive.warrior_hardened_skin",
+        "mods": [
+          {
+            "stat": "armor",
+            "pct": 0.1
+          }
+        ]
+      }
+    ],
+    "growth": {
+      "strength": 1,
+      "stamina": 1
+    }
   },
   "cleric": {
     "resource": "mana",
-    "attributes": { "strength": 6, "agility": 6, "intellect": 14, "stamina": 11, "spirit": 12 },
+    "attributes": {
+      "strength": 6,
+      "agility": 6,
+      "intellect": 14,
+      "stamina": 11,
+      "spirit": 12
+    },
     "armor": 20,
-    "slots": { "lmb": "cleric_holy_flash", "rmb": "cleric_heal", "s1": "cleric_shield_word", "s2": "cleric_renew", "s3": "cleric_holy_nova", "s4": null },
+    "slots": {
+      "lmb": "cleric_holy_flash",
+      "rmb": "cleric_heal",
+      "s1": "cleric_shield_word",
+      "s2": "cleric_renew",
+      "s3": "cleric_holy_nova",
+      "s4": null
+    },
     "passives": [
-      { "id": "cleric_meditation", "nameKey": "passive.cleric_meditation", "combatManaRegenFactor": 0.5 },
-      { "id": "cleric_unshakable_faith", "nameKey": "passive.cleric_unshakable_faith", "mods": [{ "stat": "healingReceived", "pct": 0.1 }] }
-    ]
+      {
+        "id": "cleric_meditation",
+        "nameKey": "passive.cleric_meditation",
+        "combatManaRegenFactor": 0.5
+      },
+      {
+        "id": "cleric_unshakable_faith",
+        "nameKey": "passive.cleric_unshakable_faith",
+        "mods": [
+          {
+            "stat": "healingReceived",
+            "pct": 0.1
+          }
+        ]
+      }
+    ],
+    "growth": {
+      "intellect": 1,
+      "spirit": 1
+    }
   },
   "mage": {
     "resource": "mana",
-    "attributes": { "strength": 5, "agility": 7, "intellect": 16, "stamina": 9, "spirit": 10 },
+    "attributes": {
+      "strength": 5,
+      "agility": 7,
+      "intellect": 16,
+      "stamina": 9,
+      "spirit": 10
+    },
     "armor": 15,
-    "slots": { "lmb": "mage_arcane_missile", "rmb": "mage_arcane_burst", "s1": "mage_blink", "s2": "mage_frost_nova", "s3": "mage_mana_barrier", "s4": null },
+    "slots": {
+      "lmb": "mage_arcane_missile",
+      "rmb": "mage_arcane_burst",
+      "s1": "mage_blink",
+      "s2": "mage_frost_nova",
+      "s3": "mage_mana_barrier",
+      "s4": null
+    },
     "passives": [
-      { "id": "mage_arcane_mind", "nameKey": "passive.mage_arcane_mind", "mods": [{ "stat": "maxResource", "pct": 0.1 }] },
-      { "id": "mage_concentration", "nameKey": "passive.mage_concentration", "concentration": { "afterMs": 3000, "spellDamagePct": 0.1 } }
-    ]
+      {
+        "id": "mage_arcane_mind",
+        "nameKey": "passive.mage_arcane_mind",
+        "mods": [
+          {
+            "stat": "maxResource",
+            "pct": 0.1
+          }
+        ]
+      },
+      {
+        "id": "mage_concentration",
+        "nameKey": "passive.mage_concentration",
+        "concentration": {
+          "afterMs": 3000,
+          "spellDamagePct": 0.1
+        }
+      }
+    ],
+    "growth": {
+      "intellect": 1,
+      "stamina": 1
+    }
   },
   "explorer": {
     "resource": "energy",
-    "attributes": { "strength": 8, "agility": 15, "intellect": 6, "stamina": 11, "spirit": 7 },
+    "attributes": {
+      "strength": 8,
+      "agility": 15,
+      "intellect": 6,
+      "stamina": 11,
+      "spirit": 7
+    },
     "armor": 35,
-    "slots": { "lmb": "explorer_quick_shot", "rmb": "explorer_stab", "s1": "explorer_roll", "s2": "explorer_net", "s3": "explorer_arrow_rain", "s4": null },
+    "slots": {
+      "lmb": "explorer_quick_shot",
+      "rmb": "explorer_stab",
+      "s1": "explorer_roll",
+      "s2": "explorer_net",
+      "s3": "explorer_arrow_rain",
+      "s4": null
+    },
     "passives": [
-      { "id": "explorer_reflexes", "nameKey": "passive.explorer_reflexes", "mods": [{ "stat": "dodgeChance", "flat": 0.05 }] },
-      { "id": "explorer_light_feet", "nameKey": "passive.explorer_light_feet", "mods": [{ "stat": "moveSpeed", "pct": 0.1 }] }
-    ]
+      {
+        "id": "explorer_reflexes",
+        "nameKey": "passive.explorer_reflexes",
+        "mods": [
+          {
+            "stat": "dodgeChance",
+            "flat": 0.05
+          }
+        ]
+      },
+      {
+        "id": "explorer_light_feet",
+        "nameKey": "passive.explorer_light_feet",
+        "mods": [
+          {
+            "stat": "moveSpeed",
+            "pct": 0.1
+          }
+        ]
+      }
+    ],
+    "growth": {
+      "agility": 1,
+      "stamina": 1
+    }
   }
 }

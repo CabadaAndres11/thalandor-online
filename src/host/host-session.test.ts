@@ -191,6 +191,28 @@ test('invalid classId and appearance are replaced by defaults', async () => {
   expect(roster.players[0]).toEqual({ id: 1, name: 'Ana', classId: 'warrior', appearance: defaultAppearance('warrior') });
 });
 
+test('invalid progression is reset on join', async () => {
+  const { net, world } = setup();
+  const attributes = { strength: 50, agility: 0, intellect: 0, stamina: 0, spirit: 0 };
+  const c = await join(net, { character: { progress: { level: 4, xp: 10, attributes, talents: { might_4: 1 }, specId: 'x' } } });
+  const p = world.getPlayer(1)!;
+  expect(ofType(c, 'welcome')).toHaveLength(1);
+  expect(p.level).toBe(4);
+  expect(p.xp).toBe(10);
+  expect(p.attrs.strength).toBe(0);
+  expect(p.talents).toEqual({});
+  expect(p.specId).toBeNull();
+});
+
+test('valid progression is applied on join', async () => {
+  const { net, world } = setup();
+  const attributes = { strength: 0, agility: 0, intellect: 0, stamina: 5, spirit: 0 };
+  await join(net, { character: { progress: { level: 2, xp: 0, attributes, talents: { bastion_1b: 1 } } } });
+  const p = world.getPlayer(1)!;
+  expect(p.attrs.stamina).toBe(5);
+  expect(p.talents).toEqual({ bastion_1b: 1 });
+});
+
 test('roster broadcast on join and on leave', async () => {
   const { net } = setup();
   const a = await join(net, { name: 'Ana', character: { classId: 'mage' } });
@@ -250,6 +272,33 @@ test('presses are sanitized: bad aim replaced, buttons clamped', async () => {
   expect(Number.isFinite(p.pos.x)).toBe(true);
 });
 
+test('progress is sent on join and after each accepted request; refusals get an answer', async () => {
+  const { net, session } = setup();
+  const attributes = { strength: 0, agility: 0, intellect: 0, stamina: 0, spirit: 0 };
+  const c = await join(net, { character: { progress: { level: 3, xp: 5, attributes, talents: {} } } });
+  expect(ofType(c, 'progress').at(-1)!.p).toMatchObject({ level: 3, xp: 5, freeAttrPoints: 10, freeTalentPoints: 2 });
+  c.send({ t: 'progress-req', req: { k: 'attr', attr: 'spirit' } });
+  c.send({ t: 'progress-req', req: { k: 'spec', specId: 'warrior_arms' } });
+  await vi.runAllTimersAsync();
+  session.tick();
+  await vi.runAllTimersAsync();
+  expect(ofType(c, 'progress').at(-1)!.p.attributes.spirit).toBe(1);
+  expect(ofType(c, 'progress-refused').map((m) => m.reason)).toEqual(['level']);
+});
+
+test('levelling up from a kill sends progress and a levelup event', async () => {
+  const { net, session, world } = setup();
+  const c = await join(net);
+  const me = world.getPlayer(1)!;
+  const mob = world.addMonster('orc_elite', { x: me.pos.x + 30, y: me.pos.y });
+  world.damage(mob, 99_999, me, 'physical');
+  session.tick();
+  await vi.runAllTimersAsync();
+  expect(ofType(c, 'progress').at(-1)!.p.level).toBeGreaterThan(1);
+  expect(ofType(c, 'events').flatMap((m) => m.list)).toContainEqual(expect.objectContaining({ e: 'levelup', id: 1 }));
+});
+
+
 describe('dev commands (development builds only)', () => {
   function devSetup(devCommands: boolean) {
     const world = new World(new CollisionMap(20, 20, new Uint8Array(400)), { x: 160, y: 160 });
@@ -271,6 +320,18 @@ describe('dev commands (development builds only)', () => {
     expect(mob!.pos).toEqual({ x: me.pos.x + 60, y: me.pos.y });
     expect(me.hp).toBe(me.stats.maxHp - 50);
     expect(ofType(c, 'chat')).toHaveLength(0);
+  });
+
+  test('xp and level', async () => {
+    const { world, net } = devSetup(true);
+    await join(net);
+    const c2 = await join(net, { name: 'Beto' });
+    c2.send({ t: 'chat', text: '/dev level 12' });
+    await vi.runAllTimersAsync();
+    expect(world.getPlayer(2)!.level).toBe(12);
+    c2.send({ t: 'chat', text: '/dev xp 50' });
+    await vi.runAllTimersAsync();
+    expect(world.getPlayer(2)!.xp).toBe(50);
   });
 
   test('dev commands are plain chat when disabled', async () => {

@@ -22,6 +22,8 @@ export interface AvatarState {
   showBar: boolean;
   /** Bar colour: allies green, monsters red. */
   hostile: boolean;
+  /** Drawn translucent (stealth). */
+  faded?: boolean;
 }
 
 export interface Avatar {
@@ -118,7 +120,7 @@ export class LpcAvatar implements Avatar {
       // Oversize sheets keep the 64 px character centred in the bigger frame.
       const oy = (fs - (fs - 64) / 2) / fs;
       img.setTexture(key, frameName(facing, frame)).setOrigin(0.5, oy).setPosition(x, y).setDepth(s.pos.y).setVisible(true);
-      img.setAlpha(s.state === 'dead' ? 0.6 : 1);
+      img.setAlpha(s.state === 'dead' ? 0.6 : s.faded ? 0.35 : 1);
     }
     this.overhead.update(s, x, y - LABEL_OFFSET_Y);
   }

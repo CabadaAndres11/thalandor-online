@@ -1,4 +1,4 @@
-import type { Character } from './character';
+import { parseCharacter, type Character } from './character';
 
 export interface CharacterStore {
   /** False when the browser does not let us save (progress lives only in memory). */
@@ -46,6 +46,13 @@ function req<T>(r: IDBRequest<T>): Promise<T> {
   });
 }
 
+/** Saved data may be from an older version: migrate it; skip what cannot be read. */
+function upgrade(raw: unknown): Character | undefined {
+  if (raw === undefined) return undefined;
+  const r = parseCharacter(raw);
+  return r.ok ? r.character : undefined;
+}
+
 class IdbCharacterStore implements CharacterStore {
   readonly persistent = true;
 
@@ -56,11 +63,12 @@ class IdbCharacterStore implements CharacterStore {
   }
 
   async list(): Promise<Character[]> {
-    return ((await req(this.tx('readonly').getAll())) as Character[]).sort(byCreated);
+    const raw = (await req(this.tx('readonly').getAll())) as unknown[];
+    return raw.map(upgrade).filter((c): c is Character => c !== undefined).sort(byCreated);
   }
 
   async get(id: string): Promise<Character | undefined> {
-    return (await req(this.tx('readonly').get(id))) as Character | undefined;
+    return upgrade(await req(this.tx('readonly').get(id)));
   }
 
   async put(c: Character): Promise<void> {

@@ -1,14 +1,24 @@
 import { PLAYER_SPEED } from '../constants';
-import { BALANCE, type ClassDef, type StatKey, type StatMod } from './defs';
+import { BALANCE, type Attributes, type ClassDef, type StatKey, type StatMod } from './defs';
 
 export type Stats = Record<StatKey, number>;
 
 const MULTIPLIERS: StatKey[] = ['healingReceived', 'healingDone', 'damageDone', 'damageTaken'];
 
-/** Level-1 stats of a class from its attributes (GDD §4.4, constants in data/balance.json). */
-export function playerBaseStats(c: ClassDef): Stats {
+export const NO_ATTRS: Attributes = { strength: 0, agility: 0, intellect: 0, stamina: 0, spirit: 0 };
+export const ATTR_KEYS: readonly (keyof Attributes)[] = ['strength', 'agility', 'intellect', 'stamina', 'spirit'];
+
+/** Class attributes at a level: base + growth × (level − 1) + allocated points. */
+export function totalAttributes(c: ClassDef, level: number, allocated: Attributes = NO_ATTRS): Attributes {
+  const out = { ...NO_ATTRS };
+  for (const k of ATTR_KEYS) out[k] = c.attributes[k] + (c.growth[k] ?? 0) * (level - 1) + allocated[k];
+  return out;
+}
+
+/** Base stats of a class at a level with allocated attributes (GDD §4.4, constants in data/balance.json). */
+export function playerBaseStats(c: ClassDef, level = 1, allocated: Attributes = NO_ATTRS): Stats {
   const k = BALANCE.stats;
-  const a = c.attributes;
+  const a = totalAttributes(c, level, allocated);
   const maxResource = c.resource === 'mana' ? k.baseMana + a.intellect * k.manaPerIntellect : c.resource === 'none' ? 0 : 100;
   const s: Stats = {
     maxHp: k.baseHealth + a.stamina * k.healthPerStamina,
@@ -25,6 +35,11 @@ export function playerBaseStats(c: ClassDef): Stats {
     healingDone: 1,
     damageDone: 1,
     damageTaken: 1,
+    critDamage: 0,
+    cooldownReduction: 0,
+    lifesteal: 0,
+    blockChance: a.strength * k.blockPctPerStrength,
+    threatMultiplier: 1,
   };
   return s;
 }
@@ -44,6 +59,11 @@ export function monsterBaseStats(m: { maxHp: number; armor: number; power: numbe
     moveSpeed: m.moveSpeed,
     hpRegen: 0,
     manaRegen: 0,
+    critDamage: 0,
+    cooldownReduction: 0,
+    lifesteal: 0,
+    blockChance: 0,
+    threatMultiplier: 1,
   };
 }
 

@@ -1,0 +1,436 @@
+{
+  "routes": [
+    "might",
+    "celerity",
+    "vitality",
+    "bastion",
+    "arcane"
+  ],
+  "tierRequirement": [
+    0,
+    0,
+    3,
+    6,
+    9
+  ],
+  "bridgeRequirement": 3,
+  "nodes": {
+    "might_1a": {
+      "route": "might",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "attackPower",
+          "pct": 0.03
+        }
+      ]
+    },
+    "might_1b": {
+      "route": "might",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "critChance",
+          "flat": 0.01
+        }
+      ]
+    },
+    "might_2a": {
+      "route": "might",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "critDamage",
+          "flat": 0.05
+        }
+      ]
+    },
+    "might_2b": {
+      "route": "might",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "damageDone",
+          "pct": 0.02
+        }
+      ]
+    },
+    "might_3": {
+      "route": "might",
+      "tier": 3,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "attackPower",
+          "flat": 6
+        }
+      ]
+    },
+    "might_4": {
+      "route": "might",
+      "tier": 4,
+      "maxRank": 1,
+      "modsPerRank": [
+        {
+          "stat": "attackPower",
+          "pct": 0.08
+        }
+      ]
+    },
+    "arcane_1a": {
+      "route": "arcane",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "spellPower",
+          "pct": 0.03
+        }
+      ]
+    },
+    "arcane_1b": {
+      "route": "arcane",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "maxResource",
+          "pct": 0.04
+        }
+      ]
+    },
+    "arcane_2a": {
+      "route": "arcane",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "critDamage",
+          "flat": 0.05
+        }
+      ]
+    },
+    "arcane_2b": {
+      "route": "arcane",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "manaRegen",
+          "pct": 0.05
+        }
+      ]
+    },
+    "arcane_3": {
+      "route": "arcane",
+      "tier": 3,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "spellPower",
+          "flat": 6
+        }
+      ]
+    },
+    "arcane_4": {
+      "route": "arcane",
+      "tier": 4,
+      "maxRank": 1,
+      "modsPerRank": [
+        {
+          "stat": "spellPower",
+          "pct": 0.08
+        }
+      ]
+    },
+    "bastion_1a": {
+      "route": "bastion",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "armor",
+          "pct": 0.04
+        }
+      ]
+    },
+    "bastion_1b": {
+      "route": "bastion",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "maxHp",
+          "pct": 0.03
+        }
+      ]
+    },
+    "bastion_2a": {
+      "route": "bastion",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "damageTaken",
+          "pct": -0.02
+        }
+      ]
+    },
+    "bastion_2b": {
+      "route": "bastion",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "blockChance",
+          "flat": 0.02
+        }
+      ]
+    },
+    "bastion_3": {
+      "route": "bastion",
+      "tier": 3,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "armor",
+          "flat": 15
+        }
+      ]
+    },
+    "bastion_4": {
+      "route": "bastion",
+      "tier": 4,
+      "maxRank": 1,
+      "modsPerRank": [
+        {
+          "stat": "maxHp",
+          "pct": 0.08
+        }
+      ]
+    },
+    "celerity_1a": {
+      "route": "celerity",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "moveSpeed",
+          "pct": 0.03
+        }
+      ]
+    },
+    "celerity_1b": {
+      "route": "celerity",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "dodgeChance",
+          "flat": 0.01
+        }
+      ]
+    },
+    "celerity_2a": {
+      "route": "celerity",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "cooldownReduction",
+          "flat": 0.03
+        }
+      ]
+    },
+    "celerity_2b": {
+      "route": "celerity",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "critChance",
+          "flat": 0.01
+        }
+      ]
+    },
+    "celerity_3": {
+      "route": "celerity",
+      "tier": 3,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "cooldownReduction",
+          "flat": 0.02
+        }
+      ]
+    },
+    "celerity_4": {
+      "route": "celerity",
+      "tier": 4,
+      "maxRank": 1,
+      "modsPerRank": [
+        {
+          "stat": "cooldownReduction",
+          "flat": 0.08
+        }
+      ]
+    },
+    "vitality_1a": {
+      "route": "vitality",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "hpRegen",
+          "flat": 1
+        }
+      ]
+    },
+    "vitality_1b": {
+      "route": "vitality",
+      "tier": 1,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "healingDone",
+          "pct": 0.03
+        }
+      ]
+    },
+    "vitality_2a": {
+      "route": "vitality",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "lifesteal",
+          "flat": 0.01
+        }
+      ]
+    },
+    "vitality_2b": {
+      "route": "vitality",
+      "tier": 2,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "healingReceived",
+          "pct": 0.03
+        }
+      ]
+    },
+    "vitality_3": {
+      "route": "vitality",
+      "tier": 3,
+      "maxRank": 3,
+      "modsPerRank": [
+        {
+          "stat": "maxHp",
+          "pct": 0.02
+        }
+      ]
+    },
+    "vitality_4": {
+      "route": "vitality",
+      "tier": 4,
+      "maxRank": 1,
+      "modsPerRank": [
+        {
+          "stat": "healingReceived",
+          "pct": 0.08
+        }
+      ]
+    }
+  },
+  "bridges": {
+    "bridge_might_celerity": {
+      "routes": [
+        "might",
+        "celerity"
+      ],
+      "maxRank": 2,
+      "modsPerRank": [
+        {
+          "stat": "critChance",
+          "flat": 0.01
+        },
+        {
+          "stat": "moveSpeed",
+          "pct": 0.02
+        }
+      ]
+    },
+    "bridge_celerity_vitality": {
+      "routes": [
+        "celerity",
+        "vitality"
+      ],
+      "maxRank": 2,
+      "modsPerRank": [
+        {
+          "stat": "cooldownReduction",
+          "flat": 0.02
+        },
+        {
+          "stat": "hpRegen",
+          "flat": 0.5
+        }
+      ]
+    },
+    "bridge_vitality_bastion": {
+      "routes": [
+        "vitality",
+        "bastion"
+      ],
+      "maxRank": 2,
+      "modsPerRank": [
+        {
+          "stat": "maxHp",
+          "pct": 0.02
+        },
+        {
+          "stat": "healingReceived",
+          "pct": 0.02
+        }
+      ]
+    },
+    "bridge_bastion_arcane": {
+      "routes": [
+        "bastion",
+        "arcane"
+      ],
+      "maxRank": 2,
+      "modsPerRank": [
+        {
+          "stat": "armor",
+          "pct": 0.02
+        },
+        {
+          "stat": "maxResource",
+          "pct": 0.02
+        }
+      ]
+    },
+    "bridge_arcane_might": {
+      "routes": [
+        "arcane",
+        "might"
+      ],
+      "maxRank": 2,
+      "modsPerRank": [
+        {
+          "stat": "critDamage",
+          "flat": 0.04
+        },
+        {
+          "stat": "damageDone",
+          "pct": 0.01
+        }
+      ]
+    }
+  }
+}

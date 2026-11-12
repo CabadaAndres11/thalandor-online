@@ -6,6 +6,7 @@ import type { CombatEvent } from '../sim/combat/events';
 import { ability, CLASSES } from '../sim/combat/defs';
 import type { ActionAnim } from '../appearance/catalog-types';
 import { decodeHost, encode, type NetCharacter, type RejectReason, type RosterEntry } from '../net/protocol';
+import type { ProgressInfo, ProgressRequest, RequestResult } from '../sim/progression/requests';
 import { dodgeDirection } from '../sim/movement';
 import { facingFromVector, DOWN, type Facing } from '../sim/facing';
 import type { Appearance, ClassId } from '../appearance/catalog';
@@ -25,6 +26,8 @@ export interface ClientEvents {
   left: { playerId: EntityId; name: string };
   roster: { players: RosterEntry[] };
   combat: { list: CombatEvent[] };
+  progress: { p: ProgressInfo };
+  progressRefused: { reason: Exclude<RequestResult, 'ok'> };
   disconnected: Record<string, never>;
 }
 
@@ -44,6 +47,7 @@ export interface UnitRender {
   action: { anim: ActionAnim; startedAt: number } | null;
   classId?: ClassId;
   appearance?: Appearance;
+  stealth?: boolean;
 }
 
 export interface SelfRender {
@@ -54,6 +58,7 @@ export interface SelfRender {
   maxHp: number;
   state: 'alive' | 'downed' | 'dead';
   action: { anim: ActionAnim; startedAt: number } | null;
+  stealth?: boolean;
 }
 
 export interface RenderState {
@@ -78,7 +83,7 @@ export class ClientSession {
   private readonly predictor: Predictor;
   private readonly buffer = new SnapshotBuffer();
   private readonly clock = new ServerClock();
-  private readonly listeners: Listeners = { welcome: [], rejected: [], chat: [], joined: [], left: [], roster: [], combat: [], disconnected: [] };
+  private readonly listeners: Listeners = { welcome: [], rejected: [], chat: [], joined: [], left: [], roster: [], combat: [], progress: [], progressRefused: [], disconnected: [] };
   private readonly classId: string;
   private seq = 0;
   private pressSeq = 0;
@@ -97,6 +102,7 @@ export class ClientSession {
   private selfUnit: UnitSnapshot | null = null;
   private localAction: { anim: ActionAnim; startedAt: number } | null = null;
   private me: MeSnapshot | null = null;
+  private prog: ProgressInfo | null = null;
 
   constructor(
     private readonly conn: Connection,
@@ -120,6 +126,21 @@ export class ClientSession {
     return this.me;
   }
 
+  /** The host's view of this player's progress, or null before the first one. */
+  get progress(): ProgressInfo | null {
+    return this.prog;
+  }
+
+  /** Asks the host to change the character's progress (attributes, talents, spec, hotbar). */
+  requestProgress(req: ProgressRequest): void {
+    if (!this.ended) this.conn.send(encode({ t: 'progress-req', req }), 'reliable');
+  }
+
+  /** The ability a slot casts right now (from the host's progress; class defaults before it). */
+  abilityFor(slot: Exclude<PressSlot, 'dodge'>): string | null {
+    return this.prog ? this.prog.slots[slot] : (CLASSES[this.classId]?.slots[slot] ?? null);
+  }
+
   /**
    * Registers a key press for an ability slot (or the dodge). It is sent with every input until the
    * host acknowledges it, so a lost packet never loses a press. Plays the own attack animation at once.
@@ -129,7 +150,7 @@ export class ClientSession {
     this.presses.push({ seq: ++this.pressSeq, slot, aimX: aim.x, aimY: aim.y });
     if (this.presses.length > MAX_PENDING_PRESSES) this.presses.shift();
     if (slot !== 'dodge' && this.selfUnit?.state === 'alive') {
-      const abilityId = CLASSES[this.classId]?.slots[slot];
+      const abilityId = this.abilityFor(slot);
       const ab = abilityId ? ability(abilityId) : undefined;
       const ready = (this.me?.cd[slot] ?? 0) <= 0 && (!ab?.gcd || (this.me?.gcd ?? 0) <= 0) && (this.me?.resource ?? 0) >= (ab?.cost ?? 0);
       if (ab && ab.anim !== 'none' && ready) {
@@ -148,7 +169,7 @@ export class ClientSession {
     for (const p of this.presses) {
       if (p.slot !== 'dodge' || this.predictedDodges.has(p.seq)) continue;
       this.predictedDodges.add(p.seq);
-      const canDodge = (this.me?.cd.dodge ?? 0) <= 0 && (this.me?.canMove ?? true) && !this.predictor.dashing && this.selfUnit?.state === 'alive';
+      const canDodge = (this.me?.cd.dodge ?? 0) <= 0 && ((this.me?.canMove ?? true) || !!this.me?.channel) && !this.predictor.dashing && this.selfUnit?.state === 'alive';
       if (canDodge) dodge = dodgeDirection(this.predictor.pos, i);
     }
     this.prevSelf = { ...this.predictor.pos };
@@ -180,6 +201,7 @@ export class ClientSession {
       const u = this.selfUnit;
       const action = this.localAction && localMs - this.localAction.startedAt < 1000 ? this.localAction : this.unitAction(u);
       self = { pos, facing: this.selfFacing, moving: this.selfMoving && u.state === 'alive', hp: u.hp, maxHp: u.maxHp, state: u.state, action };
+      if (u.stealth) self.stealth = true;
     }
     const latest = new Map((this.buffer.latest?.units ?? []).map((u) => [u.id, u]));
     const others = new Map<EntityId, UnitRender>();
@@ -201,6 +223,7 @@ export class ClientSession {
         state: u.state,
         action: this.unitAction(u),
       };
+      if (u.stealth) r.stealth = true;
       if (info) {
         r.classId = info.classId;
         r.appearance = info.appearance;
@@ -263,6 +286,13 @@ export class ClientSession {
         break;
       case 'left':
         this.emit('left', { playerId: msg.playerId, name: msg.name });
+        break;
+      case 'progress':
+        this.prog = msg.p;
+        this.emit('progress', { p: msg.p });
+        break;
+      case 'progress-refused':
+        this.emit('progressRefused', { reason: msg.reason });
         break;
     }
   }

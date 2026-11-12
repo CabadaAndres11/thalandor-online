@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 0.8 |
+| Versión del documento | 1.0 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.3.0 (Plan 3: combate y clases) |
 
@@ -63,7 +63,7 @@ Busca la sensación de un MMO clásico (personajes persistentes, clases con role
 - **Interpolación:** el resto de entidades se dibujan suavizadas entre instantáneas.
 - **El host también juega:** usa la misma interfaz de cliente, conectada a la simulación local por un transporte en memoria.
 
-### 2.3 Propiedad de los datos **[En curso]** (el personaje vive en el PC y viaja al host; que el host devuelva experiencia y botín llega con el combate)
+### 2.3 Propiedad de los datos **[En curso]** (el personaje viaja al host, que valida su progreso y devuelve nivel, experiencia y elecciones al momento; el botín llega en el Plan 5)
 - **El personaje vive en el PC de su jugador:** nivel, atributos, talentos, equipo, inventario, oro, misiones y última ubicación.
 - **Al unirse** a una partida, el invitado envía su personaje al host.
 - **El host devuelve el personaje actualizado** periódicamente (cada 30 s), al cambiar de zona y al salir. El cliente lo guarda.
@@ -141,7 +141,7 @@ Todas las teclas son reasignables desde Opciones.
 - **Venenos y sangrados:** daño en el tiempo.
 - **Puntos de combo:** los ataques básicos acumulan puntos (máximo 5) que se gastan en remates.
 
-### 4.3 Habilidades **[En curso]** (kit base y pasivas de clase implementados; especializaciones en el Plan 4)
+### 4.3 Habilidades **[Implementado]** (kit base, pasivas de clase y las 8 especializaciones del anexo A)
 - **Habilidades activas:**
   - Cada clase empieza con ~5: ataque básico, ataque secundario y 3 habilidades.
   - Desbloquea más al subir de nivel.
@@ -150,14 +150,15 @@ Todas las teclas son reasignables desde Opciones.
   - Se desbloquean automáticamente por nivel.
   - Hay **pasivas de clase**, comunes a ambas especializaciones (por ejemplo, Guerrero: "la ira decae más lento").
   - Y **pasivas de especialización** (por ejemplo, Asesino: "+20 % de daño por la espalda").
-- **Especialización:** se elige al alcanzar el **nivel 10** y se puede cambiar en la capital.
+- **Especialización:** se elige al alcanzar el **nivel 10** (la ventana se abre sola) y se puede cambiar en la capital. Hasta que exista la capital, el cambio es gratis desde la ventana de Personaje, fuera de combate.
   - Antes del nivel 10, el personaje usa el kit base de la clase.
   - Al elegir especialización se desbloquean sus habilidades activas y pasivas.
 - **Especialización y ataque básico:** una especialización puede sustituir el ataque básico de la clase (por ejemplo, el Asesino cambia el arco por dagas).
-- **Ranuras y habilidades disponibles:** hay más habilidades que ranuras, así que el jugador elige cuáles lleva en la barra.
+- **Ranuras y habilidades disponibles:** hay más habilidades que ranuras, así que el jugador elige cuáles lleva en la barra (ventana de Personaje: clic en la habilidad y después en la casilla).
+- **Desbloqueos:** clic izquierdo, clic derecho y habilidad 1 al nivel 1; habilidad 2 al 3 y 3 al 6. Pasivas de clase a los niveles 5 y 15. Activas de especialización a los 10, 16 y 22, y sus pasivas a los 10, 20 y 30.
 - **Definición:** el listado concreto está en el **anexo A** y en `data/abilities/`. Es una propuesta inicial de Claude, ajustable en las pruebas.
 
-### 4.4 Atributos
+### 4.4 Atributos **[Implementado]**
 Cada nivel otorga **5 puntos de atributo** para repartir libremente.
 
 | Atributo | Efecto |
@@ -168,27 +169,30 @@ Cada nivel otorga **5 puntos de atributo** para repartir libremente.
 | **Aguante** | Vida máxima |
 | **Espíritu** | Regeneración de vida y maná |
 
-Cada clase tiene atributos base propios por nivel, definidos en `data/classes/`.
+Cada clase sube además 2 atributos principales por nivel (`growth` en `data/classes.json`).
 
-### 4.5 Árbol de talentos
+La Fuerza da probabilidad de **bloqueo** (0,2 % por punto): un bloqueo reduce a la mitad el daño físico cuerpo a cuerpo.
+
+### 4.5 Árbol de talentos **[Implementado]**
 - **Puntos:** 1 por nivel a partir del 2, es decir, **29 puntos al nivel 30**.
 - **Árbol común a todas las clases.** Los nodos solo dan estadísticas: no modifican habilidades.
-- **Estructura:** un nodo central y **5 rutas**, cada una con unos 4 niveles de profundidad. Para desbloquear un nivel hay que haber gastado puntos en el nivel anterior de esa ruta.
+- **Estructura:** **5 rutas** de 4 niveles de profundidad. Para desbloquear un nivel hay que haber gastado puntos en los niveles anteriores de esa ruta (3, 6 y 9 puntos).
 - **Nodos multirrango:** se pueden invertir varios puntos en el mismo nodo.
 - **Puentes entre rutas vecinas:** nodos que combinan estadísticas de dos rutas.
-- **Reinicio:** el reinicio completo cuesta oro y se hace con el instructor de la capital.
+- **Reinicio:** el reinicio completo cuesta oro y se hace con el instructor de la capital. Hasta que existan la capital y el oro, es gratis y en cualquier momento fuera de combate (igual que cambiar de especialización).
+- **Nodos:** la lista completa está en el **anexo C**.
 
 | Ruta | Enfoque | Ejemplos de nodos |
 |---|---|---|
 | **Poderío** | Daño físico | +poder de ataque, +% crítico, +% daño crítico |
 | **Arcano** | Daño mágico | +poder de hechizos, +maná, +% daño de hechizos |
 | **Bastión** | Defensa | +armadura, +% vida, +% bloqueo |
-| **Celeridad** | Velocidad | +% velocidad de ataque, +% movimiento, +% reducción de recarga, +% esquiva |
+| **Celeridad** | Velocidad | +% movimiento, +% reducción de recarga, +% esquiva |
 | **Vitalidad** | Sostenimiento | +regeneración, +% curación hecha y recibida, +% robo de vida |
 
 Orden circular de las rutas, que determina los puentes: Poderío – Celeridad – Vitalidad – Bastión – Arcano – Poderío.
 
-### 4.6 Cálculo de estadísticas
+### 4.6 Cálculo de estadísticas **[Implementado]**
 ```
 final = (base de clase + atributos repartidos + suma de bonos planos) × (1 + suma de bonos %)
 ```
@@ -196,13 +200,18 @@ final = (base de clase + atributos repartidos + suma de bonos planos) × (1 + su
 - **Bonos porcentuales:** equipo, talentos y pasivas.
 - Los porcentajes de una misma estadística se **suman** entre sí antes de multiplicar; no se multiplican en cadena.
 - **Datos:** todas las constantes y fórmulas de conversión (por ejemplo, Agilidad → % crítico) viven en `data/balance.json`.
+- **Estadísticas secundarias:** daño crítico (se suma al ×1,5), reducción de recargas (tope del 40 %), robo de vida, bloqueo y multiplicador de amenaza.
 
-### 4.7 Progresión
+### 4.7 Progresión **[Implementado]** (experiencia de misiones en el Plan 6)
 - **Nivel máximo de la demo:** 30.
 - **Experiencia:**
   - Se gana con muertes de monstruos y con misiones.
   - En grupo, la experiencia de cada muerte se reparte entre los miembros cercanos, con un bonus por jugar en grupo.
-- **Curva de experiencia:** definida en `data/balance.json`.
+- **Curva de experiencia:** subir del nivel L al siguiente cuesta `100 × L^1,6` (unas 244.000 en total del 1 al 30, pensado para 10–15 h con misiones).
+- **Experiencia por monstruo:** `8 × nivel^1,2`, multiplicada por 4 si es élite. Baja si el monstruo está más de 2 niveles por debajo (mínimo 10 %).
+- **Reparto en grupo:** entre los jugadores a ≤ 800 px, con un bonus de `1 + 0,1 × (miembros − 1)`.
+- **Al subir de nivel:** vida y recurso al máximo, efecto dorado y aviso en el chat para todos.
+- **Validación:** el host comprueba al unirse que atributos, talentos y especialización son posibles para el nivel; si no, los reinicia sin expulsar al jugador.
 
 ### 4.8 Creación de personaje **[Implementado]**
 - Hasta **8 personajes** por jugador.
@@ -318,14 +327,14 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
    - **Al unirse**, el invitado aparece en su última ubicación guardada.
    - **"Ir con el grupo"** teletransporta junto al líder, solo fuera de combate.
 
-### 9.2 HUD **[En curso]** (barras, casillas de habilidad, números flotantes y avisos de derribo; faltan marcos de grupo y minimapa)
+### 9.2 HUD **[En curso]** (barras, experiencia y nivel, casillas de habilidad, puntos de combo, barra de canalización, números flotantes y avisos de derribo; faltan marcos de grupo y minimapa)
 - Vida, recurso de clase y barra de experiencia.
 - Barra de habilidades en **casillas cuadradas con icono** (clic izquierdo, clic derecho, 1–4 y Espacio), con barrido de recarga, tecla y casilla atenuada sin recurso suficiente. Los iconos son provisionales generados por código hasta tener arte definitivo (candidato gratuito: game-icons.net, CC-BY 3.0).
 - Marcos de grupo con la vida y el recurso de los compañeros.
 - Minimapa y seguimiento de misiones.
 - Números de daño flotantes, y nombre y vida sobre los enemigos.
 
-### 9.3 Ventanas
+### 9.3 Ventanas **[En curso]** (Personaje con C, Talentos con N y Especialización)
 - Personaje (equipo y reparto de atributos), Inventario, Talentos, Diario de misiones y Mapa del mundo.
 - Opciones: controles, volumen y pantalla completa.
 
@@ -337,7 +346,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ## 10. Guardado **[Implementado]** (IndexedDB, autoguardado de posición, exportar e importar, migraciones)
 
-- **Autoguardado:** cada 30 s, al cambiar de zona y al salir.
+- **Autoguardado:** la posición cada 30 s, al cambiar de zona y al salir; el progreso (nivel, experiencia, atributos, talentos, especialización y barra) cada vez que el host lo cambia. Formato del guardado: versión 2.
 - **Almacenamiento:** en **IndexedDB**.
 - **Exportación e importación:** cada personaje se puede exportar e importar como archivo `.json`, como copia de seguridad o para jugar desde otro PC.
 - **Versiones del guardado:** cada guardado lleva un número de versión de esquema y se migra automáticamente al actualizar el juego. Ninguna actualización puede borrar personajes.
@@ -378,6 +387,12 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 ---
 
 ## Anexo A — Habilidades (propuesta inicial)
+
+**Notas de la implementación (Plan 4):**
+- *Marca del cazador* aumenta de momento todo el daño que recibe el objetivo, no solo el de distancia.
+- *Ángel guardián* deja al aliado con un 25 % de vida en lugar de 1 punto más una curación.
+- *Escalofrío*: los enemigos ralentizados tardan un 15 % más en recuperar sus ataques (sus recargas).
+- *Evasión mortal* se activa al esquivar con Espacio o al esquivar un golpe.
 
 **Convenciones:**
 - **Teclas:** CI = clic izquierdo, CD = clic derecho.
@@ -513,9 +528,85 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ---
 
+## Anexo C — Árbol de talentos
+
+**Estructura de cada ruta:**
+- Nivel 1: 2 nodos de 3 rangos, disponibles desde el principio.
+- Nivel 2: 2 nodos de 3 rangos; requiere 3 puntos en la ruta.
+- Nivel 3: 1 nodo de 3 rangos; requiere 6.
+- Nivel 4 (culminante): 1 nodo de 1 rango; requiere 9.
+
+Completar una ruta cuesta 16 puntos. Los datos están en `data/talents.json`.
+
+**Poderío**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Fuerza bruta (1) | 3 | +3 % poder de ataque |
+| Precisión (1) | 3 | +1 % crítico |
+| Golpes certeros (2) | 3 | +5 % daño crítico |
+| Brutalidad (2) | 3 | +2 % daño realizado |
+| Ímpetu (3) | 3 | +6 poder de ataque |
+| Maestría marcial (4) | 1 | +8 % poder de ataque |
+
+**Arcano**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Poder arcano (1) | 3 | +3 % poder de hechizos |
+| Reserva (1) | 3 | +4 % recurso máximo |
+| Agudeza (2) | 3 | +5 % daño crítico |
+| Flujo (2) | 3 | +5 % regeneración de maná |
+| Foco (3) | 3 | +6 poder de hechizos |
+| Archimago (4) | 1 | +8 % poder de hechizos |
+
+**Bastión**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Coraza (1) | 3 | +4 % armadura |
+| Robustez (1) | 3 | +3 % vida |
+| Guardia (2) | 3 | −2 % daño recibido |
+| Escudo firme (2) | 3 | +2 % bloqueo |
+| Muralla (3) | 3 | +15 armadura |
+| Inquebrantable (4) | 1 | +8 % vida |
+
+**Celeridad**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Paso ligero (1) | 3 | +3 % velocidad de movimiento |
+| Reflejos felinos (1) | 3 | +1 % esquiva |
+| Presteza (2) | 3 | −3 % recargas |
+| Ojo rápido (2) | 3 | +1 % crítico |
+| Ritmo (3) | 3 | −2 % recargas |
+| Torbellino del tiempo (4) | 1 | −8 % recargas |
+
+**Vitalidad**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Regeneración (1) | 3 | +1 vida por segundo |
+| Manos sanadoras (1) | 3 | +3 % curación realizada |
+| Sed vital (2) | 3 | +1 % robo de vida |
+| Receptividad (2) | 3 | +3 % curación recibida |
+| Vigor (3) | 3 | +2 % vida |
+| Fuente de vida (4) | 1 | +8 % curación recibida |
+
+**Puentes** (2 rangos; requieren 3 puntos en cada ruta vecina):
+
+| Puente | Por rango |
+|---|---|
+| Poderío – Celeridad | +1 % crítico y +2 % velocidad de movimiento |
+| Celeridad – Vitalidad | −2 % recargas y +0,5 vida por segundo |
+| Vitalidad – Bastión | +2 % vida y +2 % curación recibida |
+| Bastión – Arcano | +2 % armadura y +2 % recurso máximo |
+| Arcano – Poderío | +4 % daño crítico y +1 % daño realizado |
+
+---
+
 ## Anexos pendientes
 - **B. Guion e historia:** se desarrollará conjuntamente. Incluye los nombres definitivos de zonas y personajes, las misiones y los jefes.
-- **C. Nodos concretos del árbol de talentos.**
 - **D. Tablas de balance:** curva de experiencia, atributos base, conversiones de estadísticas.
 
 ---
@@ -531,3 +622,5 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 0.6 | 2026-11-11 | Plan 2 implementado: creación y selección de hasta 8 personajes con arte LPC por capas (pieles y pelo por recoloreado de paleta), guardado en IndexedDB con autoguardado y reaparición, exportar e importar, tiles de 32 px y mapa de prueba LPC. El explorador lleva carcaj al andar; el arco llegará con las animaciones de combate. |
 | 0.7 | 2026-11-12 | Diseño del Plan 3 (combate): fórmulas de daño, recursos, amenaza, derribo, motor de habilidades por datos, 4 monstruos de prueba (humanoides del generador LPC y criaturas del pack LPC Monsters), HUD con casillas de habilidad con icono. Hasta la progresión, todo el kit base está disponible desde nivel 1. |
 | 0.8 | 2026-11-12 | Plan 3 implementado: combate en tiempo real con las 4 clases (kit base y pasivas), esquiva predicha, amenaza, derribo y levantar con E, 4 monstruos con IA (persecución con A*, retorno, manada, distancia) que reaparecen y escalan con el grupo, animaciones LPC de ataque y HUD con casillas de habilidad. |
+| 0.9 | 2026-11-12 | Diseño del Plan 4 (progresión): curva de experiencia, reparto en grupo, crecimiento por clase, bloqueo, anexo C con el árbol de talentos completo, desbloqueos por nivel y mecánicas de especialización. Reinicio y cambio de especialización gratis fuera de combate hasta que existan capital y oro. |
+| 1.0 | 2026-11-12 | Plan 4 implementado (versión 0.4.0): experiencia y niveles hasta el 30 con reparto en grupo, atributos con crecimiento por clase y bloqueo, árbol de talentos, desbloqueos por nivel, las 8 especializaciones con sus mecánicas (combo, sigilo, venenos, reflejo, zonas, canalizaciones, proyectiles que explotan o atraviesan, pasivas con disparadores), ventanas de Personaje, Talentos y Especialización, barra de experiencia y guardado v2. |

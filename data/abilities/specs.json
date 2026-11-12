@@ -1,0 +1,724 @@
+{
+  "warrior_taunt": {
+    "nameKey": "ability.warrior_taunt",
+    "anim": "none",
+    "cost": 10,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "shield:#c0a060",
+    "school": "physical",
+    "cooldownMs": 10000,
+    "range": 0,
+    "shape": {
+      "type": "area_self",
+      "radius": 150
+    },
+    "effects": [
+      {
+        "type": "taunt",
+        "durationMs": 4000
+      }
+    ]
+  },
+  "warrior_shield_wall": {
+    "nameKey": "ability.warrior_shield_wall",
+    "anim": "none",
+    "cost": 0,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "shield:#8fa8c8",
+    "school": "physical",
+    "cooldownMs": 60000,
+    "range": 0,
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "buff",
+        "to": "self",
+        "stat": "damageTaken",
+        "pct": -0.5,
+        "durationMs": 6000
+      }
+    ]
+  },
+  "warrior_retaliation": {
+    "nameKey": "ability.warrior_retaliation",
+    "anim": "none",
+    "cost": 20,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "shield:#d06040",
+    "school": "physical",
+    "cooldownMs": 30000,
+    "range": 0,
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "shield",
+        "to": "self",
+        "base": 60,
+        "coef": 0,
+        "durationMs": 8000
+      },
+      {
+        "type": "reflect",
+        "to": "self",
+        "pct": 0.3,
+        "durationMs": 8000
+      }
+    ]
+  },
+  "warrior_last_bastion_buff": {
+    "nameKey": "ability.warrior_last_bastion_buff",
+    "icon": "drop:#ffffff",
+    "anim": "none",
+    "cost": 0,
+    "cooldownMs": 0,
+    "gcd": false,
+    "range": 0,
+    "dodgeable": false,
+    "school": "physical",
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "buff",
+        "to": "self",
+        "stat": "damageTaken",
+        "pct": -0.4,
+        "durationMs": 8000
+      }
+    ]
+  },
+  "warrior_mortal_strike": {
+    "nameKey": "ability.warrior_mortal_strike",
+    "anim": "slash",
+    "cost": 30,
+    "gcd": true,
+    "dodgeable": true,
+    "icon": "axe:#a03030",
+    "school": "physical",
+    "cooldownMs": 6000,
+    "range": 60,
+    "shape": {
+      "type": "melee_arc",
+      "radius": 60,
+      "arcDeg": 70
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 20,
+        "coef": 1.4
+      },
+      {
+        "type": "debuff",
+        "stat": "healingReceived",
+        "pct": 0.5,
+        "durationMs": 8000
+      }
+    ]
+  },
+  "warrior_execute": {
+    "nameKey": "ability.warrior_execute",
+    "anim": "slash",
+    "cost": 20,
+    "gcd": true,
+    "dodgeable": true,
+    "icon": "sword:#e04040",
+    "school": "physical",
+    "cooldownMs": 3000,
+    "range": 60,
+    "shape": {
+      "type": "melee_arc",
+      "radius": 60,
+      "arcDeg": 70
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 10,
+        "coef": 0.8,
+        "bonuses": [
+          {
+            "pct": 2,
+            "belowHpPct": 0.25
+          }
+        ]
+      }
+    ]
+  },
+  "warrior_recklessness": {
+    "nameKey": "ability.warrior_recklessness",
+    "anim": "none",
+    "cost": 0,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "burst:#e06030",
+    "school": "physical",
+    "cooldownMs": 60000,
+    "range": 0,
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "buff",
+        "to": "self",
+        "stat": "critChance",
+        "flat": 0.3,
+        "durationMs": 10000
+      }
+    ]
+  },
+  "cleric_healing_circle": {
+    "nameKey": "ability.cleric_healing_circle",
+    "anim": "spellcast",
+    "cost": 30,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "cross:#f0e070",
+    "school": "holy",
+    "cooldownMs": 10000,
+    "range": 400,
+    "shape": {
+      "type": "area_target",
+      "radius": 90,
+      "delayMs": 0
+    },
+    "effects": [
+      {
+        "type": "heal",
+        "base": 15,
+        "coef": 0.6
+      }
+    ]
+  },
+  "cleric_prayer_of_life": {
+    "nameKey": "ability.cleric_prayer_of_life",
+    "anim": "spellcast",
+    "cost": 40,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "wing:#fff0a0",
+    "school": "holy",
+    "cooldownMs": 120000,
+    "range": 500,
+    "shape": {
+      "type": "revive"
+    },
+    "effects": [
+      {
+        "type": "revive",
+        "hpPct": 0.5
+      }
+    ]
+  },
+  "cleric_divine_hymn": {
+    "nameKey": "ability.cleric_divine_hymn",
+    "anim": "spellcast",
+    "cost": 60,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "star:#fff6c0",
+    "school": "holy",
+    "cooldownMs": 90000,
+    "range": 0,
+    "channelMs": 4000,
+    "channelTickMs": 1000,
+    "shape": {
+      "type": "area_self",
+      "radius": 220
+    },
+    "effects": [
+      {
+        "type": "heal",
+        "base": 12,
+        "coef": 0.5
+      }
+    ]
+  },
+  "cleric_holy_fire": {
+    "nameKey": "ability.cleric_holy_fire",
+    "anim": "spellcast",
+    "cost": 20,
+    "gcd": true,
+    "dodgeable": true,
+    "icon": "burst:#f0b040",
+    "school": "holy",
+    "cooldownMs": 6000,
+    "range": 400,
+    "shape": {
+      "type": "projectile",
+      "speed": 420,
+      "radius": 6,
+      "pierce": false,
+      "look": "holy_fire"
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 16,
+        "coef": 1.1
+      },
+      {
+        "type": "dot",
+        "base": 3,
+        "coef": 0.2,
+        "tickMs": 1000,
+        "durationMs": 5000
+      }
+    ]
+  },
+  "cleric_judgement": {
+    "nameKey": "ability.cleric_judgement",
+    "anim": "spellcast",
+    "cost": 15,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "cross:#e0a020",
+    "school": "holy",
+    "cooldownMs": 15000,
+    "range": 450,
+    "shape": {
+      "type": "projectile",
+      "speed": 700,
+      "radius": 6,
+      "pierce": false,
+      "look": "holy"
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 6,
+        "coef": 0.4
+      },
+      {
+        "type": "buff",
+        "to": "enemies",
+        "stat": "damageTaken",
+        "pct": 0.15,
+        "durationMs": 8000
+      }
+    ]
+  },
+  "cleric_light_spear": {
+    "nameKey": "ability.cleric_light_spear",
+    "anim": "spellcast",
+    "cost": 30,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "bolt:#fff080",
+    "school": "holy",
+    "cooldownMs": 10000,
+    "range": 450,
+    "shape": {
+      "type": "projectile",
+      "speed": 700,
+      "radius": 6,
+      "pierce": true,
+      "look": "holy"
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 20,
+        "coef": 1
+      }
+    ]
+  },
+  "mage_fireball": {
+    "nameKey": "ability.mage_fireball",
+    "anim": "spellcast",
+    "cost": 20,
+    "gcd": true,
+    "dodgeable": true,
+    "icon": "burst:#f07a30",
+    "school": "fire",
+    "cooldownMs": 2500,
+    "range": 420,
+    "shape": {
+      "type": "projectile",
+      "speed": 380,
+      "radius": 8,
+      "pierce": false,
+      "look": "fire",
+      "explodeRadius": 50
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 14,
+        "coef": 1
+      }
+    ]
+  },
+  "mage_flame_pillar": {
+    "nameKey": "ability.mage_flame_pillar",
+    "anim": "spellcast",
+    "cost": 30,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "spiral:#f06020",
+    "school": "fire",
+    "cooldownMs": 12000,
+    "range": 380,
+    "shape": {
+      "type": "zone",
+      "radius": 60,
+      "durationMs": 4000,
+      "tickMs": 1000
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 6,
+        "coef": 0.35
+      }
+    ]
+  },
+  "mage_meteor": {
+    "nameKey": "ability.mage_meteor",
+    "anim": "spellcast",
+    "cost": 45,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "star:#f05020",
+    "school": "fire",
+    "cooldownMs": 30000,
+    "range": 450,
+    "shape": {
+      "type": "area_target",
+      "radius": 90,
+      "delayMs": 1500
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 40,
+        "coef": 2
+      }
+    ]
+  },
+  "mage_ignite_burn": {
+    "nameKey": "ability.mage_ignite_burn",
+    "icon": "drop:#ffffff",
+    "anim": "none",
+    "cost": 0,
+    "cooldownMs": 0,
+    "gcd": false,
+    "range": 0,
+    "dodgeable": false,
+    "school": "fire",
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "dot",
+        "base": 3,
+        "coef": 0.2,
+        "tickMs": 1000,
+        "durationMs": 4000
+      }
+    ]
+  },
+  "mage_frostbolt": {
+    "nameKey": "ability.mage_frostbolt",
+    "anim": "spellcast",
+    "cost": 15,
+    "gcd": true,
+    "dodgeable": true,
+    "icon": "snow:#9ad0f5",
+    "school": "frost",
+    "cooldownMs": 2000,
+    "range": 420,
+    "shape": {
+      "type": "projectile",
+      "speed": 450,
+      "radius": 6,
+      "pierce": false,
+      "look": "frost"
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 12,
+        "coef": 0.9
+      },
+      {
+        "type": "slow",
+        "pct": 0.5,
+        "durationMs": 3000
+      }
+    ]
+  },
+  "mage_blizzard": {
+    "nameKey": "ability.mage_blizzard",
+    "anim": "spellcast",
+    "cost": 40,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "rain:#9ad0f5",
+    "school": "frost",
+    "cooldownMs": 20000,
+    "range": 400,
+    "shape": {
+      "type": "zone",
+      "radius": 90,
+      "durationMs": 5000,
+      "tickMs": 1000
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 4,
+        "coef": 0.25
+      },
+      {
+        "type": "slow",
+        "pct": 0.3,
+        "durationMs": 1500
+      }
+    ]
+  },
+  "mage_ice_block": {
+    "nameKey": "ability.mage_ice_block",
+    "anim": "none",
+    "cost": 0,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "shield:#bfe6ff",
+    "school": "frost",
+    "cooldownMs": 90000,
+    "range": 0,
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "root",
+        "to": "self",
+        "durationMs": 4000
+      },
+      {
+        "type": "invuln",
+        "to": "self",
+        "durationMs": 4000
+      },
+      {
+        "type": "heal",
+        "to": "self",
+        "base": 0,
+        "coef": 0,
+        "pctMaxHp": 0.2
+      }
+    ]
+  },
+  "explorer_aimed_shot": {
+    "nameKey": "ability.explorer_aimed_shot",
+    "anim": "shoot",
+    "cost": 30,
+    "gcd": true,
+    "dodgeable": true,
+    "icon": "arrow:#f0d080",
+    "school": "physical",
+    "cooldownMs": 8000,
+    "range": 480,
+    "channelMs": 1000,
+    "shape": {
+      "type": "projectile",
+      "speed": 700,
+      "radius": 6,
+      "pierce": false,
+      "look": "arrow"
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 25,
+        "coef": 1.8
+      }
+    ]
+  },
+  "explorer_multishot": {
+    "nameKey": "ability.explorer_multishot",
+    "anim": "shoot",
+    "cost": 35,
+    "gcd": true,
+    "dodgeable": true,
+    "icon": "rain:#e0a050",
+    "school": "physical",
+    "cooldownMs": 8000,
+    "range": 380,
+    "shape": {
+      "type": "projectile",
+      "speed": 520,
+      "radius": 6,
+      "pierce": false,
+      "look": "arrow",
+      "count": 5,
+      "spreadDeg": 40
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 6,
+        "coef": 0.5
+      }
+    ]
+  },
+  "explorer_hunters_mark": {
+    "nameKey": "ability.explorer_hunters_mark",
+    "anim": "shoot",
+    "cost": 10,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "star:#e06060",
+    "school": "physical",
+    "cooldownMs": 20000,
+    "range": 500,
+    "shape": {
+      "type": "projectile",
+      "speed": 800,
+      "radius": 6,
+      "pierce": false,
+      "look": "arrow"
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 2,
+        "coef": 0
+      },
+      {
+        "type": "buff",
+        "to": "enemies",
+        "stat": "damageTaken",
+        "pct": 0.2,
+        "durationMs": 10000
+      }
+    ]
+  },
+  "explorer_cut": {
+    "nameKey": "ability.explorer_cut",
+    "anim": "thrust",
+    "cost": 0,
+    "gcd": false,
+    "dodgeable": true,
+    "icon": "dagger:#d0d8e0",
+    "school": "physical",
+    "cooldownMs": 600,
+    "range": 48,
+    "comboGain": 1,
+    "shape": {
+      "type": "melee_arc",
+      "radius": 48,
+      "arcDeg": 90
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 7,
+        "coef": 0.5
+      }
+    ]
+  },
+  "explorer_eviscerate": {
+    "nameKey": "ability.explorer_eviscerate",
+    "anim": "thrust",
+    "cost": 25,
+    "gcd": true,
+    "dodgeable": true,
+    "icon": "dagger:#e04050",
+    "school": "physical",
+    "cooldownMs": 1000,
+    "range": 48,
+    "comboSpend": true,
+    "shape": {
+      "type": "melee_arc",
+      "radius": 48,
+      "arcDeg": 70
+    },
+    "effects": [
+      {
+        "type": "damage",
+        "base": 8,
+        "coef": 0.4,
+        "perComboPct": 0.6
+      }
+    ]
+  },
+  "explorer_stealth": {
+    "nameKey": "ability.explorer_stealth",
+    "anim": "none",
+    "cost": 0,
+    "gcd": false,
+    "dodgeable": false,
+    "icon": "wind:#8090a0",
+    "school": "physical",
+    "cooldownMs": 60000,
+    "range": 0,
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "stealth",
+        "to": "self",
+        "durationMs": 30000
+      }
+    ]
+  },
+  "explorer_deadly_poison": {
+    "nameKey": "ability.explorer_deadly_poison",
+    "anim": "none",
+    "cost": 0,
+    "gcd": true,
+    "dodgeable": false,
+    "icon": "drop:#60c040",
+    "school": "nature",
+    "cooldownMs": 60000,
+    "range": 0,
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "imbue",
+        "to": "self",
+        "abilityId": "explorer_poison_proc",
+        "durationMs": 30000
+      }
+    ]
+  },
+  "explorer_poison_proc": {
+    "nameKey": "ability.explorer_poison_proc",
+    "icon": "drop:#ffffff",
+    "anim": "none",
+    "cost": 0,
+    "cooldownMs": 0,
+    "gcd": false,
+    "range": 0,
+    "dodgeable": false,
+    "school": "nature",
+    "shape": {
+      "type": "self"
+    },
+    "effects": [
+      {
+        "type": "dot",
+        "base": 2,
+        "coef": 0.15,
+        "tickMs": 1000,
+        "durationMs": 6000,
+        "stackMax": 5
+      }
+    ]
+  }
+}

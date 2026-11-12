@@ -1,21 +1,33 @@
 import type { World } from '../world';
-import { BALANCE, MONSTERS, type School } from './defs';
-import { BUTTON, passiveValue, recomputeStats, type Unit } from './unit';
+import { ability, BALANCE, MONSTERS, type PassiveDef, type School } from './defs';
+import { BUTTON, passivesWith, passiveValue, recomputeStats, type Unit } from './unit';
+import { breakStealth, useAbility } from './actions';
 
 const TICK_SEC = 0.05;
 const dist = (a: Unit, b: Unit) => Math.hypot(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
 
 function enterCombat(world: World, u: Unit): void {
   u.inCombatUntil = world.now + BALANCE.combat.outOfCombatMs;
+  u.fightingUntil = u.inCombatUntil;
 }
 
-/** Applies damage (after rolls): shields absorb first, then health; handles rage, threat, combat and death. */
-export function applyDamage(world: World, target: Unit, amount: number, src: Unit | null, school: School, crit = false): void {
-  if (target.state !== 'alive' || amount <= 0) return;
+export interface DamageOpts {
+  blocked?: boolean;
+  /** Reflected damage is not reflected again. */
+  reflected?: boolean;
+}
+
+/**
+ * Applies damage (after rolls): shields absorb first, then health; handles rage, threat, combat,
+ * stealth, reflect, low-health and cheat-death passives, and death. Returns the damage taken (incl. absorbed).
+ */
+export function applyDamage(world: World, target: Unit, amount: number, src: Unit | null, school: School, crit = false, opts: DamageOpts = {}): number {
+  if (target.state !== 'alive' || amount <= 0) return 0;
   if (target.invulnUntil > world.now) {
     world.emit({ e: 'hit', src: src?.id ?? null, dst: target.id, amount: 0, crit: false, dodged: true, heal: false, absorbed: 0, school });
-    return;
+    return 0;
   }
+  breakStealth(world, target);
   let rest = amount;
   let absorbed = 0;
   for (const s of target.statuses) {
@@ -27,19 +39,58 @@ export function applyDamage(world: World, target: Unit, amount: number, src: Uni
     if (rest <= 0) break;
   }
   target.statuses = target.statuses.filter((s) => s.kind !== 'shield' || (s.amount ?? 0) > 0);
+  const hpBefore = target.hp;
   target.hp = Math.max(0, target.hp - rest);
   target.lastHurtAt = world.now;
   if (target.reviving) target.reviving = null;
   enterCombat(world, target);
   if (src) enterCombat(world, src);
-  world.emit({ e: 'hit', src: src?.id ?? null, dst: target.id, amount: rest, crit, dodged: false, heal: false, absorbed, school });
+  world.emit({ e: 'hit', src: src?.id ?? null, dst: target.id, amount: rest, crit, dodged: false, heal: false, absorbed, school, ...(opts.blocked ? { blocked: true } : {}) });
   if (target.resourceKind === 'rage' && rest > 0) {
     const gain = (rest / target.stats.maxHp) * 100 * BALANCE.resources.rage.perDamageTakenPct;
     target.resource = Math.min(target.stats.maxResource, target.resource + gain);
     target.lastRageGainAt = world.now;
   }
   if (src && target.kind === 'monster') world.addThreat(target, src, amount);
-  if (target.hp <= 0) kill(world, target);
+  const reflect = target.statuses.find((s) => s.kind === 'reflect' && s.until > world.now);
+  if (reflect?.pct && src && src !== target && !opts.reflected && rest + absorbed > 0) {
+    applyDamage(world, src, Math.max(1, Math.round((rest + absorbed) * reflect.pct)), target, school, false, { reflected: true });
+  }
+  if (target.hp <= 0 && !cheatDeath(world, target)) kill(world, target, src);
+  else if (target.hp > 0) lowHealth(world, target, hpBefore);
+  return rest + absorbed;
+}
+
+const procReady = (world: World, u: Unit, id: string) => (u.procCd[id] ?? 0) <= world.now;
+
+/** Last-stand style passives: cast a self ability when health crosses below a threshold. */
+function lowHealth(world: World, u: Unit, hpBefore: number): void {
+  for (const p of passivesWith(u, 'onLowHp')) {
+    const t = u.stats.maxHp * p.onLowHp.belowPct;
+    if (hpBefore < t || u.hp >= t || !procReady(world, u, p.id) || !ability(p.onLowHp.abilityId)) continue;
+    u.procCd[p.id] = world.now + p.onLowHp.cooldownMs;
+    useAbility(world, u, p.onLowHp.abilityId, u.pos, true);
+    world.emit({ e: 'proc', id: u.id, passiveId: p.id });
+  }
+}
+
+/** A lethal hit: the target's own cheat-death passive, or an ally's guardian one, may save it. */
+function cheatDeath(world: World, u: Unit): boolean {
+  if (u.kind !== 'player') return false;
+  const candidates: [Unit, PassiveDef & { cheatDeath: NonNullable<PassiveDef['cheatDeath']> }][] = [];
+  for (const p of passivesWith(u, 'cheatDeath')) if (!p.cheatDeath.allies) candidates.push([u, p]);
+  for (const ally of world.allPlayers()) {
+    if (ally === u || ally.state !== 'alive') continue;
+    for (const p of passivesWith(ally, 'cheatDeath')) if (p.cheatDeath.allies) candidates.push([ally, p]);
+  }
+  for (const [owner, p] of candidates) {
+    if (!procReady(world, owner, p.id)) continue;
+    owner.procCd[p.id] = world.now + p.cheatDeath.cooldownMs;
+    u.hp = Math.max(1, Math.round(u.stats.maxHp * p.cheatDeath.hpPct));
+    world.emit({ e: 'proc', id: u.id, passiveId: p.id });
+    return true;
+  }
+  return false;
 }
 
 /** Applies a heal and gives healing threat to monsters fighting the healer. */
@@ -54,10 +105,14 @@ export function applyHeal(world: World, target: Unit, amount: number, src: Unit 
   }
 }
 
-function kill(world: World, u: Unit): void {
+function kill(world: World, u: Unit, src: Unit | null = null): void {
   u.dash = null;
   u.reviving = null;
+  u.channel = null;
+  u.combo = 0;
+  u.comboBonusNext = 0;
   u.statuses = [];
+  if (src && src.kind === 'player') for (const p of passivesWith(src, 'onKill')) delete src.cooldowns[p.onKill.resetCooldown];
   recomputeStats(u, world.now);
   if (u.kind === 'monster') {
     u.state = 'dead';

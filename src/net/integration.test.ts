@@ -100,7 +100,7 @@ describe('combat over the network', () => {
     client.on('combat', ({ list }) => {
       for (const e of list) if (e.e === 'cast' && e.src === client.playerId) casts.push(1);
     });
-    client.press('s2', { x: 480, y: 480 });
+    client.press('rmb', { x: 480, y: 480 });
     const timer = setInterval(() => client.sendInput({ moveX: 0, moveY: 0, aimX: 480, aimY: 480 }), 50);
     await vi.advanceTimersByTimeAsync(1500);
     clearInterval(timer);

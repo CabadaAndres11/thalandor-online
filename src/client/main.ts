@@ -13,6 +13,7 @@ import { ClientSession } from './client-session';
 import { t } from './i18n';
 import { Overlay } from './ui/overlay';
 import { Screens } from './ui/screens';
+import { ProgressWindows } from './ui/progress-windows';
 import { Hud } from './hud/hud';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
@@ -45,32 +46,54 @@ interface Current {
   host: WorkerHostHandle | null;
   saver: AutoSaver;
   character: Character;
+  windows: ProgressWindows;
 }
 let current: Current | null = null;
+let pendingSave: Promise<void> = Promise.resolve();
 
 function backToMenu(error?: string): void {
   if (current) {
-    const { session, host, saver } = current;
+    const { session, host, saver, windows } = current;
     current = null;
+    windows.destroy();
     saver.stop();
-    void saver.saveNow();
+    pendingSave = saver.saveNow();
     session.close();
     host?.stop();
   }
   // Stop unconditionally: a start queued while the tab was hidden is not "active" yet.
   game.scene.stop('game');
   overlay.hide();
-  void screens.showSelection(error);
+  const shown = pendingSave;
+  void shown.then(() => screens.showSelection(error));
 }
 
 function startGame(conn: Connection, character: Character, host: WorkerHostHandle | null): void {
   const session = new ClientSession(conn, {
     version: GAME_VERSION,
-    character: { name: character.name, classId: character.classId, appearance: character.appearance, lastLocation: character.lastLocation },
+    character: {
+      name: character.name,
+      classId: character.classId,
+      appearance: character.appearance,
+      lastLocation: character.lastLocation,
+      progress: {
+        level: character.level,
+        xp: character.xp,
+        attributes: character.attributes,
+        talents: character.talents,
+        specId: character.specId,
+        hotbar: character.hotbar,
+      },
+    },
     map,
   });
   const saver = new AutoSaver({ store, character, mapId: MAP_ID, getLocation: () => session.selfLocation() });
-  current = { session, host, saver, character };
+  const windows = new ProgressWindows(uiRoot, {
+    classId: character.classId,
+    request: (req) => session.requestProgress(req),
+    isTyping: () => overlay.chatOpen,
+  });
+  current = { session, host, saver, character, windows };
   saver.start();
   // Events from a session that is no longer current must never touch the UI or the active game.
   const live =
@@ -83,6 +106,21 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
   session.on('chat', live(({ from, text }) => overlay.addChat(from, text)));
   session.on('joined', live(({ name: n }) => overlay.addChat(null, t('chat.joined', { name: n }))));
   session.on('left', live(({ name: n }) => overlay.addChat(null, t('chat.left', { name: n }))));
+  session.on(
+    'progress',
+    live(({ p }) => {
+      void saver.saveProgress(p);
+      hud.setProgress(p);
+      windows.update(p);
+    }),
+  );
+  session.on('progressRefused', live(({ reason }) => overlay.addChat(null, t(`refused.${reason}`))));
+  session.on(
+    'combat',
+    live(({ list }) => {
+      for (const e of list) if (e.e === 'levelup') overlay.addChat(null, t('chat.levelup', { name: e.name, level: e.level }));
+    }),
+  );
   screens.hide();
   overlay.show({
     isHost: host !== null,
@@ -155,6 +193,8 @@ if (import.meta.env.DEV) {
       return s ? { hp: s.hp, maxHp: s.maxHp, state: s.state, x: s.pos.x, y: s.pos.y } : null;
     },
     me: () => current?.session.meState ?? null,
+    progress: () => current?.session.progress ?? null,
+    window: () => current?.windows.current ?? null,
     /** World -> page pixel coordinates (the canvas sits at the page origin). */
     toScreen: (x: number, y: number) => {
       const cam = (game.scene.getScene('game') as GameScene).cameras.main;

@@ -1,5 +1,5 @@
 import { ABILITIES, CLASSES } from '../../sim/combat/defs';
-import { cooldownView, floatingText, hotbarFor, parseIcon } from './hud-logic';
+import { cooldownView, floatingText, hotbarFor, parseIcon, xpView } from './hud-logic';
 
 test('parseIcon splits glyph and colour and rejects bad specs', () => {
   expect(parseIcon('sword:#9aa3ad')).toEqual({ glyph: 'sword', color: '#9aa3ad' });
@@ -25,6 +25,18 @@ test('hotbarFor lists LMB, RMB, 1-4 and Space with keys, abilities and costs', (
   expect(bar[3]).toMatchObject({ slot: 's2', abilityId: 'warrior_battle_shout', cost: 10 });
   expect(bar[5]).toMatchObject({ slot: 's4', abilityId: null });
   expect(bar[6]).toMatchObject({ slot: 'dodge', abilityId: 'dodge' });
+});
+
+test('hotbarFor uses the host loadout when given', () => {
+  const bar = hotbarFor('explorer', { lmb: 'explorer_cut', rmb: 'explorer_stab', s1: null, s2: null, s3: null, s4: 'explorer_eviscerate' });
+  expect(bar[0]).toMatchObject({ abilityId: 'explorer_cut' });
+  expect(bar[2]).toMatchObject({ abilityId: null });
+  expect(bar[5]).toMatchObject({ abilityId: 'explorer_eviscerate', cost: 25 });
+});
+
+test('xpView shows progress, full at the cap', () => {
+  expect(xpView({ level: 2, xp: 50, xpToNext: 200 })).toEqual({ fraction: 0.25, label: '50 / 200' });
+  expect(xpView({ level: 30, xp: 0, xpToNext: 0 })).toEqual({ fraction: 1, label: '30' });
 });
 
 test('floatingText formats damage, crits, heals and dodges', () => {

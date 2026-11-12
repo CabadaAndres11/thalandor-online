@@ -94,6 +94,7 @@ export class GameScene extends Phaser.Scene {
       if (this.sys.isActive()) this.effects.handle(list, performance.now());
     });
     hud.show(self.classId);
+    if (session.progress) hud.setProgress(session.progress);
 
     // Inputs go out on a fixed 20/s timer, independent of render FPS (a slow PC must not move slower).
     this.inputTimer = setInterval(() => this.sendTickInput(), TICK_MS);
@@ -150,7 +151,7 @@ export class GameScene extends Phaser.Scene {
       seen.add(SELF_KEY);
       this.screenPos.set(SELF_KEY, rs.self.pos);
       this.avatarForPlayer(SELF_KEY, self.name, self.classId, self.appearance).setState(
-        { ...rs.self, name: self.name, showBar: false, hostile: false },
+        { ...rs.self, name: self.name, showBar: false, hostile: false, faded: !!rs.self.stealth },
         now,
       );
       this.cameras.main.centerOn(rs.self.pos.x, rs.self.pos.y - 24);
@@ -161,7 +162,7 @@ export class GameScene extends Phaser.Scene {
       const avatar = o.kind === 'player' ? this.playerAvatar(id, o) : this.monsterAvatar(id, o);
       if (o.kind === 'player') this.playerIds.add(id);
       avatar?.setState(
-        { pos: o.pos, facing: o.facing, moving: o.moving, action: o.action, name: o.kind === 'player' ? o.name : '', hp: o.hp, maxHp: o.maxHp, state: o.state, showBar: true, hostile: o.kind === 'monster' },
+        { pos: o.pos, facing: o.facing, moving: o.moving, action: o.action, name: o.kind === 'player' ? o.name : '', hp: o.hp, maxHp: o.maxHp, state: o.state, showBar: true, hostile: o.kind === 'monster', faded: !!o.stealth },
         now,
       );
     }

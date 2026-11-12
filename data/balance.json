@@ -11,7 +11,8 @@
     "dodgePctPerAgility": 0.003,
     "baseCritPct": 0.05,
     "manaRegenPerSpirit": 0.6,
-    "healthRegenPerSpirit": 0.1
+    "healthRegenPerSpirit": 0.1,
+    "blockPctPerStrength": 0.002
   },
   "combat": {
     "armorK": 100,
@@ -22,15 +23,63 @@
     "outOfCombatHealthRegenPct": 0.02,
     "gcdMs": 500,
     "healThreatFactor": 0.5,
-    "allyPickRadius": 28
+    "allyPickRadius": 28,
+    "blockReduction": 0.5,
+    "cooldownReductionCap": 0.4,
+    "farDistance": 250
   },
   "resources": {
-    "rage": { "max": 100, "perDamageTakenPct": 0.6, "decayPerSec": 5, "decayDelayMs": 3000 },
-    "energy": { "max": 100, "regenPerSec": 10 },
-    "mana": { "inCombatRegenFactor": 0 }
+    "rage": {
+      "max": 100,
+      "perDamageTakenPct": 0.6,
+      "decayPerSec": 5,
+      "decayDelayMs": 3000
+    },
+    "energy": {
+      "max": 100,
+      "regenPerSec": 10
+    },
+    "mana": {
+      "inCombatRegenFactor": 0
+    }
   },
-  "dodge": { "distance": 96, "durationMs": 150, "invulnMs": 300, "cooldownMs": 3000 },
-  "death": { "downedMs": 30000, "reviveMs": 3000, "reviveRange": 48, "reviveHpPct": 0.3, "respawnDelayMs": 3000 },
-  "monsters": { "groupHpPerExtraPlayer": 0.75, "packAlertRange": 160, "repathMs": 500, "wanderRadius": 64, "wanderEveryMs": 3000 },
-  "net": { "interestRange": 800 }
+  "dodge": {
+    "distance": 96,
+    "durationMs": 150,
+    "invulnMs": 300,
+    "cooldownMs": 3000
+  },
+  "death": {
+    "downedMs": 30000,
+    "reviveMs": 3000,
+    "reviveRange": 48,
+    "reviveHpPct": 0.3,
+    "respawnDelayMs": 3000
+  },
+  "monsters": {
+    "groupHpPerExtraPlayer": 0.75,
+    "packAlertRange": 160,
+    "repathMs": 500,
+    "wanderRadius": 64,
+    "wanderEveryMs": 3000
+  },
+  "net": {
+    "interestRange": 800
+  },
+  "xp": {
+    "base": 100,
+    "exponent": 1.6,
+    "monsterBase": 8,
+    "monsterExponent": 1.2,
+    "eliteMultiplier": 4,
+    "levelGrace": 2,
+    "levelPenalty": 0.15,
+    "minFactor": 0.1,
+    "shareRange": 800,
+    "groupBonusPerMember": 0.1,
+    "maxLevel": 30
+  },
+  "progression": {
+    "attributePointsPerLevel": 5
+  }
 }

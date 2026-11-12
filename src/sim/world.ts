@@ -5,12 +5,13 @@ import { PLAYER_RADIUS, TICK_MS, TILE_SIZE } from './constants';
 import { facingFromVector } from './facing';
 import { dodgeDirection, stepPlayerMovement } from './movement';
 import type { EntityId, PlayerInput, Press, Vec2 } from './types';
-import { stepAreas, stepDash, stepProjectiles, useAbility, type PendingArea, type Projectile } from './combat/actions';
-import { BALANCE, CLASSES, MONSTERS, SLOTS, type School } from './combat/defs';
+import { stepAreas, stepChannels, stepDash, stepProjectiles, stepZones, useAbility, type PendingArea, type Projectile, type Zone } from './combat/actions';
+import { ability, BALANCE, CLASSES, MONSTERS, SLOTS, type School } from './combat/defs';
 import type { CombatEvent } from './combat/events';
-import { applyDamage, applyHeal, monsterHpScale, rescaleMonster, stepLife, stepStatusesAndResources } from './combat/life';
+import { applyDamage, applyHeal, type DamageOpts, monsterHpScale, rescaleMonster, stepLife, stepStatusesAndResources } from './combat/life';
 import type { Rng } from './combat/damage';
-import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, type Unit } from './combat/unit';
+import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, isStealthed, passiveValue, type PlayerProgress, type Unit } from './combat/unit';
+import { shareXp } from './progression/xp';
 import { stepMonster } from './monsters/ai';
 
 /** Ticks without a moving input before a player counts as standing (hides single lost packets). */
@@ -24,6 +25,7 @@ export interface PlayerInfo {
   name: string;
   classId: ClassId;
   appearance: Appearance;
+  progress?: PlayerProgress;
 }
 
 /** Kept for code that only deals with players. */
@@ -59,6 +61,8 @@ export interface UnitSnapshot {
   lastInputSeq: number;
   /** One-shot animation and how long ago it started. */
   action?: { anim: ActionAnim; ms: number };
+  /** In stealth: drawn translucent for allies (monsters ignore it). */
+  stealth?: true;
 }
 
 export interface WorldSnapshot {
@@ -84,6 +88,9 @@ export interface MeSnapshot {
   reviving: { targetId: EntityId; pct: number } | null;
   /** Remaining dodge/charge dash, so client prediction can resume it after reconciling. */
   dash: { dx: number; dy: number; ticks: number } | null;
+  combo: number;
+  /** Channel in progress: remaining and total ms. */
+  channel: { ms: number; total: number } | null;
 }
 
 function mulberry32(seed: number): Rng {
@@ -109,7 +116,9 @@ export class World {
   readonly rng: Rng;
   projectiles: Projectile[] = [];
   areas: PendingArea[] = [];
+  zones: Zone[] = [];
   private events: CombatEvent[] = [];
+  private progressDirty = new Set<EntityId>();
   private nextId = 1;
   private nextProj = 1;
   private readonly units = new Map<EntityId, Unit>();
@@ -134,6 +143,17 @@ export class World {
 
   emit(e: CombatEvent): void {
     this.events.push(e);
+  }
+
+  /** A player's progress (xp, level, choices) changed and must be sent to it. */
+  markProgress(id: EntityId): void {
+    this.progressDirty.add(id);
+  }
+
+  drainProgress(): EntityId[] {
+    const out = [...this.progressDirty];
+    this.progressDirty.clear();
+    return out;
   }
 
   drainEvents(): CombatEvent[] {
@@ -199,8 +219,8 @@ export class World {
 
   // --- combat helpers used by the combat modules ---
 
-  damage(target: Unit, amount: number, src: Unit | null, school: School, crit = false): void {
-    applyDamage(this, target, amount, src, school, crit);
+  damage(target: Unit, amount: number, src: Unit | null, school: School, crit = false, opts?: DamageOpts): number {
+    return applyDamage(this, target, amount, src, school, crit, opts);
   }
 
   heal(target: Unit, amount: number, src: Unit | null, school: School, crit = false): void {
@@ -210,8 +230,8 @@ export class World {
   /** Adds threat on a monster towards a player; wakes it up and alerts its pack. */
   addThreat(monster: Unit, src: Unit, amount: number): void {
     const ai = monster.ai;
-    if (!ai || monster.state !== 'alive' || src.kind !== 'player' || src.state !== 'alive') return;
-    ai.threat.set(src.id, (ai.threat.get(src.id) ?? 0) + amount);
+    if (!ai || monster.state !== 'alive' || src.kind !== 'player' || src.state !== 'alive' || isStealthed(src, this.now)) return;
+    ai.threat.set(src.id, (ai.threat.get(src.id) ?? 0) + amount * src.stats.threatMultiplier);
     if (ai.state !== 'combat') ai.state = 'combat';
     const def = MONSTERS[monster.monsterType ?? ''];
     if (def?.behavior === 'pack') {
@@ -233,13 +253,13 @@ export class World {
     const taunt = m.statuses.find((s) => s.kind === 'taunt' && s.until > this.now);
     if (taunt) {
       const t = this.units.get(taunt.sourceId);
-      if (t?.state === 'alive') return t;
+      if (t?.state === 'alive' && !isStealthed(t, this.now)) return t;
     }
     let best: Unit | null = null;
     let bestThreat = -Infinity;
     for (const [id, threat] of m.ai?.threat ?? []) {
       const p = this.units.get(id);
-      if (!p || p.state !== 'alive') continue;
+      if (!p || p.state !== 'alive' || isStealthed(p, this.now)) continue;
       if (threat > bestThreat) {
         best = p;
         bestThreat = threat;
@@ -250,6 +270,7 @@ export class World {
 
   onMonsterDied(m: Unit): void {
     m.ai?.threat.clear();
+    shareXp(this, m);
     const slot = this.slots.find((s) => s.unitId === m.id);
     if (slot) slot.respawnAt = this.now + slot.def.respawnMs;
   }
@@ -261,8 +282,10 @@ export class World {
     for (const u of this.units.values()) if (u.kind === 'player') this.stepPlayer(u);
     for (const u of this.units.values()) if (u.kind === 'monster') stepMonster(this, u);
     for (const u of this.units.values()) if (u.kind === 'player') this.autoAttack(u);
+    stepChannels(this);
     stepProjectiles(this);
     stepAreas(this);
+    stepZones(this);
     stepStatusesAndResources(this);
     stepLife(this);
     this.stepSpawns();
@@ -318,23 +341,31 @@ export class World {
   private handlePress(p: Unit, press: Press, input: PlayerInput): void {
     const aim = { x: press.aimX, y: press.aimY };
     if (press.slot === 'dodge') {
-      if ((p.cooldowns.dodge ?? 0) > this.now || cannotMove(p, this.now) || p.dash) return;
+      if ((p.cooldowns.dodge ?? 0) > this.now || p.dash) return;
+      const channel = p.channel;
+      p.channel = null; // dodging breaks a channel
+      if (cannotMove(p, this.now)) {
+        p.channel = channel;
+        return;
+      }
       const dir = dodgeDirection(p.pos, input);
       const per = BALANCE.dodge.distance / DASH_TICKS;
       p.dash = { dx: dir.x * per, dy: dir.y * per, ticksLeft: DASH_TICKS };
       p.invulnUntil = this.now + BALANCE.dodge.invulnMs;
+      const od = passiveValue(p, 'onDodge');
+      if (od) p.comboBonusNext = od.nextComboBonus;
       p.cooldowns.dodge = this.now + BALANCE.dodge.cooldownMs;
       return;
     }
     if (!SLOTS.includes(press.slot)) return;
-    const abilityId = CLASSES[p.classId ?? '']?.slots[press.slot];
+    const abilityId = p.slots[press.slot];
     if (abilityId) useAbility(this, p, abilityId, aim);
   }
 
   /** Held basic-attack buttons fire again whenever ready. */
   private autoAttack(p: Unit): void {
     if (p.state !== 'alive' || !p.held || p.dash) return;
-    const slots = CLASSES[p.classId ?? '']?.slots;
+    const slots = p.slots;
     const aim = this.lastAim.get(p.id);
     if (!slots || !aim) return;
     if (p.held & BUTTON.lmb && slots.lmb) useAbility(this, p, slots.lmb, aim);
@@ -388,6 +419,7 @@ export class World {
       lastInputSeq: u.lastInputSeq,
     };
     if (u.action) s.action = { anim: u.action.anim, ms: this.now - u.action.at };
+    if (isStealthed(u, this.now)) s.stealth = true;
     return s;
   }
 
@@ -407,7 +439,7 @@ export class World {
 
   meSnapshot(u: Unit): MeSnapshot {
     const now = this.now;
-    const slots = CLASSES[u.classId ?? '']?.slots;
+    const slots = u.slots;
     const cd: Record<string, number> = {};
     if (slots) for (const [slot, id] of Object.entries(slots)) if (id) cd[slot] = Math.max(0, (u.cooldowns[id] ?? 0) - now);
     cd.dodge = Math.max(0, (u.cooldowns.dodge ?? 0) - now);
@@ -427,6 +459,8 @@ export class World {
       statuses: u.statuses.filter((s) => s.until > now).map((s) => ({ kind: s.kind, ms: s.until - now })),
       reviving,
       dash: u.dash ? { dx: u.dash.dx, dy: u.dash.dy, ticks: u.dash.ticksLeft } : null,
+      combo: u.combo,
+      channel: u.channel ? { ms: Math.max(0, u.channel.until - now), total: ability(u.channel.abilityId)?.channelMs ?? 0 } : null,
     };
   }
 }
