@@ -78,3 +78,65 @@ test('predicted position converges to host within 0.5px after inputs stop', asyn
   clearInterval(timer);
   stop();
 });
+
+describe('combat over the network', () => {
+  async function duo(opts: { latencyMs: number; lossRate: number }, classId: 'mage' | 'warrior' = 'mage') {
+    const map = new CollisionMap(30, 30, new Uint8Array(900));
+    const world = new World(map, { x: 480, y: 480 }, { rng: () => 0.5 });
+    const session = new HostSession(world, { version: '0.1.0', mapId: 'test', defaultName: 'Aventurero', now: () => Date.now() });
+    const net = createMemoryNetwork({ ...opts, rng: mulberry32(7) });
+    net.createHost('ABC234').onConnection((c) => session.attach(c));
+    const stop = startTickLoop(() => session.tick(), { now: () => Date.now() });
+    const p = net.createClient().connect('ABC234');
+    await vi.advanceTimersByTimeAsync(150);
+    const client = new ClientSession(await p, { version: '0.1.0', character: netChar('Ana', classId), map, now: () => Date.now() });
+    await vi.advanceTimersByTimeAsync(400);
+    return { world, client, stop };
+  }
+
+  test('presses survive loss and run once', async () => {
+    const { world, client, stop } = await duo({ latencyMs: 60, lossRate: 0.5 });
+    const casts: number[] = [];
+    client.on('combat', ({ list }) => {
+      for (const e of list) if (e.e === 'cast' && e.src === client.playerId) casts.push(1);
+    });
+    client.press('s2', { x: 480, y: 480 });
+    const timer = setInterval(() => client.sendInput({ moveX: 0, moveY: 0, aimX: 480, aimY: 480 }), 50);
+    await vi.advanceTimersByTimeAsync(1500);
+    clearInterval(timer);
+    stop();
+    const me = world.getPlayer(client.playerId!)!;
+    expect(me.lastPressSeq).toBe(1);
+    expect(casts).toHaveLength(1);
+  });
+
+  test('a predicted dodge ends where the host puts it', async () => {
+    const { world, client, stop } = await duo({ latencyMs: 80, lossRate: 0 });
+    client.press('dodge', { x: 600, y: 480 });
+    const timer = setInterval(() => client.sendInput({ moveX: 1, moveY: 0, aimX: 600, aimY: 480 }), 50);
+    await vi.advanceTimersByTimeAsync(150);
+    clearInterval(timer);
+    const idle = setInterval(() => client.sendInput({ moveX: 0, moveY: 0, aimX: 600, aimY: 480 }), 50);
+    await vi.advanceTimersByTimeAsync(800);
+    clearInterval(idle);
+    stop();
+    const host = world.getPlayer(client.playerId!)!.pos;
+    const self = client.renderState(Date.now()).self!.pos;
+    expect(Math.abs(self.x - host.x)).toBeLessThan(0.5);
+    expect(host.x - 480).toBeGreaterThanOrEqual(95.9);
+  });
+});
+
+test('snapshots only include units within the interest range', () => {
+  const map = new CollisionMap(60, 60, new Uint8Array(3600));
+  const world = new World(map, { x: 100, y: 100 }, { rng: () => 0.5 });
+  const p = world.addPlayer({ name: 'Ana', classId: 'mage', appearance: netChar('Ana').appearance }, { x: 100, y: 100 });
+  const near = world.addMonster('skeleton', { x: 400, y: 100 });
+  const far = world.addMonster('skeleton', { x: 1500, y: 1500 });
+  const { snap, me } = world.snapshotFor(p.id);
+  const ids = snap.units.map((u) => u.id);
+  expect(ids).toContain(p.id);
+  expect(ids).toContain(near.id);
+  expect(ids).not.toContain(far.id);
+  expect(me?.resourceKind).toBe('mana');
+});

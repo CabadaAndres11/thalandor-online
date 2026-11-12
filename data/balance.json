@@ -1,0 +1,36 @@
+{
+  "stats": {
+    "baseHealth": 100,
+    "healthPerStamina": 10,
+    "baseMana": 100,
+    "manaPerIntellect": 10,
+    "attackPowerPerStrength": 2,
+    "attackPowerPerAgility": 1,
+    "spellPowerPerIntellect": 2,
+    "critPctPerAgility": 0.005,
+    "dodgePctPerAgility": 0.003,
+    "baseCritPct": 0.05,
+    "manaRegenPerSpirit": 0.6,
+    "healthRegenPerSpirit": 0.1
+  },
+  "combat": {
+    "armorK": 100,
+    "armorCap": 0.75,
+    "critMultiplier": 1.5,
+    "variance": 0.1,
+    "outOfCombatMs": 5000,
+    "outOfCombatHealthRegenPct": 0.02,
+    "gcdMs": 500,
+    "healThreatFactor": 0.5,
+    "allyPickRadius": 28
+  },
+  "resources": {
+    "rage": { "max": 100, "perDamageTakenPct": 0.6, "decayPerSec": 5, "decayDelayMs": 3000 },
+    "energy": { "max": 100, "regenPerSec": 10 },
+    "mana": { "inCombatRegenFactor": 0 }
+  },
+  "dodge": { "distance": 96, "durationMs": 150, "invulnMs": 300, "cooldownMs": 3000 },
+  "death": { "downedMs": 30000, "reviveMs": 3000, "reviveRange": 48, "reviveHpPct": 0.3, "respawnDelayMs": 3000 },
+  "monsters": { "groupHpPerExtraPlayer": 0.75, "packAlertRange": 160, "repathMs": 500, "wanderRadius": 64, "wanderEveryMs": 3000 },
+  "net": { "interestRange": 800 }
+}

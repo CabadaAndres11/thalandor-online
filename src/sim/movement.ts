@@ -31,10 +31,22 @@ export function moveCircle(pos: Vec2, radius: number, dx: number, dy: number, ma
   return { x, y };
 }
 
-/** Advances a player one simulation tick according to its input. */
-export function stepPlayerMovement(pos: Vec2, input: PlayerInput, map: CollisionMap): Vec2 {
+/** Advances a player one simulation tick according to its input (speed in px/s). */
+export function stepPlayerMovement(pos: Vec2, input: PlayerInput, map: CollisionMap, speed: number = PLAYER_SPEED): Vec2 {
   const len = Math.hypot(input.moveX, input.moveY);
-  if (len === 0) return { x: pos.x, y: pos.y };
-  const dist = (PLAYER_SPEED * TICK_MS) / 1000;
+  if (len === 0 || speed <= 0) return { x: pos.x, y: pos.y };
+  const dist = (speed * TICK_MS) / 1000;
   return moveCircle(pos, PLAYER_RADIUS, (input.moveX / len) * dist, (input.moveY / len) * dist, map);
+}
+
+/** Direction of a dodge: the movement input if any, otherwise towards the aim point. */
+export function dodgeDirection(pos: Vec2, input: { moveX: number; moveY: number; aimX: number; aimY: number }): Vec2 {
+  let dx = input.moveX;
+  let dy = input.moveY;
+  if (dx === 0 && dy === 0) {
+    dx = input.aimX - pos.x;
+    dy = input.aimY - pos.y;
+  }
+  const l = Math.hypot(dx, dy);
+  return l < 1e-6 ? { x: 0, y: 1 } : { x: dx / l, y: dy / l };
 }

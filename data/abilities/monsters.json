@@ -1,0 +1,32 @@
+{
+  "skeleton_slash": {
+    "nameKey": "ability.skeleton_slash", "icon": "sword:#d8d8c8", "school": "physical", "anim": "slash",
+    "cost": 0, "cooldownMs": 1400, "gcd": false, "range": 44, "dodgeable": true,
+    "shape": { "type": "melee_arc", "radius": 48, "arcDeg": 100 },
+    "effects": [{ "type": "damage", "base": 6, "coef": 0.4 }]
+  },
+  "goblin_bolt": {
+    "nameKey": "ability.goblin_bolt", "icon": "bolt:#7cd05a", "school": "nature", "anim": "spellcast",
+    "cost": 0, "cooldownMs": 1800, "gcd": false, "range": 300, "dodgeable": true,
+    "shape": { "type": "projectile", "speed": 260, "radius": 7, "pierce": false, "look": "nature" },
+    "effects": [{ "type": "damage", "base": 5, "coef": 0.4 }]
+  },
+  "bat_bite": {
+    "nameKey": "ability.bat_bite", "icon": "dagger:#a070c0", "school": "physical", "anim": "slash",
+    "cost": 0, "cooldownMs": 900, "gcd": false, "range": 30, "dodgeable": true,
+    "shape": { "type": "melee_arc", "radius": 34, "arcDeg": 120 },
+    "effects": [{ "type": "damage", "base": 3, "coef": 0.3 }]
+  },
+  "orc_cleave": {
+    "nameKey": "ability.orc_cleave", "icon": "axe:#8aa060", "school": "physical", "anim": "slash",
+    "cost": 0, "cooldownMs": 1600, "gcd": false, "range": 52, "dodgeable": true,
+    "shape": { "type": "melee_arc", "radius": 58, "arcDeg": 110 },
+    "effects": [{ "type": "damage", "base": 10, "coef": 0.5 }]
+  },
+  "orc_slam": {
+    "nameKey": "ability.orc_slam", "icon": "burst:#8aa060", "school": "physical", "anim": "slash",
+    "cost": 0, "cooldownMs": 7000, "gcd": false, "range": 70, "dodgeable": true,
+    "shape": { "type": "area_target", "radius": 84, "delayMs": 1200, "atSelf": true },
+    "effects": [{ "type": "damage", "base": 22, "coef": 0.8 }, { "type": "slow", "pct": 0.4, "durationMs": 2000 }]
+  }
+}

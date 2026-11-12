@@ -1,0 +1,8 @@
+{
+  "dodge": {
+    "nameKey": "ability.dodge", "icon": "wind:#e8e0c8", "school": "physical", "anim": "none",
+    "cost": 0, "cooldownMs": 3000, "gcd": false, "range": 0, "dodgeable": false,
+    "shape": { "type": "self" },
+    "effects": []
+  }
+}

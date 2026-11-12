@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 import { CollisionMap, type TiledMap } from '../sim/collision-map';
 import { World } from '../sim/world';
+import { spawnsFromTiled } from '../sim/map-objects';
 import type { Channel, Connection } from '../net/transport';
 import { HostSession } from './host-session';
 import { startTickLoop } from './tick-loop';
@@ -62,7 +63,7 @@ export function createWorkerHandler(post: (m: WorkerToMain) => void, opts: { now
   return (m: MainToWorker): void => {
     switch (m.k) {
       case 'init': {
-        const world = new World(CollisionMap.fromTiled(m.mapJson), spawnOf(m.mapJson));
+        const world = new World(CollisionMap.fromTiled(m.mapJson), spawnOf(m.mapJson), { spawns: spawnsFromTiled(m.mapJson) });
         session = new HostSession(world, { version: m.version, mapId: m.mapId, defaultName: m.defaultName, now: opts.now });
         const s = session;
         stopLoop = startTickLoop(() => s.tick(), { now: opts.now });

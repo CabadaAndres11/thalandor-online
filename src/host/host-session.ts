@@ -59,14 +59,18 @@ export class HostSession {
 
   tick(): void {
     this.world.step();
-    const snap = encode({ t: 'snapshot', s: this.world.snapshot() });
+    const events = this.world.drainEvents();
+    const eventsMsg = events.length ? encode({ t: 'events', list: events }) : null;
     const t = this.now();
     for (const p of this.peers) {
       if (!p.noTimeout && t - p.lastSeen > CONN_TIMEOUT_MS) {
         p.conn.close();
         this.drop(p);
       } else if (p.playerId !== null) {
-        p.conn.send(snap, 'unreliable');
+        // Events first and reliable: hits and deaths must never be lost (damage numbers, death animations).
+        if (eventsMsg) p.conn.send(eventsMsg, 'reliable');
+        const { snap, me } = this.world.snapshotFor(p.playerId);
+        p.conn.send(encode(me ? { t: 'snapshot', s: snap, me } : { t: 'snapshot', s: snap }), 'unreliable');
       }
     }
   }
@@ -105,7 +109,7 @@ export class HostSession {
   private broadcastRoster(): void {
     const players: RosterEntry[] = this.world
       .allPlayers()
-      .map((p) => ({ id: p.id, name: p.name, classId: p.classId, appearance: p.appearance }));
+      .map((p) => ({ id: p.id, name: p.name, classId: p.classId!, appearance: p.appearance! }));
     this.broadcast({ t: 'roster', players }, 'reliable');
   }
 
@@ -113,12 +117,21 @@ export class HostSession {
     if (!Number.isFinite(input.seq)) return;
     const pos = this.world.getPlayer(id)?.pos ?? { x: 0, y: 0 };
     const aimOk = Number.isFinite(input.aimX) && Number.isFinite(input.aimY);
+    const presses = (input.presses ?? [])
+      .filter((p) => Number.isFinite(p.seq))
+      .map((p) => {
+        const ok = Number.isFinite(p.aimX) && Number.isFinite(p.aimY);
+        return { seq: p.seq, slot: p.slot, aimX: ok ? p.aimX : pos.x, aimY: ok ? p.aimY : pos.y };
+      });
+    const buttons = Number.isFinite(input.buttons) ? Math.max(0, Math.min(255, Math.floor(input.buttons ?? 0))) : 0;
     this.world.queueInput(id, {
       seq: input.seq,
       moveX: clampAxis(input.moveX),
       moveY: clampAxis(input.moveY),
       aimX: aimOk ? input.aimX : pos.x,
       aimY: aimOk ? input.aimY : pos.y,
+      buttons,
+      presses,
     });
   }
 

@@ -83,7 +83,7 @@ test('ignores messages before hello', async () => {
   await vi.runAllTimersAsync();
   session.tick();
   expect(session.playerCount).toBe(0);
-  expect(world.snapshot().players).toEqual([]);
+  expect(world.snapshot().units).toEqual([]);
 });
 
 test('sanitizes input', async () => {
@@ -95,7 +95,7 @@ test('sanitizes input', async () => {
   await vi.runAllTimersAsync();
   session.tick();
   await vi.runAllTimersAsync();
-  const snap = ofType(c, 'snapshot').at(-1)!.s.players[0]!;
+  const snap = ofType(c, 'snapshot').at(-1)!.s.units[0]!;
   expect(Number.isFinite(snap.x) && Number.isFinite(snap.y)).toBe(true);
   expect(snap.x).toBeCloseTo(80 + 6, 6);
   expect(snap.y).toBeCloseTo(80, 6);
@@ -113,7 +113,7 @@ test('broadcasts snapshot each tick with lastInputSeq', async () => {
   expect(ofType(a, 'snapshot')).toHaveLength(2);
   const last = ofType(b, 'snapshot').at(-1)!.s;
   expect(last.tick).toBe(2);
-  expect(last.players.find((p) => p.name === 'Ana')!.lastInputSeq).toBe(7);
+  expect(last.units.find((p) => p.name === 'Ana')!.lastInputSeq).toBe(7);
 });
 
 test('chat is trimmed and empty messages ignored', async () => {
@@ -136,7 +136,7 @@ test('names are trimmed to 16 chars and default when empty', async () => {
   const { net, world } = setup();
   await join(net, { name: '   ' });
   await join(net, { name: 'x'.repeat(30) });
-  const names = world.snapshot().players.map((p) => p.name);
+  const names = world.snapshot().units.map((p) => p.name);
   expect(names).toEqual(['Aventurero', 'x'.repeat(16)]);
 });
 
@@ -222,4 +222,30 @@ test('spawns at map spawn when saved location is solid or other map', async () =
   await join(net, { name: 'Beto', character: { lastLocation: { mapId: 'other-map', x: 300, y: 300 } } });
   expect(world.getPlayer(1)!.pos).toEqual({ x: 80, y: 80 });
   expect(world.getPlayer(2)!.pos).toEqual({ x: 80, y: 80 });
+});
+
+test('each player gets its private me block and combat events reliably', async () => {
+  const { net, session, world } = setup();
+  const a = await join(net, { name: 'Ana', character: { classId: 'warrior' } });
+  const mob = world.addMonster('skeleton', { x: 120, y: 80 });
+  world.damage(mob, 5, world.getPlayer(1)!, 'physical');
+  session.tick();
+  await vi.runAllTimersAsync();
+  const snap = ofType(a, 'snapshot').at(-1)!;
+  expect(snap.me?.resourceKind).toBe('rage');
+  expect(snap.s.units.some((u) => u.kind === 'monster')).toBe(true);
+  expect(ofType(a, 'events').flatMap((m) => m.list).some((e) => e.e === 'hit')).toBe(true);
+});
+
+test('presses are sanitized: bad aim replaced, buttons clamped', async () => {
+  const { net, session, world } = setup();
+  const c = await join(net);
+  // Raw text: JSON.stringify would turn the infinite aim into null.
+  c.conn.send('{"t":"input","input":{"seq":1,"moveX":0,"moveY":0,"aimX":0,"aimY":0,"buttons":99999,"presses":[{"seq":1,"slot":"s1","aimX":1e999,"aimY":3}]}}', 'reliable');
+  await vi.runAllTimersAsync();
+  session.tick();
+  const p = world.getPlayer(1)!;
+  expect(p.lastPressSeq).toBe(1);
+  expect(p.held).toBe(255);
+  expect(Number.isFinite(p.pos.x)).toBe(true);
 });

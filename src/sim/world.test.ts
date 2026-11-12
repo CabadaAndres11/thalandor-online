@@ -33,7 +33,7 @@ test('queued inputs applied in seq order, one movement tick each', () => {
   w.queueInput(p.id, inp(2));
   w.queueInput(p.id, inp(1));
   w.step();
-  const s = w.snapshot().players[0]!;
+  const s = w.snapshot().units[0]!;
   expect(s.x).toBeCloseTo(spawn.x + 2 * STEP, 6);
   expect(s.lastInputSeq).toBe(2);
   expect(w.tick).toBe(1);
@@ -46,7 +46,7 @@ test('stale inputs ignored', () => {
   w.step();
   w.queueInput(p.id, inp(1));
   w.step();
-  expect(w.snapshot().players[0]!.x).toBeCloseTo(spawn.x + STEP, 6);
+  expect(w.snapshot().units[0]!.x).toBeCloseTo(spawn.x + STEP, 6);
 });
 
 test('snapshot reflects positions, lastInputSeq, facing and moving', () => {
@@ -54,10 +54,11 @@ test('snapshot reflects positions, lastInputSeq, facing and moving', () => {
   const p = w.addPlayer(info('Ana'));
   w.queueInput(p.id, inp(1, 0, 1));
   w.step();
-  expect(w.snapshot()).toEqual({
-    tick: 1,
-    players: [{ id: p.id, name: 'Ana', x: spawn.x, y: spawn.y + STEP, lastInputSeq: 1, facing: DOWN, moving: true }],
-  });
+  const snap = w.snapshot();
+  expect(snap.tick).toBe(1);
+  expect(snap.units).toEqual([
+    expect.objectContaining({ id: p.id, kind: 'player', type: 'warrior', name: 'Ana', x: spawn.x, y: spawn.y + STEP, lastInputSeq: 1, facing: DOWN, moving: true, state: 'alive' }),
+  ]);
 });
 
 test('moving left faces left; standing still faces the aim', () => {
@@ -65,11 +66,11 @@ test('moving left faces left; standing still faces the aim', () => {
   const p = w.addPlayer(info('Ana'));
   w.queueInput(p.id, inp(1, -1, 0));
   w.step();
-  expect(w.snapshot().players[0]).toMatchObject({ facing: LEFT, moving: true });
+  expect(w.snapshot().units[0]).toMatchObject({ facing: LEFT, moving: true });
   const pos = w.getPlayer(p.id)!.pos;
   w.queueInput(p.id, inp(2, 0, 0, pos.x, pos.y + 50));
   w.step();
-  expect(w.snapshot().players[0]).toMatchObject({ facing: DOWN, moving: false });
+  expect(w.snapshot().units[0]).toMatchObject({ facing: DOWN, moving: false });
 });
 
 test('moving stays true across a tick with a lost input, then turns off after a pause', () => {
@@ -78,16 +79,16 @@ test('moving stays true across a tick with a lost input, then turns off after a 
   w.queueInput(p.id, inp(1));
   w.step();
   w.step(); // input lost this tick
-  expect(w.snapshot().players[0]!.moving).toBe(true);
+  expect(w.snapshot().units[0]!.moving).toBe(true);
   for (let i = 0; i < 6; i++) w.step();
-  expect(w.snapshot().players[0]!.moving).toBe(false);
+  expect(w.snapshot().units[0]!.moving).toBe(false);
 });
 
 test('removePlayer removes from snapshot', () => {
   const w = mk();
   const p = w.addPlayer(info('Ana'));
   w.removePlayer(p.id);
-  expect(w.snapshot().players).toEqual([]);
+  expect(w.snapshot().units).toEqual([]);
 });
 
 test('isSpawnable false inside or touching a wall, true in open floor', () => {

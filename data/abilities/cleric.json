@@ -1,0 +1,35 @@
+{
+  "cleric_holy_flash": {
+    "nameKey": "ability.cleric_holy_flash", "icon": "star:#f2e27a", "school": "holy", "anim": "spellcast",
+    "cost": 4, "cooldownMs": 700, "gcd": false, "range": 380, "dodgeable": true,
+    "shape": { "type": "projectile", "speed": 420, "radius": 8, "pierce": false, "look": "holy" },
+    "effects": [{ "type": "damage", "base": 8, "coef": 0.5 }]
+  },
+  "cleric_heal": {
+    "nameKey": "ability.cleric_heal", "icon": "cross:#7fe08a", "school": "holy", "anim": "spellcast",
+    "cost": 15, "cooldownMs": 1500, "gcd": true, "range": 320, "dodgeable": false,
+    "shape": { "type": "ally_target" },
+    "effects": [{ "type": "heal", "to": "allies", "base": 22, "coef": 0.8 }]
+  },
+  "cleric_shield_word": {
+    "nameKey": "ability.cleric_shield_word", "icon": "shield:#f2e27a", "school": "holy", "anim": "spellcast",
+    "cost": 20, "cooldownMs": 8000, "gcd": true, "range": 320, "dodgeable": false,
+    "shape": { "type": "ally_target" },
+    "effects": [{ "type": "shield", "to": "allies", "base": 25, "coef": 0.6, "durationMs": 10000 }]
+  },
+  "cleric_renew": {
+    "nameKey": "ability.cleric_renew", "icon": "drop:#7fe08a", "school": "holy", "anim": "spellcast",
+    "cost": 12, "cooldownMs": 3000, "gcd": true, "range": 320, "dodgeable": false,
+    "shape": { "type": "ally_target" },
+    "effects": [{ "type": "hot", "to": "allies", "base": 4, "coef": 0.15, "tickMs": 1000, "durationMs": 9000 }]
+  },
+  "cleric_holy_nova": {
+    "nameKey": "ability.cleric_holy_nova", "icon": "burst:#f2e27a", "school": "holy", "anim": "spellcast",
+    "cost": 25, "cooldownMs": 8000, "gcd": true, "range": 0, "dodgeable": true,
+    "shape": { "type": "area_self", "radius": 100 },
+    "effects": [
+      { "type": "damage", "base": 10, "coef": 0.4 },
+      { "type": "heal", "to": "allies", "base": 8, "coef": 0.3 }
+    ]
+  }
+}

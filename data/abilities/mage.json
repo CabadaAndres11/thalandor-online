@@ -1,0 +1,32 @@
+{
+  "mage_arcane_missile": {
+    "nameKey": "ability.mage_arcane_missile", "icon": "bolt:#b07cf0", "school": "arcane", "anim": "spellcast",
+    "cost": 3, "cooldownMs": 600, "gcd": false, "range": 400, "dodgeable": true,
+    "shape": { "type": "projectile", "speed": 480, "radius": 7, "pierce": false, "look": "arcane" },
+    "effects": [{ "type": "damage", "base": 9, "coef": 0.55 }]
+  },
+  "mage_arcane_burst": {
+    "nameKey": "ability.mage_arcane_burst", "icon": "burst:#b07cf0", "school": "arcane", "anim": "spellcast",
+    "cost": 12, "cooldownMs": 3000, "gcd": true, "range": 360, "dodgeable": true,
+    "shape": { "type": "area_target", "radius": 44, "delayMs": 300 },
+    "effects": [{ "type": "damage", "base": 16, "coef": 0.8 }]
+  },
+  "mage_blink": {
+    "nameKey": "ability.mage_blink", "icon": "wing:#9ad0f5", "school": "arcane", "anim": "none",
+    "cost": 10, "cooldownMs": 10000, "gcd": true, "range": 170, "dodgeable": false,
+    "shape": { "type": "blink", "distance": 170 },
+    "effects": []
+  },
+  "mage_frost_nova": {
+    "nameKey": "ability.mage_frost_nova", "icon": "snow:#9ad0f5", "school": "frost", "anim": "spellcast",
+    "cost": 15, "cooldownMs": 12000, "gcd": true, "range": 0, "dodgeable": false,
+    "shape": { "type": "area_self", "radius": 100 },
+    "effects": [{ "type": "damage", "base": 5, "coef": 0.2 }, { "type": "freeze", "durationMs": 2000 }]
+  },
+  "mage_mana_barrier": {
+    "nameKey": "ability.mage_mana_barrier", "icon": "shield:#9ad0f5", "school": "arcane", "anim": "spellcast",
+    "cost": 25, "cooldownMs": 15000, "gcd": true, "range": 0, "dodgeable": false,
+    "shape": { "type": "self" },
+    "effects": [{ "type": "shield", "to": "self", "base": 40, "coef": 1.0, "durationMs": 10000 }]
+  }
+}

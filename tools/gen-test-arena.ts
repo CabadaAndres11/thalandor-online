@@ -45,6 +45,16 @@ for (const [px, py] of PILLARS) {
   for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) collision[(py + dy) * W + px + dx] = WALL;
 }
 
+/** Monster spawn points (pixel coordinates), all at least 8 tiles from the player spawn. */
+const SPAWNS: { monster: string; tx: number; ty: number; count: number; respawnMs: number }[] = [
+  { monster: 'skeleton', tx: 5, ty: 4, count: 2, respawnMs: 30000 },
+  { monster: 'skeleton', tx: 34, ty: 4, count: 2, respawnMs: 30000 },
+  { monster: 'goblin_shaman', tx: 16, ty: 23, count: 1, respawnMs: 40000 },
+  { monster: 'goblin_shaman', tx: 29, ty: 5, count: 1, respawnMs: 40000 },
+  { monster: 'bat', tx: 33, ty: 11, count: 3, respawnMs: 30000 },
+  { monster: 'orc_elite', tx: 4, ty: 26, count: 1, respawnMs: 60000 },
+];
+
 const layer = (id: number, name: string, data: number[]) => ({ id, name, type: 'tilelayer', width: W, height: H, x: 0, y: 0, opacity: 1, visible: true, data });
 
 const map = {
@@ -57,8 +67,8 @@ const map = {
   height: H,
   tilewidth: T,
   tileheight: T,
-  nextlayerid: 4,
-  nextobjectid: 1,
+  nextlayerid: 5,
+  nextobjectid: SPAWNS.length + 1,
   properties: [
     { name: 'spawnX', type: 'int', value: (W / 2) * T },
     { name: 'spawnY', type: 'int', value: (H / 2) * T },
@@ -78,7 +88,37 @@ const map = {
       spacing: 0,
     },
   ],
-  layers: [layer(1, 'ground', ground), layer(2, 'decor', new Array<number>(W * H).fill(0)), layer(3, 'collision', collision)],
+  layers: [
+    layer(1, 'ground', ground),
+    layer(2, 'decor', new Array<number>(W * H).fill(0)),
+    layer(3, 'collision', collision),
+    {
+      id: 4,
+      name: 'spawns',
+      type: 'objectgroup',
+      visible: true,
+      opacity: 1,
+      x: 0,
+      y: 0,
+      objects: SPAWNS.map((sp, i) => ({
+        id: i + 1,
+        name: sp.monster,
+        type: 'spawn',
+        x: sp.tx * T + T / 2,
+        y: sp.ty * T + T / 2,
+        width: 0,
+        height: 0,
+        point: true,
+        visible: true,
+        rotation: 0,
+        properties: [
+          { name: 'monster', type: 'string', value: sp.monster },
+          { name: 'count', type: 'int', value: sp.count },
+          { name: 'respawnMs', type: 'int', value: sp.respawnMs },
+        ],
+      })),
+    },
+  ],
 };
 
 const out = fileURLToPath(new URL('../data/maps/test-arena.json', import.meta.url));

@@ -1,6 +1,7 @@
 import { isClassId, type Appearance, type ClassId } from '../appearance/catalog';
-import type { EntityId, PlayerInput } from '../sim/types';
-import type { WorldSnapshot } from '../sim/world';
+import type { EntityId, PlayerInput, Press } from '../sim/types';
+import type { MeSnapshot, UnitSnapshot, WorldSnapshot } from '../sim/world';
+import type { CombatEvent } from '../sim/combat/events';
 
 /** What a client sends about its character when joining. The host validates class and appearance. */
 export interface NetCharacter {
@@ -27,7 +28,8 @@ export type RejectReason = 'version' | 'full';
 export type HostMessage =
   | { t: 'welcome'; playerId: EntityId; mapId: string }
   | { t: 'reject'; reason: RejectReason }
-  | { t: 'snapshot'; s: WorldSnapshot }
+  | { t: 'snapshot'; s: WorldSnapshot; me?: MeSnapshot }
+  | { t: 'events'; list: CombatEvent[] }
   | { t: 'roster'; players: RosterEntry[] }
   | { t: 'chat'; from: string; text: string }
   | { t: 'left'; playerId: EntityId; name: string };
@@ -52,8 +54,19 @@ function parse(raw: string): Obj | null {
 }
 
 /** Numbers are only type-checked here; range sanitizing is the host's job (HostSession). */
+const PRESS_SLOTS = new Set(['lmb', 'rmb', 's1', 's2', 's3', 's4', 'dodge']);
+const MAX_PRESSES = 16;
+const isPress = (v: unknown): v is Press => isObj(v) && isNum(v.seq) && isStr(v.slot) && PRESS_SLOTS.has(v.slot) && isNum(v.aimX) && isNum(v.aimY);
+
 const isInput = (v: unknown): v is PlayerInput =>
-  isObj(v) && isNum(v.seq) && isNum(v.moveX) && isNum(v.moveY) && isNum(v.aimX) && isNum(v.aimY);
+  isObj(v) &&
+  isNum(v.seq) &&
+  isNum(v.moveX) &&
+  isNum(v.moveY) &&
+  isNum(v.aimX) &&
+  isNum(v.aimY) &&
+  (v.buttons === undefined || isNum(v.buttons)) &&
+  (v.presses === undefined || (Array.isArray(v.presses) && v.presses.length <= MAX_PRESSES && v.presses.every(isPress)));
 
 /** Shape only: whether the ids exist in the catalog is decided by the host. */
 const isAppearanceShape = (v: unknown): v is Appearance =>
@@ -64,13 +77,32 @@ const isLocation = (v: unknown) => v === null || (isObj(v) && isStr(v.mapId) && 
 const isNetCharacter = (v: unknown): v is NetCharacter =>
   isObj(v) && isStr(v.name) && isStr(v.classId) && isAppearanceShape(v.appearance) && isLocation(v.lastLocation);
 
-const isSnapshot = (v: unknown): v is WorldSnapshot =>
-  isObj(v) &&
-  isNum(v.tick) &&
-  Array.isArray(v.players) &&
-  v.players.every(
-    (p) => isObj(p) && isNum(p.id) && isStr(p.name) && isNum(p.x) && isNum(p.y) && isNum(p.lastInputSeq) && isNum(p.facing) && isBool(p.moving),
-  );
+const STATES = new Set(['alive', 'downed', 'dead']);
+const isUnit = (u: unknown): u is UnitSnapshot =>
+  isObj(u) &&
+  isNum(u.id) &&
+  (u.kind === 'player' || u.kind === 'monster') &&
+  isStr(u.type) &&
+  isStr(u.name) &&
+  isNum(u.x) &&
+  isNum(u.y) &&
+  Number.isInteger(u.facing) &&
+  (u.facing as number) >= 0 &&
+  (u.facing as number) <= 3 &&
+  isBool(u.moving) &&
+  isNum(u.hp) &&
+  isNum(u.maxHp) &&
+  STATES.has(u.state as string) &&
+  isNum(u.lastInputSeq) &&
+  (u.action === undefined || (isObj(u.action) && isStr(u.action.anim) && isNum(u.action.ms)));
+
+const isSnapshot = (v: unknown): v is WorldSnapshot => isObj(v) && isNum(v.tick) && Array.isArray(v.units) && v.units.every(isUnit);
+
+/** Light check: the private block only feeds the HUD and prediction of the local player. */
+const isMe = (v: unknown): v is MeSnapshot =>
+  isObj(v) && isNum(v.resource) && isNum(v.maxResource) && isObj(v.cd) && isNum(v.gcd) && isNum(v.moveSpeed) && isBool(v.canMove) && isNum(v.lastPressSeq);
+
+const isEvents = (v: unknown): v is CombatEvent[] => Array.isArray(v) && v.every((e) => isObj(e) && isStr(e.e));
 
 const isRoster = (v: unknown): v is RosterEntry[] =>
   Array.isArray(v) && v.every((p) => isObj(p) && isNum(p.id) && isStr(p.name) && isClassId(p.classId) && isAppearanceShape(p.appearance));
@@ -99,7 +131,11 @@ export function decodeHost(raw: string): HostMessage | null {
     case 'reject':
       return m.reason === 'version' || m.reason === 'full' ? { t: 'reject', reason: m.reason } : null;
     case 'snapshot':
-      return isSnapshot(m.s) ? { t: 'snapshot', s: m.s } : null;
+      if (!isSnapshot(m.s)) return null;
+      if (m.me === undefined) return { t: 'snapshot', s: m.s };
+      return isMe(m.me) ? { t: 'snapshot', s: m.s, me: m.me } : null;
+    case 'events':
+      return isEvents(m.list) ? { t: 'events', list: m.list } : null;
     case 'roster':
       return isRoster(m.players) ? { t: 'roster', players: m.players } : null;
     case 'chat':

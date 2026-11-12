@@ -1,0 +1,33 @@
+{
+  "explorer_quick_shot": {
+    "nameKey": "ability.explorer_quick_shot", "icon": "arrow:#c8a46a", "school": "physical", "anim": "shoot",
+    "cost": 10, "cooldownMs": 550, "gcd": false, "range": 420, "dodgeable": true,
+    "shape": { "type": "projectile", "speed": 560, "radius": 6, "pierce": false, "look": "arrow" },
+    "effects": [{ "type": "damage", "base": 7, "coef": 0.5 }]
+  },
+  "explorer_stab": {
+    "nameKey": "ability.explorer_stab", "icon": "dagger:#c0c8d0", "school": "physical", "anim": "thrust",
+    "cost": 30, "cooldownMs": 3000, "gcd": true, "range": 48, "dodgeable": true,
+    "shape": { "type": "melee_arc", "radius": 48, "arcDeg": 70 },
+    "effects": [{ "type": "damage", "base": 16, "coef": 0.9 }]
+  },
+  "explorer_roll": {
+    "nameKey": "ability.explorer_roll", "icon": "wind:#c8a46a", "school": "physical", "anim": "shoot",
+    "cost": 15, "cooldownMs": 9000, "gcd": true, "range": 120, "dodgeable": false,
+    "shape": { "type": "dash", "distance": 120, "backwards": true, "stopOnHit": false },
+    "then": "explorer_quick_shot",
+    "effects": []
+  },
+  "explorer_net": {
+    "nameKey": "ability.explorer_net", "icon": "net:#c8a46a", "school": "physical", "anim": "shoot",
+    "cost": 20, "cooldownMs": 12000, "gcd": true, "range": 360, "dodgeable": true,
+    "shape": { "type": "projectile", "speed": 400, "radius": 10, "pierce": false, "look": "net" },
+    "effects": [{ "type": "root", "durationMs": 3000 }]
+  },
+  "explorer_arrow_rain": {
+    "nameKey": "ability.explorer_arrow_rain", "icon": "rain:#c8a46a", "school": "physical", "anim": "shoot",
+    "cost": 35, "cooldownMs": 10000, "gcd": true, "range": 380, "dodgeable": true,
+    "shape": { "type": "area_target", "radius": 72, "delayMs": 600 },
+    "effects": [{ "type": "damage", "base": 14, "coef": 0.6 }]
+  }
+}

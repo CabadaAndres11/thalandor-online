@@ -1,0 +1,34 @@
+{
+  "warrior_slash": {
+    "nameKey": "ability.warrior_slash", "icon": "sword:#9aa3ad", "school": "physical", "anim": "slash",
+    "cost": 0, "cooldownMs": 650, "gcd": false, "range": 56, "dodgeable": true,
+    "shape": { "type": "melee_arc", "radius": 56, "arcDeg": 120 },
+    "gainOnHit": 8,
+    "effects": [{ "type": "damage", "base": 7, "coef": 0.45 }]
+  },
+  "warrior_brutal_strike": {
+    "nameKey": "ability.warrior_brutal_strike", "icon": "axe:#c0503c", "school": "physical", "anim": "slash",
+    "cost": 30, "cooldownMs": 4000, "gcd": true, "range": 60, "dodgeable": true,
+    "shape": { "type": "melee_arc", "radius": 60, "arcDeg": 70 },
+    "effects": [{ "type": "damage", "base": 18, "coef": 1.2 }]
+  },
+  "warrior_charge": {
+    "nameKey": "ability.warrior_charge", "icon": "arrow:#d9a23c", "school": "physical", "anim": "none",
+    "cost": 0, "cooldownMs": 12000, "gcd": true, "range": 220, "dodgeable": false,
+    "shape": { "type": "dash", "distance": 220, "stopOnHit": true },
+    "gainOnHit": 15,
+    "effects": [{ "type": "damage", "base": 5, "coef": 0.2 }, { "type": "stun", "durationMs": 1000 }]
+  },
+  "warrior_battle_shout": {
+    "nameKey": "ability.warrior_battle_shout", "icon": "star:#e0c060", "school": "physical", "anim": "none",
+    "cost": 10, "cooldownMs": 30000, "gcd": true, "range": 0, "dodgeable": false,
+    "shape": { "type": "area_self", "radius": 200 },
+    "effects": [{ "type": "buff", "to": "allies", "stat": "damageDone", "pct": 0.15, "durationMs": 10000 }]
+  },
+  "warrior_whirlwind": {
+    "nameKey": "ability.warrior_whirlwind", "icon": "spiral:#b0b8c0", "school": "physical", "anim": "slash",
+    "cost": 25, "cooldownMs": 6000, "gcd": true, "range": 0, "dodgeable": true,
+    "shape": { "type": "area_self", "radius": 72 },
+    "effects": [{ "type": "damage", "base": 10, "coef": 0.6 }]
+  }
+}

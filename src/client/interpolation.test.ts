@@ -4,7 +4,7 @@ import { SnapshotBuffer } from './interpolation';
 
 const snap = (tick: number, players: [number, number, number][]): WorldSnapshot => ({
   tick,
-  players: players.map(([id, x, y]) => ({ id, name: `p${id}`, x, y, lastInputSeq: 0, facing: 2, moving: false })),
+  units: players.map(([id, x, y]) => ({ id, kind: 'player' as const, type: 'mage', name: `p${id}`, x, y, lastInputSeq: 0, facing: 2, moving: false, hp: 1, maxHp: 1, state: 'alive' as const })),
 });
 
 test('interpolates halfway between ticks', () => {

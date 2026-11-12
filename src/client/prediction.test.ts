@@ -27,3 +27,36 @@ test('reconcile replays unacked inputs', () => {
   p.reconcile(server, 5);
   expect(p.pos).toEqual(server);
 });
+
+test('dodge is predicted: 96 px over three inputs, ignoring move input', () => {
+  const p = new Predictor(map);
+  p.reconcile({ x: 100, y: 100 }, 0);
+  p.applyLocal(inp(1, 0, 0), { x: 1, y: 0 });
+  p.applyLocal(inp(2, 0, 1));
+  p.applyLocal(inp(3, 0, 1));
+  expect(p.pos.x).toBeCloseTo(196, 6);
+  expect(p.pos.y).toBeCloseTo(100, 6);
+  p.applyLocal(inp(4, 0, 1));
+  expect(p.pos.y).toBeCloseTo(106, 6);
+});
+
+test('reconcile resumes a dash the server reports in progress', () => {
+  const p = new Predictor(map);
+  p.reconcile({ x: 100, y: 100 }, 0);
+  p.applyLocal(inp(1, 0, 0), { x: 1, y: 0 });
+  p.applyLocal(inp(2, 0, 0));
+  // Server applied input 1 only; one dash tick of 32 px left after input 2 is replayed? No: server says 2 ticks left after input 1.
+  p.reconcile({ x: 132, y: 100 }, 1, { dx: 32, dy: 0, ticks: 2 });
+  expect(p.pos.x).toBeCloseTo(164, 6);
+});
+
+test('speed and inability to move are respected', () => {
+  const p = new Predictor(map);
+  p.reconcile({ x: 100, y: 100 }, 0);
+  p.setMotion(60, true);
+  p.applyLocal(inp(1));
+  expect(p.pos.x).toBeCloseTo(103, 6);
+  p.setMotion(60, false);
+  p.applyLocal(inp(2));
+  expect(p.pos.x).toBeCloseTo(103, 6);
+});

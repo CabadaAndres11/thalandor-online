@@ -13,6 +13,18 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers());
 
 const map = new CollisionMap(30, 30, new Uint8Array(900));
+/** A player unit as the host sends it. */
+const U = (o: { id: number; name: string; x: number; y: number; facing?: number; moving?: boolean }) => ({
+  kind: 'player' as const,
+  type: 'warrior',
+  hp: 100,
+  maxHp: 100,
+  state: 'alive' as const,
+  lastInputSeq: 0,
+  facing: 2,
+  moving: false,
+  ...o,
+});
 
 async function setup() {
   const net = createMemoryNetwork();
@@ -67,7 +79,7 @@ test('emits disconnected when no snapshot for 5s', async () => {
   session.on('disconnected', () => disconnected++);
   await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
   clock = 1000;
-  await send({ t: 'snapshot', s: { tick: 1, players: [{ id: 1, name: 'Ana', x: 5, y: 5, lastInputSeq: 0, facing: 2, moving: false }] } });
+  await send({ t: 'snapshot', s: { tick: 1, units: [U({ id: 1, name: 'Ana', x: 5, y: 5 })] } });
   session.checkTimeout(1000 + SNAPSHOT_TIMEOUT_MS - 1);
   expect(disconnected).toBe(0);
   session.checkTimeout(1000 + SNAPSHOT_TIMEOUT_MS + 1);
@@ -93,17 +105,24 @@ test('renders self from prediction and others from snapshots; emits joined, left
   session.on('left', (p) => left.push(p));
   session.on('chat', (p) => chats.push(p));
   await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
-  const ana = { id: 1, name: 'Ana', x: 50, y: 50, lastInputSeq: 0, facing: 2, moving: false };
-  const beto = { id: 2, name: 'Beto', x: 10, y: 10, lastInputSeq: 0, facing: 2, moving: false };
-  await send({ t: 'snapshot', s: { tick: 1, players: [ana, beto] } });
-  await send({ t: 'snapshot', s: { tick: 2, players: [ana, beto, { id: 3, name: 'Cira', x: 1, y: 1, lastInputSeq: 0, facing: 2, moving: false }] } });
+  const ana = U({ id: 1, name: 'Ana', x: 50, y: 50 });
+  const beto = U({ id: 2, name: 'Beto', x: 10, y: 10 });
+  const look = netChar('x').appearance;
+  const r1 = [
+    { id: 1, name: 'Ana', classId: 'warrior' as const, appearance: look },
+    { id: 2, name: 'Beto', classId: 'warrior' as const, appearance: look },
+  ];
+  await send({ t: 'roster', players: r1 });
+  await send({ t: 'snapshot', s: { tick: 1, units: [ana, beto] } });
+  await send({ t: 'roster', players: [...r1, { id: 3, name: 'Cira', classId: 'mage' as const, appearance: look }] });
+  await send({ t: 'snapshot', s: { tick: 2, units: [ana, beto, U({ id: 3, name: 'Cira', x: 1, y: 1 })] } });
   expect(joined).toEqual([{ playerId: 3, name: 'Cira' }]);
   session.sendInput({ moveX: 1, moveY: 0, aimX: 0, aimY: 0 });
   await vi.runAllTimersAsync();
-  expect(received.at(-1)).toEqual({ t: 'input', input: { seq: 1, moveX: 1, moveY: 0, aimX: 0, aimY: 0 } });
+  expect(received.at(-1)).toEqual({ t: 'input', input: { seq: 1, moveX: 1, moveY: 0, aimX: 0, aimY: 0, buttons: 0, presses: [] } });
   clock += 1000;
   const r = session.renderState(clock);
-  expect(r.self).toEqual({ pos: { x: 56, y: 50 }, facing: 3, moving: true });
+  expect(r.self).toMatchObject({ pos: { x: 56, y: 50 }, facing: 3, moving: true });
   expect(r.others.get(2)).toMatchObject({ name: 'Beto', pos: { x: 10, y: 10 }, facing: 2, moving: false });
   expect(r.others.has(1)).toBe(false);
   await send({ t: 'left', playerId: 3, name: 'Cira' });
@@ -131,9 +150,9 @@ test('roster event and others carry classId/appearance', async () => {
     { id: 2, name: 'Beto', classId: 'mage' as const, appearance: mageLook },
   ];
   await send({ t: 'roster', players: roster });
-  await send({ t: 'snapshot', s: { tick: 1, players: [{ id: 2, name: 'Beto', x: 10, y: 10, lastInputSeq: 0, facing: 1, moving: true }] } });
+  await send({ t: 'snapshot', s: { tick: 1, units: [U({ id: 2, name: 'Beto', x: 10, y: 10, facing: 1, moving: true })] } });
   expect(rosters).toEqual([{ players: roster }]);
-  expect(session.renderState(clock + 1000).others.get(2)).toEqual({
+  expect(session.renderState(clock + 1000).others.get(2)).toMatchObject({
     name: 'Beto',
     pos: { x: 10, y: 10 },
     facing: 1,
@@ -146,7 +165,7 @@ test('roster event and others carry classId/appearance', async () => {
 test('self facing follows last input: movement first, then aim when still', async () => {
   const { session, send } = await setup();
   await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
-  await send({ t: 'snapshot', s: { tick: 1, players: [{ id: 1, name: 'Ana', x: 50, y: 50, lastInputSeq: 0, facing: 2, moving: false }] } });
+  await send({ t: 'snapshot', s: { tick: 1, units: [U({ id: 1, name: 'Ana', x: 50, y: 50 })] } });
   session.sendInput({ moveX: 0, moveY: -1, aimX: 0, aimY: 0 });
   expect(session.renderState(clock).self).toMatchObject({ facing: 0, moving: true });
   session.sendInput({ moveX: 0, moveY: 0, aimX: 0, aimY: 44 });
@@ -157,7 +176,46 @@ test('selfLocation returns authoritative snapshot position, not the prediction',
   const { session, send } = await setup();
   expect(session.selfLocation()).toBeNull();
   await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
-  await send({ t: 'snapshot', s: { tick: 1, players: [{ id: 1, name: 'Ana', x: 50, y: 70, lastInputSeq: 0, facing: 2, moving: false }] } });
+  await send({ t: 'snapshot', s: { tick: 1, units: [U({ id: 1, name: 'Ana', x: 50, y: 70 })] } });
   session.sendInput({ moveX: 1, moveY: 0, aimX: 0, aimY: 0 });
   expect(session.selfLocation()).toEqual({ x: 50, y: 70 });
+});
+
+test('presses are resent until acknowledged by the host, then dropped', async () => {
+  const { session, send, received } = await setup();
+  await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
+  session.press('s1', { x: 9, y: 9 });
+  session.sendInput({ moveX: 0, moveY: 0, aimX: 0, aimY: 0 });
+  session.sendInput({ moveX: 0, moveY: 0, aimX: 0, aimY: 0 });
+  await vi.runAllTimersAsync();
+  const inputs = received.filter((m) => m.t === 'input');
+  expect(inputs.map((m) => (m.t === 'input' ? m.input.presses : []))).toEqual([
+    [{ seq: 1, slot: 's1', aimX: 9, aimY: 9 }],
+    [{ seq: 1, slot: 's1', aimX: 9, aimY: 9 }],
+  ]);
+  const me = { resource: 0, maxResource: 100, resourceKind: 'rage', cd: {}, gcd: 0, shield: 0, downedMs: 0, respawnMs: 0, moveSpeed: 120, canMove: true, lastPressSeq: 1, statuses: [], reviving: null, dash: null };
+  await send({ t: 'snapshot', s: { tick: 1, units: [U({ id: 1, name: 'Ana', x: 50, y: 50 })] }, me });
+  session.sendInput({ moveX: 0, moveY: 0, aimX: 0, aimY: 0 });
+  await vi.runAllTimersAsync();
+  const last = received.at(-1);
+  expect(last?.t === 'input' && last.input.presses).toEqual([]);
+  expect(session.meState?.lastPressSeq).toBe(1);
+});
+
+test('combat events are surfaced', async () => {
+  const { session, send } = await setup();
+  const got: unknown[] = [];
+  session.on('combat', (p) => got.push(p));
+  await send({ t: 'events', list: [{ e: 'died', id: 7 }] });
+  expect(got).toEqual([{ list: [{ e: 'died', id: 7 }] }]);
+});
+
+test('monsters appear among the others with their type and health', async () => {
+  const { session, send } = await setup();
+  await send({ t: 'welcome', playerId: 1, mapId: 'test-arena' });
+  await send({
+    t: 'snapshot',
+    s: { tick: 1, units: [U({ id: 1, name: 'Ana', x: 0, y: 0 }), { ...U({ id: 9, name: 'skeleton', x: 30, y: 40 }), kind: 'monster', type: 'skeleton', hp: 20, maxHp: 70 }] },
+  });
+  expect(session.renderState(clock + 1000).others.get(9)).toMatchObject({ kind: 'monster', type: 'skeleton', hp: 20, maxHp: 70, pos: { x: 30, y: 40 } });
 });

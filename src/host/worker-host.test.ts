@@ -50,8 +50,8 @@ test('remote connection via memory HostTransport is relayed', async () => {
   await vi.advanceTimersByTimeAsync(50);
   const remote = new ClientSession(await p, { version: '0.1.0', character: netChar('Amigo'), map, now: () => Date.now() });
   await vi.advanceTimersByTimeAsync(500);
-  expect(remote.playerId).toBe(2);
-  expect(local.renderState(Date.now()).others.get(2)?.name).toBe('Amigo');
+  expect(remote.playerId).not.toBeNull();
+  expect(local.renderState(Date.now()).others.get(remote.playerId!)?.name).toBe('Amigo');
   expect(remote.renderState(Date.now()).others.get(1)?.name).toBe('Host');
   handle.stop();
 });

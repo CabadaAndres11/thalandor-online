@@ -34,9 +34,9 @@ export class SnapshotBuffer {
     const a = this.snaps[i]!;
     const b = this.snaps[i + 1]!;
     const alpha = (t - a.tick) / (b.tick - a.tick);
-    const prev = new Map(a.players.map((p) => [p.id, p]));
+    const prev = new Map(a.units.map((p) => [p.id, p]));
     const out = new Map<EntityId, Vec2>();
-    for (const p of b.players) {
+    for (const p of b.units) {
       const q = prev.get(p.id);
       out.set(p.id, q ? { x: q.x + (p.x - q.x) * alpha, y: q.y + (p.y - q.y) * alpha } : { x: p.x, y: p.y });
     }
@@ -45,5 +45,5 @@ export class SnapshotBuffer {
 }
 
 function positions(s: WorldSnapshot): Map<EntityId, Vec2> {
-  return new Map(s.players.map((p) => [p.id, { x: p.x, y: p.y }]));
+  return new Map(s.units.map((p) => [p.id, { x: p.x, y: p.y }]));
 }
