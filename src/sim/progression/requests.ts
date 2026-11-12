@@ -43,7 +43,7 @@ const SUMMARY_STATS = [
   'armor', 'moveSpeed', 'hpRegen', 'manaRegen', 'cooldownReduction', 'lifesteal',
 ] as const;
 
-const inCombat = (world: World, u: Unit) => u.inCombatUntil > world.now;
+const inCombat = (world: World, u: Unit) => u.inCombatUntil > world.now || u.fightingUntil > world.now;
 const spentTalents = (u: Unit) => Object.values(u.talents).reduce((a, b) => a + b, 0);
 
 export function applyProgressRequest(world: World, u: Unit, req: ProgressRequest): RequestResult {

@@ -8,6 +8,7 @@ const dist = (a: Unit, b: Unit) => Math.hypot(a.pos.x - b.pos.x, a.pos.y - b.pos
 
 function enterCombat(world: World, u: Unit): void {
   u.inCombatUntil = world.now + BALANCE.combat.outOfCombatMs;
+  u.fightingUntil = u.inCombatUntil;
 }
 
 export interface DamageOpts {

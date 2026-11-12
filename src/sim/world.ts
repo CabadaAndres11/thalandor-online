@@ -253,7 +253,7 @@ export class World {
     const taunt = m.statuses.find((s) => s.kind === 'taunt' && s.until > this.now);
     if (taunt) {
       const t = this.units.get(taunt.sourceId);
-      if (t?.state === 'alive') return t;
+      if (t?.state === 'alive' && !isStealthed(t, this.now)) return t;
     }
     let best: Unit | null = null;
     let bestThreat = -Infinity;
@@ -341,8 +341,13 @@ export class World {
   private handlePress(p: Unit, press: Press, input: PlayerInput): void {
     const aim = { x: press.aimX, y: press.aimY };
     if (press.slot === 'dodge') {
-      if (p.channel && (p.cooldowns.dodge ?? 0) <= this.now) p.channel = null;
-      if ((p.cooldowns.dodge ?? 0) > this.now || cannotMove(p, this.now) || p.dash) return;
+      if ((p.cooldowns.dodge ?? 0) > this.now || p.dash) return;
+      const channel = p.channel;
+      p.channel = null; // dodging breaks a channel
+      if (cannotMove(p, this.now)) {
+        p.channel = channel;
+        return;
+      }
       const dir = dodgeDirection(p.pos, input);
       const per = BALANCE.dodge.distance / DASH_TICKS;
       p.dash = { dx: dir.x * per, dy: dir.y * per, ticksLeft: DASH_TICKS };

@@ -1,8 +1,11 @@
 import texts from '../../../data/i18n/es.json';
+import { useAbility } from '../combat/actions';
+import { rebuildPlayer } from '../combat/unit';
 import { ability, CLASSES, validateDefs } from '../combat/defs';
 import { addPlayer, grant, setLevel, testWorld } from '../combat/test-world';
 import { applyProgressRequest, devSetLevel, progressInfo } from './requests';
 import { loadout, SPECS, specsOf, UNLOCK, unlockedActives } from './unlocks';
+import { sanitizeProgress } from './validate';
 
 const T = texts as Record<string, string>;
 
@@ -122,4 +125,31 @@ test('dev level keeps valid choices and drops impossible ones', () => {
   expect(p.specId).toBeNull();
   expect(p.talents).toEqual({});
   expect(p.hp).toBe(p.stats.maxHp);
+});
+
+test('prototype keys never count as talents, specs or attributes', () => {
+  const w = testWorld();
+  const p = addPlayer(w, 'warrior', { x: 300, y: 300 });
+  devSetLevel(w, p, 30);
+  for (const key of ['__proto__', 'constructor', 'toString', 'hasOwnProperty']) {
+    expect(applyProgressRequest(w, p, { k: 'talent', node: key })).not.toBe('ok');
+    expect(applyProgressRequest(w, p, { k: 'spec', specId: key })).not.toBe('ok');
+    expect(applyProgressRequest(w, p, { k: 'attr', attr: key as 'strength' })).not.toBe('ok');
+    expect(applyProgressRequest(w, p, { k: 'hotbar', slot: 0, abilityId: key })).not.toBe('ok');
+  }
+  expect(sanitizeProgress('warrior', JSON.parse('{"level":30,"talents":{"__proto__":1,"constructor":1},"specId":"constructor"}')).resets).toEqual(['talents', 'spec']);
+});
+
+test('vanishing does not unlock spec changes or resets mid-fight', () => {
+  const w = testWorld();
+  const p = addPlayer(w, 'explorer', { x: 300, y: 300 });
+  devSetLevel(w, p, 16);
+  const m = w.addMonster('skeleton', { x: 330, y: 300 });
+  w.damage(m, 1, p, 'physical');
+  p.specId = 'explorer_assassin';
+  rebuildPlayer(p, w.now);
+  useAbility(w, p, 'explorer_stealth', p.pos);
+  expect(p.inCombatUntil).toBe(0);
+  expect(applyProgressRequest(w, p, { k: 'resetTalents' })).toBe('combat');
+  expect(applyProgressRequest(w, p, { k: 'spec', specId: 'explorer_marksman' })).toBe('combat');
 });

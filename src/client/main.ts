@@ -49,6 +49,7 @@ interface Current {
   windows: ProgressWindows;
 }
 let current: Current | null = null;
+let pendingSave: Promise<void> = Promise.resolve();
 
 function backToMenu(error?: string): void {
   if (current) {
@@ -56,14 +57,15 @@ function backToMenu(error?: string): void {
     current = null;
     windows.destroy();
     saver.stop();
-    void saver.saveNow();
+    pendingSave = saver.saveNow();
     session.close();
     host?.stop();
   }
   // Stop unconditionally: a start queued while the tab was hidden is not "active" yet.
   game.scene.stop('game');
   overlay.hide();
-  void screens.showSelection(error);
+  const shown = pendingSave;
+  void shown.then(() => screens.showSelection(error));
 }
 
 function startGame(conn: Connection, character: Character, host: WorkerHostHandle | null): void {

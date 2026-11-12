@@ -350,7 +350,7 @@ function applyEffect(world: World, caster: Unit, target: Unit, ab: AbilityDef, e
       }
       const dealt = world.damage(target, amount, caster, ab.school, r.crit, { blocked });
       if (blocked) onBlock(world, target);
-      afterDamageDealt(world, caster, target, ab, dealt, r.crit);
+      if (!ctx.fromProc) afterDamageDealt(world, caster, target, ab, dealt, r.crit);
       return;
     }
     case 'heal': {
@@ -478,13 +478,13 @@ function afterDamageDealt(world: World, caster: Unit, target: Unit, ab: AbilityD
       if (oc.healPctMaxHp) world.heal(caster, Math.round(caster.stats.maxHp * oc.healPctMaxHp), caster, ab.school);
       if (oc.cdReduce) reduceCooldown(caster, oc.cdReduce.abilityId, oc.cdReduce.ms);
       const extra = oc.applyAbility ? ability(oc.applyAbility) : undefined;
-      if (extra && target.state === 'alive') applyEffects(world, caster, target, extra);
+      if (extra && target.state === 'alive') applyEffects(world, caster, target, extra, { fromProc: true });
     }
   }
   for (const s of caster.statuses) {
     if (s.kind !== 'imbue' || s.until <= world.now || !s.abilityId || s.abilityId === ab.id) continue;
     const proc = ability(s.abilityId);
-    if (proc && target.state === 'alive') applyEffects(world, caster, target, proc);
+    if (proc && target.state === 'alive') applyEffects(world, caster, target, proc, { fromProc: true });
   }
 }
 
@@ -548,6 +548,7 @@ export function stepChannels(world: World): void {
     }
     while (c.nextTick <= now && c.nextTick <= c.until) {
       resolveAbility(world, u, ab, c.aim, c.ctx);
+      c.ctx = { comboSpent: c.ctx.comboSpent };
       c.nextTick += ab.channelTickMs ?? Infinity;
     }
     if (now >= c.until) {

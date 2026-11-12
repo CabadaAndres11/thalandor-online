@@ -113,6 +113,8 @@ export interface Unit {
   cooldowns: Record<string, number>;
   gcdUntil: number;
   inCombatUntil: number;
+  /** Like inCombatUntil, but vanish does not clear it (gates spec/reset changes). */
+  fightingUntil: number;
   lastHurtAt: number;
   lastRageGainAt: number;
   dash: DashState | null;
@@ -132,6 +134,8 @@ export interface Unit {
 
 /** Per-hit modifiers carried from the cast to where the hit lands. */
 export interface HitCtx {
+  /** Hits from procs (imbues, on-crit abilities) never trigger more procs. */
+  fromProc?: boolean;
   forceCrit?: boolean;
   bonusPct?: number;
   comboSpent?: number;
@@ -174,6 +178,7 @@ function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name'
     cooldowns: {},
     gcdUntil: 0,
     inCombatUntil: 0,
+    fightingUntil: 0,
     lastHurtAt: -1e9,
     lastRageGainAt: 0,
     dash: null,

@@ -238,6 +238,8 @@ export function validateDefs(texts: Record<string, string>): string[] {
     if (!(ICON_GLYPHS as readonly string[]).includes(glyph ?? '') || !/^#[0-9a-f]{6}$/i.test(color ?? '')) errors.push(`${where}: bad icon ${a.icon}`);
     for (const e of a.effects) if (!EFFECTS.has(e.type)) errors.push(`${where}: unknown effect ${e.type}`);
     if (a.then && !ability(a.then)) errors.push(`${where}: unknown follow-up ${a.then}`);
+    if (a.shape?.type === 'zone' && !(a.shape.tickMs > 0)) errors.push(`${where}: zone tickMs must be > 0`);
+    if (a.channelTickMs !== undefined && !(a.channelTickMs > 0)) errors.push(`${where}: channelTickMs must be > 0`);
     for (const e of a.effects) if (e.type === 'imbue' && !ability(e.abilityId)) errors.push(`${where}: unknown imbue ${e.abilityId}`);
   }
   for (const [id, c] of Object.entries(CLASSES)) {

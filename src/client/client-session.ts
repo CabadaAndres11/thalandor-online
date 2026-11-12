@@ -169,7 +169,7 @@ export class ClientSession {
     for (const p of this.presses) {
       if (p.slot !== 'dodge' || this.predictedDodges.has(p.seq)) continue;
       this.predictedDodges.add(p.seq);
-      const canDodge = (this.me?.cd.dodge ?? 0) <= 0 && (this.me?.canMove ?? true) && !this.predictor.dashing && this.selfUnit?.state === 'alive';
+      const canDodge = (this.me?.cd.dodge ?? 0) <= 0 && ((this.me?.canMove ?? true) || !!this.me?.channel) && !this.predictor.dashing && this.selfUnit?.state === 'alive';
       if (canDodge) dodge = dodgeDirection(this.predictor.pos, i);
     }
     this.prevSelf = { ...this.predictor.pos };
