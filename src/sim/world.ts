@@ -6,11 +6,11 @@ import { facingFromVector } from './facing';
 import { dodgeDirection, stepPlayerMovement } from './movement';
 import type { EntityId, PlayerInput, Press, Vec2 } from './types';
 import { stepAreas, stepChannels, stepDash, stepProjectiles, stepZones, useAbility, type PendingArea, type Projectile, type Zone } from './combat/actions';
-import { BALANCE, CLASSES, MONSTERS, SLOTS, type School } from './combat/defs';
+import { ability, BALANCE, CLASSES, MONSTERS, SLOTS, type School } from './combat/defs';
 import type { CombatEvent } from './combat/events';
 import { applyDamage, applyHeal, type DamageOpts, monsterHpScale, rescaleMonster, stepLife, stepStatusesAndResources } from './combat/life';
 import type { Rng } from './combat/damage';
-import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, isStealthed, type PlayerProgress, type Unit } from './combat/unit';
+import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, isStealthed, passiveValue, type PlayerProgress, type Unit } from './combat/unit';
 import { shareXp } from './progression/xp';
 import { stepMonster } from './monsters/ai';
 
@@ -61,6 +61,8 @@ export interface UnitSnapshot {
   lastInputSeq: number;
   /** One-shot animation and how long ago it started. */
   action?: { anim: ActionAnim; ms: number };
+  /** In stealth: drawn translucent for allies (monsters ignore it). */
+  stealth?: true;
 }
 
 export interface WorldSnapshot {
@@ -86,6 +88,9 @@ export interface MeSnapshot {
   reviving: { targetId: EntityId; pct: number } | null;
   /** Remaining dodge/charge dash, so client prediction can resume it after reconciling. */
   dash: { dx: number; dy: number; ticks: number } | null;
+  combo: number;
+  /** Channel in progress: remaining and total ms. */
+  channel: { ms: number; total: number } | null;
 }
 
 function mulberry32(seed: number): Rng {
@@ -113,6 +118,7 @@ export class World {
   areas: PendingArea[] = [];
   zones: Zone[] = [];
   private events: CombatEvent[] = [];
+  private progressDirty = new Set<EntityId>();
   private nextId = 1;
   private nextProj = 1;
   private readonly units = new Map<EntityId, Unit>();
@@ -137,6 +143,17 @@ export class World {
 
   emit(e: CombatEvent): void {
     this.events.push(e);
+  }
+
+  /** A player's progress (xp, level, choices) changed and must be sent to it. */
+  markProgress(id: EntityId): void {
+    this.progressDirty.add(id);
+  }
+
+  drainProgress(): EntityId[] {
+    const out = [...this.progressDirty];
+    this.progressDirty.clear();
+    return out;
   }
 
   drainEvents(): CombatEvent[] {
@@ -330,6 +347,8 @@ export class World {
       const per = BALANCE.dodge.distance / DASH_TICKS;
       p.dash = { dx: dir.x * per, dy: dir.y * per, ticksLeft: DASH_TICKS };
       p.invulnUntil = this.now + BALANCE.dodge.invulnMs;
+      const od = passiveValue(p, 'onDodge');
+      if (od) p.comboBonusNext = od.nextComboBonus;
       p.cooldowns.dodge = this.now + BALANCE.dodge.cooldownMs;
       return;
     }
@@ -395,6 +414,7 @@ export class World {
       lastInputSeq: u.lastInputSeq,
     };
     if (u.action) s.action = { anim: u.action.anim, ms: this.now - u.action.at };
+    if (isStealthed(u, this.now)) s.stealth = true;
     return s;
   }
 
@@ -434,6 +454,8 @@ export class World {
       statuses: u.statuses.filter((s) => s.until > now).map((s) => ({ kind: s.kind, ms: s.until - now })),
       reviving,
       dash: u.dash ? { dx: u.dash.dx, dy: u.dash.dy, ticks: u.dash.ticksLeft } : null,
+      combo: u.combo,
+      channel: u.channel ? { ms: Math.max(0, u.channel.until - now), total: ability(u.channel.abilityId)?.channelMs ?? 0 } : null,
     };
   }
 }

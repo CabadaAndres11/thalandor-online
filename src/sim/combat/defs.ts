@@ -7,6 +7,7 @@ import mage from '../../../data/abilities/mage.json';
 import explorer from '../../../data/abilities/explorer.json';
 import monsterAbilities from '../../../data/abilities/monsters.json';
 import common from '../../../data/abilities/common.json';
+import specAbilities from '../../../data/abilities/specs.json';
 import type { ActionAnim } from '../../appearance/catalog-types';
 
 export type School = 'physical' | 'holy' | 'fire' | 'frost' | 'arcane' | 'nature';
@@ -205,6 +206,7 @@ export const ABILITIES: Record<string, AbilityDef> = withIds<AbilityDef>({
   ...(explorer as Record<string, Omit<AbilityDef, 'id'>>),
   ...(monsterAbilities as Record<string, Omit<AbilityDef, 'id'>>),
   ...(common as Record<string, Omit<AbilityDef, 'id'>>),
+  ...(specAbilities as Record<string, Omit<AbilityDef, 'id'>>),
 });
 
 export const CLASSES = classesJson as unknown as Record<string, ClassDef>;

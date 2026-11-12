@@ -193,7 +193,7 @@ test('presses are resent until acknowledged by the host, then dropped', async ()
     [{ seq: 1, slot: 's1', aimX: 9, aimY: 9 }],
     [{ seq: 1, slot: 's1', aimX: 9, aimY: 9 }],
   ]);
-  const me = { resource: 0, maxResource: 100, resourceKind: 'rage', cd: {}, gcd: 0, shield: 0, downedMs: 0, respawnMs: 0, moveSpeed: 120, canMove: true, lastPressSeq: 1, statuses: [], reviving: null, dash: null };
+  const me = { resource: 0, maxResource: 100, resourceKind: 'rage', cd: {}, gcd: 0, shield: 0, downedMs: 0, respawnMs: 0, moveSpeed: 120, canMove: true, lastPressSeq: 1, statuses: [], reviving: null, dash: null, combo: 0, channel: null };
   await send({ t: 'snapshot', s: { tick: 1, units: [U({ id: 1, name: 'Ana', x: 50, y: 50 })] }, me });
   session.sendInput({ moveX: 0, moveY: 0, aimX: 0, aimY: 0 });
   await vi.runAllTimersAsync();

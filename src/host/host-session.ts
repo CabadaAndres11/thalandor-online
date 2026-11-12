@@ -4,6 +4,8 @@ import { MAX_PLAYERS } from '../sim/constants';
 import type { EntityId, PlayerInput } from '../sim/types';
 import type { World } from '../sim/world';
 import { sanitizeProgress } from '../sim/progression/validate';
+import { applyProgressRequest, devSetLevel, progressInfo } from '../sim/progression/requests';
+import { awardXp } from '../sim/progression/xp';
 import { decodeClient, encode, type HostMessage, type NetCharacter, type RosterEntry } from '../net/protocol';
 import type { Channel, Connection } from '../net/transport';
 
@@ -65,6 +67,7 @@ export class HostSession {
     this.world.step();
     const events = this.world.drainEvents();
     const eventsMsg = events.length ? encode({ t: 'events', list: events }) : null;
+    const dirty = new Set(this.world.drainProgress());
     const t = this.now();
     for (const p of this.peers) {
       if (!p.noTimeout && t - p.lastSeen > CONN_TIMEOUT_MS) {
@@ -73,6 +76,7 @@ export class HostSession {
       } else if (p.playerId !== null) {
         // Events first and reliable: hits and deaths must never be lost (damage numbers, death animations).
         if (eventsMsg) p.conn.send(eventsMsg, 'reliable');
+        if (dirty.has(p.playerId)) this.sendProgress(p);
         const { snap, me } = this.world.snapshotFor(p.playerId);
         p.conn.send(encode(me ? { t: 'snapshot', s: snap, me } : { t: 'snapshot', s: snap }), 'unreliable');
       }
@@ -89,6 +93,11 @@ export class HostSession {
       return;
     }
     if (msg.t === 'input') this.handleInput(peer.playerId, msg.input);
+    else if (msg.t === 'progress-req') {
+      const u = this.world.getPlayer(peer.playerId);
+      const r = u ? applyProgressRequest(this.world, u, msg.req) : 'invalid';
+      if (r !== 'ok') this.sendTo(peer, { t: 'progress-refused', reason: r }, 'reliable');
+    }
     else if (msg.t === 'chat') {
       const text = msg.text.trim().slice(0, MAX_CHAT_LENGTH);
       if (this.opts.devCommands && text.startsWith('/dev ')) return this.devCommand(peer.playerId, text.slice(5).split(/\s+/));
@@ -109,6 +118,7 @@ export class HostSession {
     peer.playerId = player.id;
     peer.name = name;
     this.sendTo(peer, { t: 'welcome', playerId: player.id, mapId: this.opts.mapId }, 'reliable');
+    this.sendProgress(peer);
     this.broadcastRoster();
   }
 
@@ -119,6 +129,13 @@ export class HostSession {
     if (cmd === 'spawn' && a && Object.hasOwn(MONSTERS, a)) this.world.addMonster(a, { x: me.pos.x + Number(b ?? 0), y: me.pos.y + Number(c ?? 0) });
     else if (cmd === 'hurt') this.world.damage(me, Math.max(0, Number(a ?? 0)), null, 'physical');
     else if (cmd === 'kill') this.world.damage(me, me.hp + 9999, null, 'physical');
+    else if (cmd === 'xp') awardXp(this.world, me, Math.max(0, Number(a ?? 0)) || 0);
+    else if (cmd === 'level' && Number.isFinite(Number(a))) devSetLevel(this.world, me, Number(a));
+  }
+
+  private sendProgress(peer: Peer): void {
+    const u = peer.playerId !== null ? this.world.getPlayer(peer.playerId) : undefined;
+    if (u) this.sendTo(peer, { t: 'progress', p: progressInfo(u) }, 'reliable');
   }
 
   private broadcastRoster(): void {

@@ -2,7 +2,7 @@ import { netChar } from '../test-fixtures';
 import { decodeClient, decodeHost, encode, type ClientMessage, type HostMessage } from './protocol';
 
 const UNIT = { id: 1, kind: 'player' as const, type: 'mage', name: 'Ana', x: 1, y: 2, facing: 1, moving: true, hp: 50, maxHp: 90, state: 'alive' as const, lastInputSeq: 3 };
-const ME = { resource: 10, maxResource: 100, resourceKind: 'mana', cd: { lmb: 0, s1: 500 }, gcd: 0, shield: 0, downedMs: 0, respawnMs: 0, moveSpeed: 120, canMove: true, lastPressSeq: 3, statuses: [], reviving: null, dash: null };
+const ME = { resource: 10, maxResource: 100, resourceKind: 'mana', cd: { lmb: 0, s1: 500 }, gcd: 0, shield: 0, downedMs: 0, respawnMs: 0, moveSpeed: 120, canMove: true, lastPressSeq: 3, statuses: [], reviving: null, dash: null, combo: 0, channel: null };
 
 const clientMsgs: ClientMessage[] = [
   { t: 'hello', version: '0.1.0', character: netChar('Ana', 'mage', { mapId: 'test-arena', x: 1, y: 2 }) },
@@ -62,4 +62,20 @@ test('decode rejects malformed presses, units and events', () => {
   expect(decodeHost(JSON.stringify({ t: 'snapshot', s: { tick: 1, units: [{ ...UNIT, state: 'zombie' }] } }))).toBeNull();
   expect(decodeHost(JSON.stringify({ t: 'snapshot', s: { tick: 1, units: [{ ...UNIT, facing: 7 }] } }))).toBeNull();
   expect(decodeHost(JSON.stringify({ t: 'events', list: [{ nope: 1 }] }))).toBeNull();
+});
+
+test('progress requests: valid shapes pass, unknown kinds and bad fields are dropped', () => {
+  const ok: ClientMessage[] = [
+    { t: 'progress-req', req: { k: 'attr', attr: 'stamina' } },
+    { t: 'progress-req', req: { k: 'talent', node: 'might_1a' } },
+    { t: 'progress-req', req: { k: 'spec', specId: 'mage_fire' } },
+    { t: 'progress-req', req: { k: 'resetTalents' } },
+    { t: 'progress-req', req: { k: 'hotbar', slot: 2, abilityId: null } },
+  ];
+  for (const m of ok) expect(decodeClient(encode(m))).toEqual(m);
+  for (const req of [{ k: 'attr', attr: 'luck' }, { k: 'gold' }, { k: 'hotbar', slot: 'x', abilityId: null }, null]) {
+    expect(decodeClient(JSON.stringify({ t: 'progress-req', req }))).toBeNull();
+  }
+  expect(decodeHost(JSON.stringify({ t: 'progress-refused', reason: 'combat' }))).toEqual({ t: 'progress-refused', reason: 'combat' });
+  expect(decodeHost(JSON.stringify({ t: 'progress', p: { level: 1 } }))).toBeNull();
 });

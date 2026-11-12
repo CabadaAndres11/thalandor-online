@@ -32,6 +32,7 @@ export function groupShare(total: number, n: number): number {
 export function awardXp(world: World, p: Unit, amount: number): void {
   if (p.kind !== 'player' || p.level >= MAX_LEVEL || amount <= 0) return;
   p.xp += amount;
+  world.markProgress(p.id);
   let levelled = false;
   while (p.level < MAX_LEVEL && p.xp >= xpToNext(p.level)) {
     p.xp -= xpToNext(p.level);
