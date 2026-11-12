@@ -25,7 +25,8 @@
     "healThreatFactor": 0.5,
     "allyPickRadius": 28,
     "blockReduction": 0.5,
-    "cooldownReductionCap": 0.4
+    "cooldownReductionCap": 0.4,
+    "farDistance": 250
   },
   "resources": {
     "rage": {

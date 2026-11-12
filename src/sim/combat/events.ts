@@ -4,7 +4,18 @@ import type { School } from './defs';
 
 /** Things that happened during a tick, sent reliably to every client in range. */
 export type CombatEvent =
-  | { e: 'hit'; src: EntityId | null; dst: EntityId; amount: number; crit: boolean; dodged: boolean; heal: boolean; absorbed: number; school: School }
+  | {
+      e: 'hit';
+      src: EntityId | null;
+      dst: EntityId;
+      amount: number;
+      crit: boolean;
+      dodged: boolean;
+      heal: boolean;
+      absorbed: number;
+      school: School;
+      blocked?: boolean;
+    }
   | { e: 'proj'; id: number; x: number; y: number; vx: number; vy: number; look: string; ttlMs: number }
   | { e: 'projEnd'; id: number; x: number; y: number }
   | { e: 'tele'; x: number; y: number; r: number; ms: number; hostile: boolean }
@@ -14,4 +25,8 @@ export type CombatEvent =
   | { e: 'revived'; id: EntityId }
   | { e: 'died'; id: EntityId }
   | { e: 'respawned'; id: EntityId }
+  | { e: 'channel'; src: EntityId; ms: number }
+  | { e: 'zone'; x: number; y: number; r: number; ms: number; school: School }
+  /** A passive fired (cheat death, last stand...): for effects and chat. */
+  | { e: 'proc'; id: EntityId; passiveId: string }
   | { e: 'levelup'; id: EntityId; name: string; level: number };

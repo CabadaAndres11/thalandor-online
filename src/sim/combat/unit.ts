@@ -14,7 +14,20 @@ export type LifeState = 'alive' | 'downed' | 'dead';
 /** Bits of PlayerInput.buttons (held keys). */
 export const BUTTON = { lmb: 1, rmb: 2, interact: 128 } as const;
 
-export type StatusKind = 'buff' | 'debuff' | 'dot' | 'hot' | 'stun' | 'root' | 'freeze' | 'slow' | 'shield' | 'taunt';
+export type StatusKind =
+  | 'buff'
+  | 'debuff'
+  | 'dot'
+  | 'hot'
+  | 'stun'
+  | 'root'
+  | 'freeze'
+  | 'slow'
+  | 'shield'
+  | 'taunt'
+  | 'reflect'
+  | 'stealth'
+  | 'imbue';
 
 export interface Status {
   kind: StatusKind;
@@ -22,6 +35,12 @@ export interface Status {
   sourceId: EntityId;
   stat?: StatKey;
   pct?: number;
+  flat?: number;
+  /** imbue: ability applied on hit. dot: the ability that applied it (stacking key). */
+  abilityId?: string;
+  stacks?: number;
+  /** slow: extra cooldown on the slowed unit's abilities. */
+  attackSlowPct?: number;
   /** Shield: remaining absorb. dot/hot: amount per tick. */
   amount?: number;
   tickMs?: number;
@@ -101,7 +120,29 @@ export interface Unit {
   /** One-shot animation being played (for clients). */
   action: { anim: ActionAnim; at: number } | null;
   reviving: { targetId: EntityId; since: number } | null;
+  /** Assassin combo points (0–5) and a bonus for the next generator. */
+  combo: number;
+  comboBonusNext: number;
+  basicCount: number;
+  /** Internal cooldowns of passive procs, by passive id. */
+  procCd: Record<string, number>;
+  channel: Channel | null;
   ai?: MonsterAi;
+}
+
+/** Per-hit modifiers carried from the cast to where the hit lands. */
+export interface HitCtx {
+  forceCrit?: boolean;
+  bonusPct?: number;
+  comboSpent?: number;
+}
+
+export interface Channel {
+  abilityId: string;
+  aim: Vec2;
+  until: number;
+  nextTick: number;
+  ctx: HitCtx;
 }
 
 function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name' | 'radius' | 'baseStats' | 'stats' | 'resourceKind'> {
@@ -139,6 +180,11 @@ function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name'
     invulnUntil: 0,
     action: null,
     reviving: null,
+    combo: 0,
+    comboBonusNext: 0,
+    basicCount: 0,
+    procCd: {},
+    channel: null,
   };
 }
 
@@ -226,7 +272,10 @@ export function recomputeStats(u: Unit, now: number): void {
   const statusMods: StatMod[] = [];
   for (const s of u.statuses) {
     if (s.until <= now) continue;
-    if ((s.kind === 'buff' || s.kind === 'debuff') && s.stat && s.pct) statusMods.push({ stat: s.stat, pct: s.kind === 'buff' ? s.pct : -s.pct });
+    if ((s.kind === 'buff' || s.kind === 'debuff') && s.stat && (s.pct || s.flat)) {
+      const sign = s.kind === 'buff' ? 1 : -1;
+      statusMods.push({ stat: s.stat, pct: sign * (s.pct ?? 0), flat: sign * (s.flat ?? 0) });
+    }
     if (s.kind === 'slow' && s.pct) statusMods.push({ stat: 'moveSpeed', pct: -s.pct });
   }
   u.stats = computeStats(u.baseStats, [...u.mods, ...statusMods]);
@@ -240,7 +289,14 @@ export const hasStatus = (u: Unit, kind: StatusKind, now: number) => u.statuses.
 export const cannotAct = (u: Unit, now: number) => u.state !== 'alive' || hasStatus(u, 'stun', now) || hasStatus(u, 'freeze', now);
 
 /** Rooted, stunned or frozen units cannot move. */
-export const cannotMove = (u: Unit, now: number) => cannotAct(u, now) || hasStatus(u, 'root', now);
+export const cannotMove = (u: Unit, now: number) => cannotAct(u, now) || hasStatus(u, 'root', now) || u.channel !== null;
+
+export const isStealthed = (u: Unit, now: number) => hasStatus(u, 'stealth', now);
+
+/** Passives of a unit that define `key`. */
+export function passivesWith<K extends keyof PassiveDef>(u: Unit, key: K): (PassiveDef & Required<Pick<PassiveDef, K>>)[] {
+  return u.passives.filter((p) => p[key] !== undefined) as (PassiveDef & Required<Pick<PassiveDef, K>>)[];
+}
 
 export const isEnemy = (a: Unit, b: Unit) => a.team !== b.team;
 

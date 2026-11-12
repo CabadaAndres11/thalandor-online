@@ -22,6 +22,9 @@ export interface DamageRoll {
   dodgeable: boolean;
   /** Attacker damageDone * target damageTaken * other multipliers. */
   dmgMult: number;
+  /** Added to the base critical multiplier (critDamage stat). */
+  critBonus?: number;
+  forceCrit?: boolean;
   rng: Rng;
 }
 
@@ -29,20 +32,20 @@ export interface DamageRoll {
 export function rollDamage(o: DamageRoll): { amount: number; crit: boolean; dodged: boolean } {
   if (o.dodgeable && o.rng() < o.dodgeChance) return { amount: 0, crit: false, dodged: true };
   if (!o.dodgeable) o.rng();
-  const crit = o.rng() < o.critChance;
+  const crit = o.rng() < o.critChance || !!o.forceCrit;
   let amount = (o.base + o.coef * o.power) * varianceFactor(o.rng()) * o.dmgMult;
-  if (crit) amount *= BALANCE.combat.critMultiplier;
+  if (crit) amount *= BALANCE.combat.critMultiplier + (o.critBonus ?? 0);
   if (o.school === 'physical') amount *= 1 - mitigation(o.armor);
   return { amount: Math.max(1, Math.round(amount)), crit, dodged: false };
 }
 
 /** Rolls a heal. rng order: crit, variance. */
-export function rollHeal(o: { base: number; coef: number; power: number; critChance: number; healMult: number; rng: Rng }): {
+export function rollHeal(o: { base: number; coef: number; power: number; critChance: number; healMult: number; critBonus?: number; rng: Rng }): {
   amount: number;
   crit: boolean;
 } {
   const crit = o.rng() < o.critChance;
   let amount = (o.base + o.coef * o.power) * varianceFactor(o.rng()) * o.healMult;
-  if (crit) amount *= BALANCE.combat.critMultiplier;
+  if (crit) amount *= BALANCE.combat.critMultiplier + (o.critBonus ?? 0);
   return { amount: Math.max(0, Math.round(amount)), crit };
 }

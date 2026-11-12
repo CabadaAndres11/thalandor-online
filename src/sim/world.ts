@@ -5,12 +5,12 @@ import { PLAYER_RADIUS, TICK_MS, TILE_SIZE } from './constants';
 import { facingFromVector } from './facing';
 import { dodgeDirection, stepPlayerMovement } from './movement';
 import type { EntityId, PlayerInput, Press, Vec2 } from './types';
-import { stepAreas, stepDash, stepProjectiles, useAbility, type PendingArea, type Projectile } from './combat/actions';
+import { stepAreas, stepChannels, stepDash, stepProjectiles, stepZones, useAbility, type PendingArea, type Projectile, type Zone } from './combat/actions';
 import { BALANCE, CLASSES, MONSTERS, SLOTS, type School } from './combat/defs';
 import type { CombatEvent } from './combat/events';
-import { applyDamage, applyHeal, monsterHpScale, rescaleMonster, stepLife, stepStatusesAndResources } from './combat/life';
+import { applyDamage, applyHeal, type DamageOpts, monsterHpScale, rescaleMonster, stepLife, stepStatusesAndResources } from './combat/life';
 import type { Rng } from './combat/damage';
-import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, type PlayerProgress, type Unit } from './combat/unit';
+import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, isStealthed, type PlayerProgress, type Unit } from './combat/unit';
 import { shareXp } from './progression/xp';
 import { stepMonster } from './monsters/ai';
 
@@ -111,6 +111,7 @@ export class World {
   readonly rng: Rng;
   projectiles: Projectile[] = [];
   areas: PendingArea[] = [];
+  zones: Zone[] = [];
   private events: CombatEvent[] = [];
   private nextId = 1;
   private nextProj = 1;
@@ -201,8 +202,8 @@ export class World {
 
   // --- combat helpers used by the combat modules ---
 
-  damage(target: Unit, amount: number, src: Unit | null, school: School, crit = false): void {
-    applyDamage(this, target, amount, src, school, crit);
+  damage(target: Unit, amount: number, src: Unit | null, school: School, crit = false, opts?: DamageOpts): number {
+    return applyDamage(this, target, amount, src, school, crit, opts);
   }
 
   heal(target: Unit, amount: number, src: Unit | null, school: School, crit = false): void {
@@ -212,8 +213,8 @@ export class World {
   /** Adds threat on a monster towards a player; wakes it up and alerts its pack. */
   addThreat(monster: Unit, src: Unit, amount: number): void {
     const ai = monster.ai;
-    if (!ai || monster.state !== 'alive' || src.kind !== 'player' || src.state !== 'alive') return;
-    ai.threat.set(src.id, (ai.threat.get(src.id) ?? 0) + amount);
+    if (!ai || monster.state !== 'alive' || src.kind !== 'player' || src.state !== 'alive' || isStealthed(src, this.now)) return;
+    ai.threat.set(src.id, (ai.threat.get(src.id) ?? 0) + amount * src.stats.threatMultiplier);
     if (ai.state !== 'combat') ai.state = 'combat';
     const def = MONSTERS[monster.monsterType ?? ''];
     if (def?.behavior === 'pack') {
@@ -241,7 +242,7 @@ export class World {
     let bestThreat = -Infinity;
     for (const [id, threat] of m.ai?.threat ?? []) {
       const p = this.units.get(id);
-      if (!p || p.state !== 'alive') continue;
+      if (!p || p.state !== 'alive' || isStealthed(p, this.now)) continue;
       if (threat > bestThreat) {
         best = p;
         bestThreat = threat;
@@ -264,8 +265,10 @@ export class World {
     for (const u of this.units.values()) if (u.kind === 'player') this.stepPlayer(u);
     for (const u of this.units.values()) if (u.kind === 'monster') stepMonster(this, u);
     for (const u of this.units.values()) if (u.kind === 'player') this.autoAttack(u);
+    stepChannels(this);
     stepProjectiles(this);
     stepAreas(this);
+    stepZones(this);
     stepStatusesAndResources(this);
     stepLife(this);
     this.stepSpawns();
@@ -321,6 +324,7 @@ export class World {
   private handlePress(p: Unit, press: Press, input: PlayerInput): void {
     const aim = { x: press.aimX, y: press.aimY };
     if (press.slot === 'dodge') {
+      if (p.channel && (p.cooldowns.dodge ?? 0) <= this.now) p.channel = null;
       if ((p.cooldowns.dodge ?? 0) > this.now || cannotMove(p, this.now) || p.dash) return;
       const dir = dodgeDirection(p.pos, input);
       const per = BALANCE.dodge.distance / DASH_TICKS;
