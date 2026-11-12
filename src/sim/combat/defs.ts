@@ -28,7 +28,12 @@ export type StatKey =
   | 'healingReceived'
   | 'healingDone'
   | 'damageDone'
-  | 'damageTaken';
+  | 'damageTaken'
+  | 'critDamage'
+  | 'cooldownReduction'
+  | 'lifesteal'
+  | 'blockChance'
+  | 'threatMultiplier';
 
 export type ShapeDef =
   | { type: 'melee_arc'; radius: number; arcDeg: number }
@@ -98,6 +103,8 @@ export interface ClassDef {
   resource: ResourceKind;
   attributes: Attributes;
   armor: number;
+  /** Attributes gained automatically per level above 1. */
+  growth: Partial<Attributes>;
   slots: Record<Exclude<Slot, 'dodge'>, string | null>;
   passives: PassiveDef[];
 }
@@ -106,6 +113,7 @@ export interface MonsterDef {
   id: string;
   nameKey: string;
   look: { kind: 'layers' | 'creature'; id: string };
+  level: number;
   stats: { maxHp: number; armor: number; power: number; moveSpeed: number };
   radius: number;
   aggroRange: number;

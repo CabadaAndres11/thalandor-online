@@ -13,4 +13,5 @@ export type CombatEvent =
   | { e: 'downed'; id: EntityId }
   | { e: 'revived'; id: EntityId }
   | { e: 'died'; id: EntityId }
-  | { e: 'respawned'; id: EntityId };
+  | { e: 'respawned'; id: EntityId }
+  | { e: 'levelup'; id: EntityId; name: string; level: number };

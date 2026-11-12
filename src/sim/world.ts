@@ -10,7 +10,8 @@ import { BALANCE, CLASSES, MONSTERS, SLOTS, type School } from './combat/defs';
 import type { CombatEvent } from './combat/events';
 import { applyDamage, applyHeal, monsterHpScale, rescaleMonster, stepLife, stepStatusesAndResources } from './combat/life';
 import type { Rng } from './combat/damage';
-import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, type Unit } from './combat/unit';
+import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, type PlayerProgress, type Unit } from './combat/unit';
+import { shareXp } from './progression/xp';
 import { stepMonster } from './monsters/ai';
 
 /** Ticks without a moving input before a player counts as standing (hides single lost packets). */
@@ -24,6 +25,7 @@ export interface PlayerInfo {
   name: string;
   classId: ClassId;
   appearance: Appearance;
+  progress?: PlayerProgress;
 }
 
 /** Kept for code that only deals with players. */
@@ -250,6 +252,7 @@ export class World {
 
   onMonsterDied(m: Unit): void {
     m.ai?.threat.clear();
+    shareXp(this, m);
     const slot = this.slots.find((s) => s.unitId === m.id);
     if (slot) slot.respawnAt = this.now + slot.def.respawnMs;
   }

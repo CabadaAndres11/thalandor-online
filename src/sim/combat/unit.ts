@@ -3,8 +3,8 @@ import type { ActionAnim } from '../../appearance/catalog-types';
 import { PLAYER_RADIUS } from '../constants';
 import { DOWN, type Facing } from '../facing';
 import type { EntityId, Vec2 } from '../types';
-import { BALANCE, CLASSES, MONSTERS, type PassiveDef, type ResourceKind, type School, type StatKey, type StatMod } from './defs';
-import { computeStats, monsterBaseStats, playerBaseStats, type Stats } from './stats';
+import { BALANCE, CLASSES, MONSTERS, type Attributes, type PassiveDef, type ResourceKind, type School, type StatKey, type StatMod } from './defs';
+import { computeStats, monsterBaseStats, NO_ATTRS, playerBaseStats, type Stats } from './stats';
 
 export type Team = 'players' | 'monsters';
 export type LifeState = 'alive' | 'downed' | 'dead';
@@ -56,6 +56,11 @@ export interface Unit {
   classId?: ClassId;
   appearance?: Appearance;
   monsterType?: string;
+  level: number;
+  /** Experience into the current level (players). */
+  xp: number;
+  /** Attribute points allocated by the player. */
+  attrs: Attributes;
   pos: Vec2;
   radius: number;
   facing: Facing;
@@ -94,6 +99,9 @@ export interface Unit {
 function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name' | 'radius' | 'baseStats' | 'stats' | 'resourceKind'> {
   return {
     id,
+    level: 1,
+    xp: 0,
+    attrs: { ...NO_ATTRS },
     pos: { ...pos },
     facing: DOWN,
     moving: false,
@@ -122,9 +130,21 @@ function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name'
   };
 }
 
-export function createPlayerUnit(id: EntityId, info: { name: string; classId: ClassId; appearance: Appearance }, pos: Vec2): Unit {
+export interface PlayerProgress {
+  level: number;
+  xp: number;
+  attributes: Attributes;
+}
+
+export function createPlayerUnit(
+  id: EntityId,
+  info: { name: string; classId: ClassId; appearance: Appearance; progress?: PlayerProgress },
+  pos: Vec2,
+): Unit {
   const c = CLASSES[info.classId]!;
-  const baseStats = playerBaseStats(c);
+  const level = info.progress?.level ?? 1;
+  const attrs = { ...(info.progress?.attributes ?? NO_ATTRS) };
+  const baseStats = playerBaseStats(c, level, attrs);
   const u: Unit = {
     ...blankUnit(id, pos),
     kind: 'player',
@@ -136,6 +156,9 @@ export function createPlayerUnit(id: EntityId, info: { name: string; classId: Cl
     resourceKind: c.resource,
     baseStats,
     stats: baseStats,
+    level,
+    xp: info.progress?.xp ?? 0,
+    attrs,
     passives: c.passives,
     mods: c.passives.flatMap((p) => p.mods ?? []),
   };
@@ -155,6 +178,7 @@ export function createMonsterUnit(id: EntityId, type: string, pos: Vec2, hpScale
     team: 'monsters',
     name: type,
     monsterType: type,
+    level: def.level,
     radius: def.radius,
     resourceKind: 'none',
     baseStats,
@@ -163,6 +187,19 @@ export function createMonsterUnit(id: EntityId, type: string, pos: Vec2, hpScale
   };
   u.hp = u.stats.maxHp;
   return u;
+}
+
+/** Rebuilds a player's base stats after a level or attribute change, keeping hp/resource ratios sane. */
+export function refreshPlayerBase(u: Unit, now: number): void {
+  if (!u.classId) return;
+  u.baseStats = playerBaseStats(CLASSES[u.classId]!, u.level, u.attrs);
+  recomputeStats(u, now);
+}
+
+/** Attribute points earned by level and not yet allocated. */
+export function freeAttrPoints(u: Pick<Unit, 'level' | 'attrs'>): number {
+  const spent = Object.values(u.attrs).reduce((a, b) => a + b, 0);
+  return BALANCE.progression.attributePointsPerLevel * (u.level - 1) - spent;
 }
 
 /** Recomputes stats from base + permanent mods + active buff/debuff/slow statuses; clamps hp/resource. */
