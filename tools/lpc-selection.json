@@ -31,6 +31,11 @@
       "file": "palette_definitions/cloth/cloth_ulpc.json",
       "base": "white",
       "choices": []
+    },
+    "metal": {
+      "file": "palette_definitions/metal/metal_ulpc.json",
+      "base": "steel",
+      "choices": []
     }
   },
   "bodies": [
@@ -115,27 +120,32 @@
           "z": 9,
           "anims": {
             "slash": "weapon/sword/arming/attack_slash/bg/steel.png"
-          }
+          },
+          "slot": "weapon"
         },
         {
           "src": "legs/pants/male/walk.png",
           "z": 20,
-          "cloth": "brown"
+          "cloth": "brown",
+          "slot": "legs"
         },
         {
           "src": "feet/boots/basic/male/walk.png",
-          "z": 25
+          "z": 25,
+          "slot": "feet"
         },
         {
           "src": "torso/armour/leather/male/walk.png",
-          "z": 60
+          "z": 60,
+          "slot": "chest"
         },
         {
           "src": "weapon/sword/arming/universal/fg/walk/steel.png",
           "z": 140,
           "anims": {
             "slash": "weapon/sword/arming/attack_slash/fg/steel.png"
-          }
+          },
+          "slot": "weapon"
         }
       ],
       "female": [
@@ -144,27 +154,32 @@
           "z": 9,
           "anims": {
             "slash": "weapon/sword/arming/attack_slash/bg/steel.png"
-          }
+          },
+          "slot": "weapon"
         },
         {
           "src": "legs/pants/thin/walk.png",
           "z": 20,
-          "cloth": "brown"
+          "cloth": "brown",
+          "slot": "legs"
         },
         {
           "src": "feet/boots/basic/thin/walk.png",
-          "z": 25
+          "z": 25,
+          "slot": "feet"
         },
         {
           "src": "torso/armour/leather/female/walk.png",
-          "z": 60
+          "z": 60,
+          "slot": "chest"
         },
         {
           "src": "weapon/sword/arming/universal/fg/walk/steel.png",
           "z": 140,
           "anims": {
             "slash": "weapon/sword/arming/attack_slash/fg/steel.png"
-          }
+          },
+          "slot": "weapon"
         }
       ]
     },
@@ -172,43 +187,52 @@
       "male": [
         {
           "src": "weapon/blunt/mace/universal_behind/walk/mace.png",
-          "z": 9
+          "z": 9,
+          "slot": "weapon"
         },
         {
           "src": "feet/shoes/basic/male/walk.png",
-          "z": 15
+          "z": 15,
+          "slot": "feet"
         },
         {
           "src": "legs/pants/male/walk.png",
           "z": 20,
-          "cloth": "white"
+          "cloth": "white",
+          "slot": "legs"
         },
         {
           "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
           "z": 35,
-          "cloth": "white"
+          "cloth": "white",
+          "slot": "chest"
         },
         {
           "src": "weapon/blunt/mace/walk/mace.png",
-          "z": 140
+          "z": 140,
+          "slot": "weapon"
         }
       ],
       "female": [
         {
           "src": "weapon/blunt/mace/universal_behind/walk/mace.png",
-          "z": 9
+          "z": 9,
+          "slot": "weapon"
         },
         {
           "src": "feet/shoes/basic/thin/walk.png",
-          "z": 15
+          "z": 15,
+          "slot": "feet"
         },
         {
           "src": "torso/clothes/robe/female/walk/white.png",
-          "z": 35
+          "z": 35,
+          "slot": "chest"
         },
         {
           "src": "weapon/blunt/mace/walk/mace.png",
-          "z": 140
+          "z": 140,
+          "slot": "weapon"
         }
       ]
     },
@@ -216,43 +240,52 @@
       "male": [
         {
           "src": "weapon/magic/simple/background/walk/simple.png",
-          "z": 9
+          "z": 9,
+          "slot": "weapon"
         },
         {
           "src": "feet/shoes/basic/male/walk.png",
-          "z": 15
+          "z": 15,
+          "slot": "feet"
         },
         {
           "src": "legs/pants/male/walk.png",
           "z": 20,
-          "cloth": "purple"
+          "cloth": "purple",
+          "slot": "legs"
         },
         {
           "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
           "z": 35,
-          "cloth": "purple"
+          "cloth": "purple",
+          "slot": "chest"
         },
         {
           "src": "weapon/magic/simple/foreground/walk/simple.png",
-          "z": 140
+          "z": 140,
+          "slot": "weapon"
         }
       ],
       "female": [
         {
           "src": "weapon/magic/simple/background/walk/simple.png",
-          "z": 9
+          "z": 9,
+          "slot": "weapon"
         },
         {
           "src": "feet/shoes/basic/thin/walk.png",
-          "z": 15
+          "z": 15,
+          "slot": "feet"
         },
         {
           "src": "torso/clothes/robe/female/walk/purple.png",
-          "z": 35
+          "z": 35,
+          "slot": "chest"
         },
         {
           "src": "weapon/magic/simple/foreground/walk/simple.png",
-          "z": 140
+          "z": 140,
+          "slot": "weapon"
         }
       ]
     },
@@ -260,26 +293,31 @@
       "male": [
         {
           "src": "quiver/walk/quiver.png",
-          "z": 8
+          "z": 8,
+          "slot": "offhand"
         },
         {
           "src": "legs/pants/male/walk.png",
           "z": 20,
-          "cloth": "leather"
+          "cloth": "leather",
+          "slot": "legs"
         },
         {
           "src": "feet/boots/basic/male/walk.png",
-          "z": 25
+          "z": 25,
+          "slot": "feet"
         },
         {
           "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
           "z": 35,
-          "cloth": "forest"
+          "cloth": "forest",
+          "slot": "chest"
         },
         {
           "src": "hat/cloth/hood/adult/walk.png",
           "z": 130,
-          "cloth": "forest"
+          "cloth": "forest",
+          "slot": "head"
         },
         {
           "src": "weapon/ranged/bow/normal/universal/background/shoot/medium.png",
@@ -287,7 +325,8 @@
           "actionOnly": true,
           "anims": {
             "shoot": "weapon/ranged/bow/normal/universal/background/shoot/medium.png"
-          }
+          },
+          "slot": "weapon"
         },
         {
           "src": "weapon/ranged/bow/normal/universal/foreground/shoot/medium.png",
@@ -295,32 +334,38 @@
           "actionOnly": true,
           "anims": {
             "shoot": "weapon/ranged/bow/normal/universal/foreground/shoot/medium.png"
-          }
+          },
+          "slot": "weapon"
         }
       ],
       "female": [
         {
           "src": "quiver/walk/quiver.png",
-          "z": 8
+          "z": 8,
+          "slot": "offhand"
         },
         {
           "src": "legs/pants/thin/walk.png",
           "z": 20,
-          "cloth": "leather"
+          "cloth": "leather",
+          "slot": "legs"
         },
         {
           "src": "feet/boots/basic/thin/walk.png",
-          "z": 25
+          "z": 25,
+          "slot": "feet"
         },
         {
           "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
           "z": 35,
-          "cloth": "forest"
+          "cloth": "forest",
+          "slot": "chest"
         },
         {
           "src": "hat/cloth/hood/adult/walk.png",
           "z": 130,
-          "cloth": "forest"
+          "cloth": "forest",
+          "slot": "head"
         },
         {
           "src": "weapon/ranged/bow/normal/universal/background/shoot/medium.png",
@@ -328,7 +373,8 @@
           "actionOnly": true,
           "anims": {
             "shoot": "weapon/ranged/bow/normal/universal/background/shoot/medium.png"
-          }
+          },
+          "slot": "weapon"
         },
         {
           "src": "weapon/ranged/bow/normal/universal/foreground/shoot/medium.png",
@@ -336,7 +382,8 @@
           "actionOnly": true,
           "anims": {
             "shoot": "weapon/ranged/bow/normal/universal/foreground/shoot/medium.png"
-          }
+          },
+          "slot": "weapon"
         }
       ]
     }
@@ -494,6 +541,3833 @@
         ],
         "urls": [
           "https://opengameart.org/content/lpc-monsters"
+        ]
+      }
+    }
+  },
+  "gear": {
+    "head_mail_iron": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "head_nasal_iron": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "head_kettle_iron": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "head_barbuta_iron": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/barbuta/male/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/barbuta/female/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "head_greathelm_iron": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/greathelm/male/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/greathelm/female/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "head_horned_iron": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "head_mail_steel": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "head_nasal_steel": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "head_kettle_steel": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "head_barbuta_steel": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/barbuta/male/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/barbuta/female/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "head_greathelm_steel": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/greathelm/male/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/greathelm/female/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "head_horned_steel": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "head_mail_bronze": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "head_nasal_bronze": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "head_kettle_bronze": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "head_barbuta_bronze": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/barbuta/male/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/barbuta/female/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "head_greathelm_bronze": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/greathelm/male/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/greathelm/female/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "head_horned_bronze": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "head_mail_gold": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "head_nasal_gold": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "head_kettle_gold": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "head_barbuta_gold": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/barbuta/male/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/barbuta/female/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "head_greathelm_gold": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/greathelm/male/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/greathelm/female/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "head_horned_gold": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "head_mail_silver": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/mail/adult/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "head_nasal_silver": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/nasal/adult/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "head_kettle_silver": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/kettle/adult/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "head_barbuta_silver": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/barbuta/male/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/barbuta/female/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "head_greathelm_silver": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/greathelm/male/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/greathelm/female/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "head_horned_silver": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/helmet/horned/adult/walk.png",
+            "z": 130,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "head_hood_brown": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "brown"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "brown"
+          }
+        ]
+      }
+    },
+    "head_cap_brown": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/brown.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/brown.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_hood_gray": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "gray"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "gray"
+          }
+        ]
+      }
+    },
+    "head_cap_gray": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/gray.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/gray.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_hood_navy": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "navy"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "navy"
+          }
+        ]
+      }
+    },
+    "head_cap_navy": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/navy.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/navy.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_hood_forest": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "forest"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "forest"
+          }
+        ]
+      }
+    },
+    "head_cap_forest": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/forest.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/forest.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_hood_black": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "black"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "black"
+          }
+        ]
+      }
+    },
+    "head_cap_black": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/black.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/black.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_hood_maroon": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/hood/adult/walk.png",
+            "z": 130,
+            "cloth": "maroon"
+          }
+        ]
+      }
+    },
+    "head_cap_maroon": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/maroon.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/cloth/leather_cap/adult/walk/maroon.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_wizard_blue": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/blue.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/blue.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_wizard_black": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/black.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/black.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_wizard_brown": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/brown.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/brown.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_wizard_forest": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/forest.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/forest.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "head_wizard_charcoal": {
+      "slot": "head",
+      "bodies": {
+        "male": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/charcoal.png",
+            "z": 130
+          }
+        ],
+        "female": [
+          {
+            "src": "hat/magic/wizard/base/adult/walk/charcoal.png",
+            "z": 130
+          }
+        ]
+      }
+    },
+    "shoulders_pauldrons_white": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/pauldrons/male/walk.png",
+            "z": 65,
+            "cloth": "white"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/pauldrons/thin/walk.png",
+            "z": 65,
+            "cloth": "white"
+          }
+        ]
+      }
+    },
+    "shoulders_pauldrons_gray": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/pauldrons/male/walk.png",
+            "z": 65,
+            "cloth": "gray"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/pauldrons/thin/walk.png",
+            "z": 65,
+            "cloth": "gray"
+          }
+        ]
+      }
+    },
+    "shoulders_pauldrons_brown": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/pauldrons/male/walk.png",
+            "z": 65,
+            "cloth": "brown"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/pauldrons/thin/walk.png",
+            "z": 65,
+            "cloth": "brown"
+          }
+        ]
+      }
+    },
+    "shoulders_pauldrons_black": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/pauldrons/male/walk.png",
+            "z": 65,
+            "cloth": "black"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/pauldrons/thin/walk.png",
+            "z": 65,
+            "cloth": "black"
+          }
+        ]
+      }
+    },
+    "shoulders_pauldrons_maroon": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/pauldrons/male/walk.png",
+            "z": 65,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/pauldrons/thin/walk.png",
+            "z": 65,
+            "cloth": "maroon"
+          }
+        ]
+      }
+    },
+    "shoulders_legion_bronze": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/legion/male/walk/bronze.png",
+            "z": 65
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/legion/female/walk/bronze.png",
+            "z": 65
+          }
+        ]
+      }
+    },
+    "shoulders_legion_iron": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/legion/male/walk/iron.png",
+            "z": 65
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/legion/female/walk/iron.png",
+            "z": 65
+          }
+        ]
+      }
+    },
+    "shoulders_legion_gold": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/legion/male/walk/gold.png",
+            "z": 65
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/legion/female/walk/gold.png",
+            "z": 65
+          }
+        ]
+      }
+    },
+    "shoulders_legion_silver": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/legion/male/walk/silver.png",
+            "z": 65
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/legion/female/walk/silver.png",
+            "z": 65
+          }
+        ]
+      }
+    },
+    "shoulders_legion_steel": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/legion/male/walk/steel.png",
+            "z": 65
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/legion/female/walk/steel.png",
+            "z": 65
+          }
+        ]
+      }
+    },
+    "shoulders_mantal_purple": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/mantal/male/walk.png",
+            "z": 65,
+            "cloth": "purple"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/mantal/thin/walk.png",
+            "z": 65,
+            "cloth": "purple"
+          }
+        ]
+      }
+    },
+    "shoulders_mantal_navy": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/mantal/male/walk.png",
+            "z": 65,
+            "cloth": "navy"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/mantal/thin/walk.png",
+            "z": 65,
+            "cloth": "navy"
+          }
+        ]
+      }
+    },
+    "shoulders_mantal_maroon": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/mantal/male/walk.png",
+            "z": 65,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/mantal/thin/walk.png",
+            "z": 65,
+            "cloth": "maroon"
+          }
+        ]
+      }
+    },
+    "shoulders_mantal_forest": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/mantal/male/walk.png",
+            "z": 65,
+            "cloth": "forest"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/mantal/thin/walk.png",
+            "z": 65,
+            "cloth": "forest"
+          }
+        ]
+      }
+    },
+    "shoulders_mantal_white": {
+      "slot": "shoulders",
+      "bodies": {
+        "male": [
+          {
+            "src": "shoulders/mantal/male/walk.png",
+            "z": 65,
+            "cloth": "white"
+          }
+        ],
+        "female": [
+          {
+            "src": "shoulders/mantal/thin/walk.png",
+            "z": 65,
+            "cloth": "white"
+          }
+        ]
+      }
+    },
+    "chest_plate_iron": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/armour/plate/male/walk.png",
+            "z": 60,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/armour/plate/female/walk.png",
+            "z": 60,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "chest_mail_iron": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/chainmail/male/walk.png",
+            "z": 50,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/chainmail/female/walk.png",
+            "z": 50,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "chest_plate_steel": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/armour/plate/male/walk.png",
+            "z": 60,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/armour/plate/female/walk.png",
+            "z": 60,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "chest_mail_steel": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/chainmail/male/walk.png",
+            "z": 50,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/chainmail/female/walk.png",
+            "z": 50,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "chest_plate_bronze": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/armour/plate/male/walk.png",
+            "z": 60,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/armour/plate/female/walk.png",
+            "z": 60,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "chest_mail_bronze": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/chainmail/male/walk.png",
+            "z": 50,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/chainmail/female/walk.png",
+            "z": 50,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "chest_plate_gold": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/armour/plate/male/walk.png",
+            "z": 60,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/armour/plate/female/walk.png",
+            "z": 60,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "chest_mail_gold": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/chainmail/male/walk.png",
+            "z": 50,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/chainmail/female/walk.png",
+            "z": 50,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "chest_plate_silver": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/armour/plate/male/walk.png",
+            "z": 60,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/armour/plate/female/walk.png",
+            "z": 60,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "chest_mail_silver": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/chainmail/male/walk.png",
+            "z": 50,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/chainmail/female/walk.png",
+            "z": 50,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "chest_leather": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/armour/leather/male/walk.png",
+            "z": 60
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/armour/leather/female/walk.png",
+            "z": 60
+          }
+        ]
+      }
+    },
+    "chest_shirt_white": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "white"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "z": 35,
+            "cloth": "white"
+          }
+        ]
+      }
+    },
+    "chest_shirt_purple": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "purple"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "z": 35,
+            "cloth": "purple"
+          }
+        ]
+      }
+    },
+    "chest_shirt_navy": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "navy"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "z": 35,
+            "cloth": "navy"
+          }
+        ]
+      }
+    },
+    "chest_shirt_maroon": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "z": 35,
+            "cloth": "maroon"
+          }
+        ]
+      }
+    },
+    "chest_shirt_forest": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "forest"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "z": 35,
+            "cloth": "forest"
+          }
+        ]
+      }
+    },
+    "chest_shirt_gray": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "gray"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "z": 35,
+            "cloth": "gray"
+          }
+        ]
+      }
+    },
+    "chest_shirt_black": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "black"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "z": 35,
+            "cloth": "black"
+          }
+        ]
+      }
+    },
+    "chest_shirt_brown": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "brown"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/female/walk.png",
+            "z": 35,
+            "cloth": "brown"
+          }
+        ]
+      }
+    },
+    "chest_robe_black": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "black"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/robe/female/walk/black.png",
+            "z": 35
+          }
+        ]
+      }
+    },
+    "chest_robe_blue": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "navy"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/robe/female/walk/blue.png",
+            "z": 35
+          }
+        ]
+      }
+    },
+    "chest_robe_brown": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "brown"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/robe/female/walk/brown.png",
+            "z": 35
+          }
+        ]
+      }
+    },
+    "chest_robe_purple": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "purple"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/robe/female/walk/purple.png",
+            "z": 35
+          }
+        ]
+      }
+    },
+    "chest_robe_red": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/robe/female/walk/red.png",
+            "z": 35
+          }
+        ]
+      }
+    },
+    "chest_robe_white": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "white"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/robe/female/walk/white.png",
+            "z": 35
+          }
+        ]
+      }
+    },
+    "chest_robe_forest_green": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "forest"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/robe/female/walk/forest_green.png",
+            "z": 35
+          }
+        ]
+      }
+    },
+    "chest_robe_light_gray": {
+      "slot": "chest",
+      "bodies": {
+        "male": [
+          {
+            "src": "torso/clothes/longsleeve/longsleeve/male/walk.png",
+            "z": 35,
+            "cloth": "gray"
+          }
+        ],
+        "female": [
+          {
+            "src": "torso/clothes/robe/female/walk/light_gray.png",
+            "z": 35
+          }
+        ]
+      }
+    },
+    "hands_gloves_iron": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/hands/gloves/male/walk.png",
+            "z": 70,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/hands/gloves/thin/walk.png",
+            "z": 70,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "hands_gauntlets_iron": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/armour/plate/male/walk.png",
+            "z": 70,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/armour/plate/thin/walk.png",
+            "z": 70,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "hands_gloves_steel": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/hands/gloves/male/walk.png",
+            "z": 70,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/hands/gloves/thin/walk.png",
+            "z": 70,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "hands_gauntlets_steel": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/armour/plate/male/walk.png",
+            "z": 70,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/armour/plate/thin/walk.png",
+            "z": 70,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "hands_gloves_bronze": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/hands/gloves/male/walk.png",
+            "z": 70,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/hands/gloves/thin/walk.png",
+            "z": 70,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "hands_gauntlets_bronze": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/armour/plate/male/walk.png",
+            "z": 70,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/armour/plate/thin/walk.png",
+            "z": 70,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "hands_gloves_gold": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/hands/gloves/male/walk.png",
+            "z": 70,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/hands/gloves/thin/walk.png",
+            "z": 70,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "hands_gauntlets_gold": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/armour/plate/male/walk.png",
+            "z": 70,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/armour/plate/thin/walk.png",
+            "z": 70,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "hands_gloves_silver": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/hands/gloves/male/walk.png",
+            "z": 70,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/hands/gloves/thin/walk.png",
+            "z": 70,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "hands_gauntlets_silver": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/armour/plate/male/walk.png",
+            "z": 70,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/armour/plate/thin/walk.png",
+            "z": 70,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "hands_bracers": {
+      "slot": "hands",
+      "bodies": {
+        "male": [
+          {
+            "src": "arms/bracers/male/walk.png",
+            "z": 70
+          }
+        ],
+        "female": [
+          {
+            "src": "arms/bracers/thin/walk.png",
+            "z": 70
+          }
+        ]
+      }
+    },
+    "legs_pants_brown": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "brown"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "brown"
+          }
+        ]
+      }
+    },
+    "legs_leggings_brown": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "brown"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "brown"
+          }
+        ]
+      }
+    },
+    "legs_pants_gray": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "gray"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "gray"
+          }
+        ]
+      }
+    },
+    "legs_leggings_gray": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "gray"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "gray"
+          }
+        ]
+      }
+    },
+    "legs_pants_navy": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "navy"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "navy"
+          }
+        ]
+      }
+    },
+    "legs_leggings_navy": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "navy"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "navy"
+          }
+        ]
+      }
+    },
+    "legs_pants_maroon": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "maroon"
+          }
+        ]
+      }
+    },
+    "legs_leggings_maroon": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "maroon"
+          }
+        ]
+      }
+    },
+    "legs_pants_forest": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "forest"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "forest"
+          }
+        ]
+      }
+    },
+    "legs_leggings_forest": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "forest"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "forest"
+          }
+        ]
+      }
+    },
+    "legs_pants_black": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "black"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "black"
+          }
+        ]
+      }
+    },
+    "legs_leggings_black": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "black"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "black"
+          }
+        ]
+      }
+    },
+    "legs_pants_white": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "white"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "white"
+          }
+        ]
+      }
+    },
+    "legs_leggings_white": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "white"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "white"
+          }
+        ]
+      }
+    },
+    "legs_pants_purple": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "purple"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "purple"
+          }
+        ]
+      }
+    },
+    "legs_leggings_purple": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "purple"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "purple"
+          }
+        ]
+      }
+    },
+    "legs_pants_leather": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/pants/male/walk.png",
+            "z": 20,
+            "cloth": "leather"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/pants/thin/walk.png",
+            "z": 20,
+            "cloth": "leather"
+          }
+        ]
+      }
+    },
+    "legs_leggings_leather": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/leggings/male/walk.png",
+            "z": 20,
+            "cloth": "leather"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/leggings/thin/walk.png",
+            "z": 20,
+            "cloth": "leather"
+          }
+        ]
+      }
+    },
+    "legs_plate_iron": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/armour/plate/male/walk.png",
+            "z": 20,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/armour/plate/thin/walk.png",
+            "z": 20,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "legs_plate_steel": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/armour/plate/male/walk.png",
+            "z": 20,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/armour/plate/thin/walk.png",
+            "z": 20,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "legs_plate_bronze": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/armour/plate/male/walk.png",
+            "z": 20,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/armour/plate/thin/walk.png",
+            "z": 20,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "legs_plate_gold": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/armour/plate/male/walk.png",
+            "z": 20,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/armour/plate/thin/walk.png",
+            "z": 20,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "legs_plate_silver": {
+      "slot": "legs",
+      "bodies": {
+        "male": [
+          {
+            "src": "legs/armour/plate/male/walk.png",
+            "z": 20,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "legs/armour/plate/thin/walk.png",
+            "z": 20,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "feet_shoes": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/shoes/basic/male/walk.png",
+            "z": 15
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/shoes/basic/thin/walk.png",
+            "z": 15
+          }
+        ]
+      }
+    },
+    "feet_boots": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/basic/male/walk.png",
+            "z": 25
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/basic/thin/walk.png",
+            "z": 25
+          }
+        ]
+      }
+    },
+    "feet_fold_brown": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/fold/male/walk.png",
+            "z": 25,
+            "cloth": "brown"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/fold/thin/walk.png",
+            "z": 25,
+            "cloth": "brown"
+          }
+        ]
+      }
+    },
+    "feet_rimmed_brown": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/rimmed/male/walk.png",
+            "z": 25,
+            "cloth": "brown"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/rimmed/thin/walk.png",
+            "z": 25,
+            "cloth": "brown"
+          }
+        ]
+      }
+    },
+    "feet_fold_black": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/fold/male/walk.png",
+            "z": 25,
+            "cloth": "black"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/fold/thin/walk.png",
+            "z": 25,
+            "cloth": "black"
+          }
+        ]
+      }
+    },
+    "feet_rimmed_black": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/rimmed/male/walk.png",
+            "z": 25,
+            "cloth": "black"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/rimmed/thin/walk.png",
+            "z": 25,
+            "cloth": "black"
+          }
+        ]
+      }
+    },
+    "feet_fold_gray": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/fold/male/walk.png",
+            "z": 25,
+            "cloth": "gray"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/fold/thin/walk.png",
+            "z": 25,
+            "cloth": "gray"
+          }
+        ]
+      }
+    },
+    "feet_rimmed_gray": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/rimmed/male/walk.png",
+            "z": 25,
+            "cloth": "gray"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/rimmed/thin/walk.png",
+            "z": 25,
+            "cloth": "gray"
+          }
+        ]
+      }
+    },
+    "feet_fold_maroon": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/fold/male/walk.png",
+            "z": 25,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/fold/thin/walk.png",
+            "z": 25,
+            "cloth": "maroon"
+          }
+        ]
+      }
+    },
+    "feet_rimmed_maroon": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/rimmed/male/walk.png",
+            "z": 25,
+            "cloth": "maroon"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/rimmed/thin/walk.png",
+            "z": 25,
+            "cloth": "maroon"
+          }
+        ]
+      }
+    },
+    "feet_fold_leather": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/fold/male/walk.png",
+            "z": 25,
+            "cloth": "leather"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/fold/thin/walk.png",
+            "z": 25,
+            "cloth": "leather"
+          }
+        ]
+      }
+    },
+    "feet_rimmed_leather": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/boots/rimmed/male/walk.png",
+            "z": 25,
+            "cloth": "leather"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/boots/rimmed/thin/walk.png",
+            "z": 25,
+            "cloth": "leather"
+          }
+        ]
+      }
+    },
+    "feet_plate_iron": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/armour/plate/male/walk.png",
+            "z": 25,
+            "metal": "iron"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/armour/plate/thin/walk.png",
+            "z": 25,
+            "metal": "iron"
+          }
+        ]
+      }
+    },
+    "feet_plate_steel": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/armour/plate/male/walk.png",
+            "z": 25,
+            "metal": "steel"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/armour/plate/thin/walk.png",
+            "z": 25,
+            "metal": "steel"
+          }
+        ]
+      }
+    },
+    "feet_plate_bronze": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/armour/plate/male/walk.png",
+            "z": 25,
+            "metal": "bronze"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/armour/plate/thin/walk.png",
+            "z": 25,
+            "metal": "bronze"
+          }
+        ]
+      }
+    },
+    "feet_plate_gold": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/armour/plate/male/walk.png",
+            "z": 25,
+            "metal": "gold"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/armour/plate/thin/walk.png",
+            "z": 25,
+            "metal": "gold"
+          }
+        ]
+      }
+    },
+    "feet_plate_silver": {
+      "slot": "feet",
+      "bodies": {
+        "male": [
+          {
+            "src": "feet/armour/plate/male/walk.png",
+            "z": 25,
+            "metal": "silver"
+          }
+        ],
+        "female": [
+          {
+            "src": "feet/armour/plate/thin/walk.png",
+            "z": 25,
+            "metal": "silver"
+          }
+        ]
+      }
+    },
+    "weapon_arming_steel": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/steel.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/steel.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/steel.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/steel.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/steel.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/steel.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/steel.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/steel.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_arming_iron": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/iron.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/iron.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/iron.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/iron.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/iron.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/iron.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/iron.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/iron.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_arming_gold": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/gold.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/gold.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/gold.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/gold.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/gold.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/gold.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/gold.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/gold.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_arming_bronze": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/bronze.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/bronze.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/bronze.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/bronze.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/bronze.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/bronze.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/bronze.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/bronze.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_arming_silver": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/silver.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/silver.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/silver.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/silver.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/silver.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/silver.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/silver.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/silver.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_arming_copper": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/copper.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/copper.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/copper.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/copper.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/arming/universal/bg/walk/copper.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/bg/copper.png"
+            }
+          },
+          {
+            "src": "weapon/sword/arming/universal/fg/walk/copper.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/arming/attack_slash/fg/copper.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_longsword": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/longsword/universal_behind/walk/longsword.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/longsword/attack_slash/behind/longsword.png"
+            }
+          },
+          {
+            "src": "weapon/sword/longsword/walk/longsword.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/longsword/attack_slash/longsword.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/longsword/universal_behind/walk/longsword.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/longsword/attack_slash/behind/longsword.png"
+            }
+          },
+          {
+            "src": "weapon/sword/longsword/walk/longsword.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/longsword/attack_slash/longsword.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_saber": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/saber/universal_behind/walk/saber.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/saber/attack_slash/behind/saber.png"
+            }
+          },
+          {
+            "src": "weapon/sword/saber/walk/saber.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/saber/attack_slash/saber.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/saber/universal_behind/walk/saber.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/saber/attack_slash/behind/saber.png"
+            }
+          },
+          {
+            "src": "weapon/sword/saber/walk/saber.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/saber/attack_slash/saber.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_waraxe": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/blunt/waraxe/behind/walk/waraxe.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/blunt/waraxe/attack_slash/behind/waraxe.png"
+            }
+          },
+          {
+            "src": "weapon/blunt/waraxe/walk/waraxe.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/blunt/waraxe/attack_slash/waraxe.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/blunt/waraxe/behind/walk/waraxe.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/blunt/waraxe/attack_slash/behind/waraxe.png"
+            }
+          },
+          {
+            "src": "weapon/blunt/waraxe/walk/waraxe.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/blunt/waraxe/attack_slash/waraxe.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_mace": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/blunt/mace/universal_behind/walk/mace.png",
+            "z": 9
+          },
+          {
+            "src": "weapon/blunt/mace/walk/mace.png",
+            "z": 140
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/blunt/mace/universal_behind/walk/mace.png",
+            "z": 9
+          },
+          {
+            "src": "weapon/blunt/mace/walk/mace.png",
+            "z": 140
+          }
+        ]
+      }
+    },
+    "weapon_flail": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/blunt/flail/behind/walk/flail.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/blunt/flail/attack_slash/behind/flail.png"
+            }
+          },
+          {
+            "src": "weapon/blunt/flail/walk/flail.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/blunt/flail/attack_slash/flail.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/blunt/flail/behind/walk/flail.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/blunt/flail/attack_slash/behind/flail.png"
+            }
+          },
+          {
+            "src": "weapon/blunt/flail/walk/flail.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/blunt/flail/attack_slash/flail.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_dagger": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/sword/dagger/behind/walk/dagger.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/dagger/behind/slash/dagger.png"
+            }
+          },
+          {
+            "src": "weapon/sword/dagger/walk/dagger.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/dagger/slash/dagger.png",
+              "thrust": "weapon/sword/dagger/thrust/dagger.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/sword/dagger/behind/walk/dagger.png",
+            "z": 9,
+            "anims": {
+              "slash": "weapon/sword/dagger/behind/slash/dagger.png"
+            }
+          },
+          {
+            "src": "weapon/sword/dagger/walk/dagger.png",
+            "z": 140,
+            "anims": {
+              "slash": "weapon/sword/dagger/slash/dagger.png",
+              "thrust": "weapon/sword/dagger/thrust/dagger.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_staff_simple": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/simple/background/walk/simple.png",
+            "z": 9
+          },
+          {
+            "src": "weapon/magic/simple/foreground/walk/simple.png",
+            "z": 140
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/simple/background/walk/simple.png",
+            "z": 9
+          },
+          {
+            "src": "weapon/magic/simple/foreground/walk/simple.png",
+            "z": 140
+          }
+        ]
+      }
+    },
+    "weapon_staff_crystal_blue": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/blue.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/blue.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/blue.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/blue.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/blue.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/blue.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/blue.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/blue.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_staff_crystal_green": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/green.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/green.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/green.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/green.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/green.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/green.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/green.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/green.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_staff_crystal_purple": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/purple.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/purple.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/purple.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/purple.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/purple.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/purple.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/purple.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/purple.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_staff_crystal_red": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/red.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/red.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/red.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/red.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/red.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/red.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/red.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/red.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_staff_crystal_orange": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/orange.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/orange.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/orange.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/orange.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/crystal/universal/background/walk/orange.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/background/orange.png"
+            }
+          },
+          {
+            "src": "weapon/magic/crystal/universal/foreground/walk/orange.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/crystal/thrust/foreground/orange.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_staff_gnarled_light": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/gnarled/universal/background/walk/light.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/background/light.png"
+            }
+          },
+          {
+            "src": "weapon/magic/gnarled/universal/foreground/walk/light.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/foreground/light.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/gnarled/universal/background/walk/light.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/background/light.png"
+            }
+          },
+          {
+            "src": "weapon/magic/gnarled/universal/foreground/walk/light.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/foreground/light.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_staff_gnarled_medium": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/gnarled/universal/background/walk/medium.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/background/medium.png"
+            }
+          },
+          {
+            "src": "weapon/magic/gnarled/universal/foreground/walk/medium.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/foreground/medium.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/gnarled/universal/background/walk/medium.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/background/medium.png"
+            }
+          },
+          {
+            "src": "weapon/magic/gnarled/universal/foreground/walk/medium.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/foreground/medium.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_staff_gnarled_dark": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/magic/gnarled/universal/background/walk/dark.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/background/dark.png"
+            }
+          },
+          {
+            "src": "weapon/magic/gnarled/universal/foreground/walk/dark.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/foreground/dark.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/magic/gnarled/universal/background/walk/dark.png",
+            "z": 9,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/background/dark.png"
+            }
+          },
+          {
+            "src": "weapon/magic/gnarled/universal/foreground/walk/dark.png",
+            "z": 140,
+            "anims": {
+              "thrust": "weapon/magic/gnarled/thrust/foreground/dark.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_bow_light": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/ranged/bow/normal/universal/background/shoot/light.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/background/shoot/light.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/normal/universal/foreground/shoot/light.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/foreground/shoot/light.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/ranged/bow/normal/universal/background/shoot/light.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/background/shoot/light.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/normal/universal/foreground/shoot/light.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/foreground/shoot/light.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_recurve_light": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/ranged/bow/recurve/universal/background/shoot/light.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/background/shoot/light.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/recurve/universal/foreground/shoot/light.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/foreground/shoot/light.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/ranged/bow/recurve/universal/background/shoot/light.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/background/shoot/light.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/recurve/universal/foreground/shoot/light.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/foreground/shoot/light.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_bow_medium": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/ranged/bow/normal/universal/background/shoot/medium.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/background/shoot/medium.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/normal/universal/foreground/shoot/medium.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/foreground/shoot/medium.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/ranged/bow/normal/universal/background/shoot/medium.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/background/shoot/medium.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/normal/universal/foreground/shoot/medium.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/foreground/shoot/medium.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_recurve_medium": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/ranged/bow/recurve/universal/background/shoot/medium.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/background/shoot/medium.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/recurve/universal/foreground/shoot/medium.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/foreground/shoot/medium.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/ranged/bow/recurve/universal/background/shoot/medium.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/background/shoot/medium.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/recurve/universal/foreground/shoot/medium.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/foreground/shoot/medium.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_bow_dark": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/ranged/bow/normal/universal/background/shoot/dark.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/background/shoot/dark.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/normal/universal/foreground/shoot/dark.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/foreground/shoot/dark.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/ranged/bow/normal/universal/background/shoot/dark.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/background/shoot/dark.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/normal/universal/foreground/shoot/dark.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/normal/universal/foreground/shoot/dark.png"
+            }
+          }
+        ]
+      }
+    },
+    "weapon_recurve_dark": {
+      "slot": "weapon",
+      "bodies": {
+        "male": [
+          {
+            "src": "weapon/ranged/bow/recurve/universal/background/shoot/dark.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/background/shoot/dark.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/recurve/universal/foreground/shoot/dark.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/foreground/shoot/dark.png"
+            }
+          }
+        ],
+        "female": [
+          {
+            "src": "weapon/ranged/bow/recurve/universal/background/shoot/dark.png",
+            "z": -1,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/background/shoot/dark.png"
+            }
+          },
+          {
+            "src": "weapon/ranged/bow/recurve/universal/foreground/shoot/dark.png",
+            "z": 141,
+            "actionOnly": true,
+            "anims": {
+              "shoot": "weapon/ranged/bow/recurve/universal/foreground/shoot/dark.png"
+            }
+          }
+        ]
+      }
+    },
+    "offhand_round_brown": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/round/walk/brown.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/round/walk/brown.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_round_black": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/round/walk/black.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/round/walk/black.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_round_gold": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/round/walk/gold.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/round/walk/gold.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_round_green": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/round/walk/green.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/round/walk/green.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_round_silver": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/round/walk/silver.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/round/walk/silver.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_kite_gray": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/kite/male/walk/kite_gray.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/kite/female/walk/kite_gray.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_kite_blue_gray": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/kite/male/walk/kite_blue_gray.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/kite/female/walk/kite_blue_gray.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_kite_red_gray": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/kite/male/walk/kite_red_gray.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/kite/female/walk/kite_red_gray.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_kite_green_gray": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/kite/male/walk/kite_green_gray.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/kite/female/walk/kite_green_gray.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_kite_orange": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/kite/male/walk/kite_orange.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/kite/female/walk/kite_orange.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_spartan": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "shield/spartan/bg/walk/spartan.png",
+            "z": 9
+          },
+          {
+            "src": "shield/spartan/fg/walk/spartan.png",
+            "z": 110
+          }
+        ],
+        "female": [
+          {
+            "src": "shield/spartan/bg/walk/spartan.png",
+            "z": 9
+          },
+          {
+            "src": "shield/spartan/fg/walk/spartan.png",
+            "z": 110
+          }
+        ]
+      }
+    },
+    "offhand_quiver": {
+      "slot": "offhand",
+      "bodies": {
+        "male": [
+          {
+            "src": "quiver/walk/quiver.png",
+            "z": 8
+          }
+        ],
+        "female": [
+          {
+            "src": "quiver/walk/quiver.png",
+            "z": 8
+          }
         ]
       }
     }

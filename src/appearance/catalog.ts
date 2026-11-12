@@ -1,5 +1,5 @@
 import catalogJson from '../../data/appearance/catalog.json';
-import type { AppearanceCatalog, LayerRef } from './catalog-types';
+import type { AppearanceCatalog, GearSlot, LayerRef } from './catalog-types';
 
 export type { AppearanceCatalog, LayerRef } from './catalog-types';
 
@@ -37,11 +37,26 @@ export function defaultAppearance(_classId: ClassId): Appearance {
   };
 }
 
-/** All layers to draw for a character, back to front. */
-export function resolveLayers(classId: ClassId, a: Appearance): LayerRef[] {
+/** Look id per equipment slot (from equipped items). */
+export type GearLooks = Partial<Record<GearSlot, string>>;
+
+export const gearLook = (id: string) => (Object.hasOwn(CATALOG.layers.gear, id) ? CATALOG.layers.gear[id] : undefined);
+
+/** All layers to draw for a character, back to front. Equipped looks replace the class outfit in their slot. */
+export function resolveLayers(classId: ClassId, a: Appearance, gear: GearLooks = {}): LayerRef[] {
+  const worn: LayerRef[] = [];
+  const covered = new Set<GearSlot>();
+  for (const [slot, id] of Object.entries(gear) as [GearSlot, string][]) {
+    const look = id ? gearLook(id) : undefined;
+    if (!look || look.slot !== slot) continue;
+    covered.add(slot);
+    worn.push(...(look.bodies[a.body] ?? []));
+  }
+  const outfit = (CATALOG.layers.outfit[classId]?.[a.body] ?? []).filter((l) => !l.slot || !covered.has(l.slot));
   const layers = [
     ...(CATALOG.layers.body[a.body] ?? []),
-    ...(CATALOG.layers.outfit[classId]?.[a.body] ?? []),
+    ...outfit,
+    ...worn,
     ...(CATALOG.layers.hair[a.hairStyle] ? [CATALOG.layers.hair[a.hairStyle]!] : []),
   ];
   return layers.sort((x, y) => x.zIndex - y.zIndex);
@@ -60,5 +75,6 @@ export function allLayers(): LayerRef[] {
   out.push(...Object.values(CATALOG.layers.hair));
   for (const byBody of Object.values(CATALOG.layers.outfit)) for (const ls of Object.values(byBody)) out.push(...ls);
   for (const ls of Object.values(CATALOG.layers.monster)) out.push(...ls);
+  for (const g of Object.values(CATALOG.layers.gear)) for (const ls of Object.values(g.bodies)) out.push(...ls);
   return out;
 }

@@ -70,3 +70,35 @@ test('oversize anim sheets have a frame size above 64', () => {
   const sword = resolveLayers('warrior', defaultAppearance('warrior')).find((l) => l.sheet.includes('sword/arming/universal/fg'));
   expect(sword?.anims?.slash?.frameSize).toBe(128);
 });
+
+describe('equipment looks', () => {
+  test('an equipped look replaces the class outfit layers of its slot only', () => {
+    const a = defaultAppearance('warrior');
+    const base = resolveLayers('warrior', a);
+    const withHelm = resolveLayers('warrior', a, { head: 'head_nasal_iron', chest: 'chest_plate_gold' });
+    const sheets = (ls: { sheet: string }[]) => ls.map((l) => l.sheet);
+    expect(sheets(withHelm)).toContain('assets/lpc/characters/hat/helmet/nasal/adult/walk.png');
+    expect(sheets(withHelm).some((s) => s.includes('torso/armour/plate'))).toBe(true);
+    expect(sheets(withHelm).some((s) => s.includes('torso/armour/leather'))).toBe(false);
+    // legs, feet and weapon stay as the class default
+    for (const s of sheets(base).filter((s) => !s.includes('torso/'))) expect(sheets(withHelm)).toContain(s);
+  });
+
+  test('unknown looks or looks in the wrong slot are ignored', () => {
+    const a = defaultAppearance('mage');
+    expect(resolveLayers('mage', a, { head: 'nope', chest: 'head_nasal_iron' })).toEqual(resolveLayers('mage', a));
+  });
+
+  test('every look has layers for every body and its sheets exist', () => {
+    for (const [id, g] of Object.entries(CATALOG.layers.gear)) {
+      for (const b of CATALOG.bodies) {
+        const ls = g.bodies[b.id];
+        expect(ls?.length, `${id}/${b.id}`).toBeGreaterThan(0);
+        for (const l of ls!) {
+          expect(existsSync(`public/${l.sheet}`), l.sheet).toBe(true);
+          if (l.recolor?.palette) expect(CATALOG.palettes[l.recolor.material].colors[l.recolor.palette], `${id} ${l.recolor.palette}`).toBeDefined();
+        }
+      }
+    }
+  });
+});
