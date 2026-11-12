@@ -2,17 +2,35 @@
 
 export type Material = 'body' | 'hair' | 'cloth';
 
-/** How a layer is recolored: body/hair follow the player's choice; cloth uses a fixed palette. */
+/** Combat/extra animations besides walk. */
+export const ACTION_ANIMS = ['slash', 'thrust', 'spellcast', 'shoot', 'hurt'] as const;
+export type ActionAnim = (typeof ACTION_ANIMS)[number];
+export type Anim = 'walk' | ActionAnim;
+
+/**
+ * How a layer is recolored: body/hair follow the player's choice unless a fixed `palette`
+ * is given (monsters); cloth always uses its fixed palette.
+ */
 export interface Recolor {
   material: Material;
   palette?: string;
 }
 
+/** One animation sheet of a layer; frameSize > 64 means an oversize sheet drawn centred on the character. */
+export interface AnimSheet {
+  sheet: string;
+  frameSize: number;
+}
+
 export interface LayerRef {
-  /** Path under public/, e.g. "assets/lpc/characters/body/bodies/male/walk.png". */
+  /** Walk sheet: path under public/, e.g. "assets/lpc/characters/body/bodies/male/walk.png". */
   sheet: string;
   zIndex: number;
   recolor?: Recolor;
+  /** Other animations available for this layer (missing ones are hidden during that animation). */
+  anims?: Partial<Record<ActionAnim, AnimSheet>>;
+  /** Hidden while walking/idle; only drawn during its action animations. */
+  actionOnly?: boolean;
 }
 
 export interface Opt {
@@ -30,6 +48,14 @@ export interface PaletteSet {
   colors: Record<string, string[]>;
 }
 
+/** A single-sheet creature (LPC Monsters pack): rows are up, left, down, right. */
+export interface CreatureLook {
+  sheet: string;
+  frameSize: number;
+  moveFrames: number[];
+  attackFrames: number[];
+}
+
 export interface AppearanceCatalog {
   palettes: Record<Material, PaletteSet>;
   bodies: Opt[];
@@ -40,6 +66,9 @@ export interface AppearanceCatalog {
     body: Record<string, LayerRef[]>;
     hair: Record<string, LayerRef>;
     outfit: Record<string, Record<string, LayerRef[]>>;
+    /** Humanoid monsters: full, fixed layer stacks. */
+    monster: Record<string, LayerRef[]>;
   };
+  creatures: Record<string, CreatureLook>;
   tileset: string;
 }

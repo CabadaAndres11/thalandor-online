@@ -2,3 +2,5 @@ filename,notes,authors,licenses,urls
 "body/bodies/male/walk.png","base body" ,"Alice,Bob (bobby)" ,"OGA-BY 3.0,CC-BY-SA 3.0" ,"https://example.org/a,https://example.org/b"
 "hair/plain/adult/walk.png","" ,"Carol" ,"CC-BY-SA 3.0" ,"https://example.org/hair"
 "weapon/sword/arming/universal/fg/walk.png","sword, steel" ,"Dave" ,"GPL 3.0" ,"https://example.org/sword"
+"body/bodies/male/slash.png","" ,"Alice" ,"CC-BY-SA 3.0" ,"https://example.org/a"
+"weapon/sword/arming/attack_slash/fg/walk.png","" ,"Erin" ,"GPL 3.0" ,"https://example.org/slash"

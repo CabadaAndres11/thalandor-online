@@ -18,4 +18,6 @@ test('layerPalette resolves body, hair and fixed cloth palettes', () => {
   expect(layerPalette({ material: 'hair' }, appearance)).toEqual({ material: 'hair', name: 'blonde' });
   expect(layerPalette({ material: 'cloth', palette: 'forest' }, appearance)).toEqual({ material: 'cloth', name: 'forest' });
   expect(layerPalette(undefined, appearance)).toBeNull();
+  expect(layerPalette({ material: 'body', palette: 'green' }, appearance)).toEqual({ material: 'body', name: 'green' });
+  expect(layerPalette({ material: 'body', palette: 'dark_green' })).toEqual({ material: 'body', name: 'dark_green' });
 });

@@ -65,6 +65,22 @@
           "#442725",
           "#603429",
           "#7f4c31"
+        ],
+        "green": [
+          "#140c09",
+          "#09320b",
+          "#19541d",
+          "#228236",
+          "#39aa4e",
+          "#53bf71"
+        ],
+        "dark_green": [
+          "#011708",
+          "#02280e",
+          "#06410e",
+          "#255e1d",
+          "#508a48",
+          "#509e59"
         ]
       }
     },
@@ -193,6 +209,14 @@
           "#0b2b28",
           "#134507",
           "#1b5502"
+        ],
+        "black": [
+          "#000000",
+          "#101414",
+          "#1c2222",
+          "#22282a",
+          "#2a3034",
+          "#4a5057"
         ]
       }
     }
@@ -328,6 +352,28 @@
           "zIndex": 10,
           "recolor": {
             "material": "body"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/body/bodies/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/body/bodies/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/body/bodies/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/body/bodies/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/body/bodies/male/hurt.png",
+              "frameSize": 64
+            }
           }
         },
         {
@@ -335,6 +381,28 @@
           "zIndex": 100,
           "recolor": {
             "material": "body"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/head/heads/human/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/head/heads/human/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/head/heads/human/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/head/heads/human/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/head/heads/human/male/hurt.png",
+              "frameSize": 64
+            }
           }
         }
       ],
@@ -344,6 +412,28 @@
           "zIndex": 10,
           "recolor": {
             "material": "body"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/body/bodies/female/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/body/bodies/female/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/body/bodies/female/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/body/bodies/female/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/body/bodies/female/hurt.png",
+              "frameSize": 64
+            }
           }
         },
         {
@@ -351,6 +441,28 @@
           "zIndex": 100,
           "recolor": {
             "material": "body"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/head/heads/human/female/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/head/heads/human/female/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/head/heads/human/female/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/head/heads/human/female/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/head/heads/human/female/hurt.png",
+              "frameSize": 64
+            }
           }
         }
       ]
@@ -361,6 +473,28 @@
         "zIndex": 120,
         "recolor": {
           "material": "hair"
+        },
+        "anims": {
+          "slash": {
+            "sheet": "assets/lpc/characters/hair/plain/adult/slash.png",
+            "frameSize": 64
+          },
+          "thrust": {
+            "sheet": "assets/lpc/characters/hair/plain/adult/thrust.png",
+            "frameSize": 64
+          },
+          "spellcast": {
+            "sheet": "assets/lpc/characters/hair/plain/adult/spellcast.png",
+            "frameSize": 64
+          },
+          "shoot": {
+            "sheet": "assets/lpc/characters/hair/plain/adult/shoot.png",
+            "frameSize": 64
+          },
+          "hurt": {
+            "sheet": "assets/lpc/characters/hair/plain/adult/hurt.png",
+            "frameSize": 64
+          }
         }
       },
       "bangs": {
@@ -368,6 +502,28 @@
         "zIndex": 120,
         "recolor": {
           "material": "hair"
+        },
+        "anims": {
+          "slash": {
+            "sheet": "assets/lpc/characters/hair/bangs/adult/slash.png",
+            "frameSize": 64
+          },
+          "thrust": {
+            "sheet": "assets/lpc/characters/hair/bangs/adult/thrust.png",
+            "frameSize": 64
+          },
+          "spellcast": {
+            "sheet": "assets/lpc/characters/hair/bangs/adult/spellcast.png",
+            "frameSize": 64
+          },
+          "shoot": {
+            "sheet": "assets/lpc/characters/hair/bangs/adult/shoot.png",
+            "frameSize": 64
+          },
+          "hurt": {
+            "sheet": "assets/lpc/characters/hair/bangs/adult/hurt.png",
+            "frameSize": 64
+          }
         }
       },
       "bob": {
@@ -375,6 +531,28 @@
         "zIndex": 120,
         "recolor": {
           "material": "hair"
+        },
+        "anims": {
+          "slash": {
+            "sheet": "assets/lpc/characters/hair/bob/adult/slash.png",
+            "frameSize": 64
+          },
+          "thrust": {
+            "sheet": "assets/lpc/characters/hair/bob/adult/thrust.png",
+            "frameSize": 64
+          },
+          "spellcast": {
+            "sheet": "assets/lpc/characters/hair/bob/adult/spellcast.png",
+            "frameSize": 64
+          },
+          "shoot": {
+            "sheet": "assets/lpc/characters/hair/bob/adult/shoot.png",
+            "frameSize": 64
+          },
+          "hurt": {
+            "sheet": "assets/lpc/characters/hair/bob/adult/hurt.png",
+            "frameSize": 64
+          }
         }
       },
       "pixie": {
@@ -382,6 +560,28 @@
         "zIndex": 120,
         "recolor": {
           "material": "hair"
+        },
+        "anims": {
+          "slash": {
+            "sheet": "assets/lpc/characters/hair/pixie/adult/slash.png",
+            "frameSize": 64
+          },
+          "thrust": {
+            "sheet": "assets/lpc/characters/hair/pixie/adult/thrust.png",
+            "frameSize": 64
+          },
+          "spellcast": {
+            "sheet": "assets/lpc/characters/hair/pixie/adult/spellcast.png",
+            "frameSize": 64
+          },
+          "shoot": {
+            "sheet": "assets/lpc/characters/hair/pixie/adult/shoot.png",
+            "frameSize": 64
+          },
+          "hurt": {
+            "sheet": "assets/lpc/characters/hair/pixie/adult/hurt.png",
+            "frameSize": 64
+          }
         }
       },
       "spiked": {
@@ -389,6 +589,28 @@
         "zIndex": 120,
         "recolor": {
           "material": "hair"
+        },
+        "anims": {
+          "slash": {
+            "sheet": "assets/lpc/characters/hair/spiked/adult/slash.png",
+            "frameSize": 64
+          },
+          "thrust": {
+            "sheet": "assets/lpc/characters/hair/spiked/adult/thrust.png",
+            "frameSize": 64
+          },
+          "spellcast": {
+            "sheet": "assets/lpc/characters/hair/spiked/adult/spellcast.png",
+            "frameSize": 64
+          },
+          "shoot": {
+            "sheet": "assets/lpc/characters/hair/spiked/adult/shoot.png",
+            "frameSize": 64
+          },
+          "hurt": {
+            "sheet": "assets/lpc/characters/hair/spiked/adult/hurt.png",
+            "frameSize": 64
+          }
         }
       },
       "messy1": {
@@ -396,6 +618,28 @@
         "zIndex": 120,
         "recolor": {
           "material": "hair"
+        },
+        "anims": {
+          "slash": {
+            "sheet": "assets/lpc/characters/hair/messy1/adult/slash.png",
+            "frameSize": 64
+          },
+          "thrust": {
+            "sheet": "assets/lpc/characters/hair/messy1/adult/thrust.png",
+            "frameSize": 64
+          },
+          "spellcast": {
+            "sheet": "assets/lpc/characters/hair/messy1/adult/spellcast.png",
+            "frameSize": 64
+          },
+          "shoot": {
+            "sheet": "assets/lpc/characters/hair/messy1/adult/shoot.png",
+            "frameSize": 64
+          },
+          "hurt": {
+            "sheet": "assets/lpc/characters/hair/messy1/adult/hurt.png",
+            "frameSize": 64
+          }
         }
       },
       "long": {
@@ -403,6 +647,28 @@
         "zIndex": 120,
         "recolor": {
           "material": "hair"
+        },
+        "anims": {
+          "slash": {
+            "sheet": "assets/lpc/characters/hair/long/adult/slash.png",
+            "frameSize": 64
+          },
+          "thrust": {
+            "sheet": "assets/lpc/characters/hair/long/adult/thrust.png",
+            "frameSize": 64
+          },
+          "spellcast": {
+            "sheet": "assets/lpc/characters/hair/long/adult/spellcast.png",
+            "frameSize": 64
+          },
+          "shoot": {
+            "sheet": "assets/lpc/characters/hair/long/adult/shoot.png",
+            "frameSize": 64
+          },
+          "hurt": {
+            "sheet": "assets/lpc/characters/hair/long/adult/hurt.png",
+            "frameSize": 64
+          }
         }
       },
       "curly_short": {
@@ -410,6 +676,28 @@
         "zIndex": 120,
         "recolor": {
           "material": "hair"
+        },
+        "anims": {
+          "slash": {
+            "sheet": "assets/lpc/characters/hair/curly_short/adult/slash.png",
+            "frameSize": 64
+          },
+          "thrust": {
+            "sheet": "assets/lpc/characters/hair/curly_short/adult/thrust.png",
+            "frameSize": 64
+          },
+          "spellcast": {
+            "sheet": "assets/lpc/characters/hair/curly_short/adult/spellcast.png",
+            "frameSize": 64
+          },
+          "shoot": {
+            "sheet": "assets/lpc/characters/hair/curly_short/adult/shoot.png",
+            "frameSize": 64
+          },
+          "hurt": {
+            "sheet": "assets/lpc/characters/hair/curly_short/adult/hurt.png",
+            "frameSize": 64
+          }
         }
       }
     },
@@ -418,7 +706,17 @@
         "male": [
           {
             "sheet": "assets/lpc/characters/weapon/sword/arming/universal/bg/walk/steel.png",
-            "zIndex": 9
+            "zIndex": 9,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/weapon/sword/arming/attack_slash/bg/steel.png",
+                "frameSize": 128
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/sword/arming/universal/bg/hurt/steel.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
@@ -426,25 +724,111 @@
             "recolor": {
               "material": "cloth",
               "palette": "brown"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/legs/pants/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/legs/pants/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/legs/pants/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/legs/pants/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/legs/pants/male/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
             "sheet": "assets/lpc/characters/feet/boots/basic/male/walk.png",
-            "zIndex": 25
+            "zIndex": 25,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/torso/armour/leather/male/walk.png",
-            "zIndex": 60
+            "zIndex": 60,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/male/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/weapon/sword/arming/universal/fg/walk/steel.png",
-            "zIndex": 140
+            "zIndex": 140,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/weapon/sword/arming/attack_slash/fg/steel.png",
+                "frameSize": 128
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/sword/arming/universal/fg/hurt/steel.png",
+                "frameSize": 64
+              }
+            }
           }
         ],
         "female": [
           {
             "sheet": "assets/lpc/characters/weapon/sword/arming/universal/bg/walk/steel.png",
-            "zIndex": 9
+            "zIndex": 9,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/weapon/sword/arming/attack_slash/bg/steel.png",
+                "frameSize": 128
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/sword/arming/universal/bg/hurt/steel.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/legs/pants/thin/walk.png",
@@ -452,19 +836,95 @@
             "recolor": {
               "material": "cloth",
               "palette": "brown"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
             "sheet": "assets/lpc/characters/feet/boots/basic/thin/walk.png",
-            "zIndex": 25
+            "zIndex": 25,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/torso/armour/leather/female/walk.png",
-            "zIndex": 60
+            "zIndex": 60,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/female/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/female/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/female/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/female/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/torso/armour/leather/female/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/weapon/sword/arming/universal/fg/walk/steel.png",
-            "zIndex": 140
+            "zIndex": 140,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/weapon/sword/arming/attack_slash/fg/steel.png",
+                "frameSize": 128
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/sword/arming/universal/fg/hurt/steel.png",
+                "frameSize": 64
+              }
+            }
           }
         ]
       },
@@ -472,11 +932,39 @@
         "male": [
           {
             "sheet": "assets/lpc/characters/weapon/blunt/mace/universal_behind/walk/mace.png",
-            "zIndex": 9
+            "zIndex": 9,
+            "anims": {
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/blunt/mace/universal_behind/hurt/mace.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/feet/shoes/basic/male/walk.png",
-            "zIndex": 15
+            "zIndex": 15,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
@@ -484,6 +972,28 @@
             "recolor": {
               "material": "cloth",
               "palette": "white"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/legs/pants/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/legs/pants/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/legs/pants/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/legs/pants/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/legs/pants/male/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
@@ -492,29 +1002,113 @@
             "recolor": {
               "material": "cloth",
               "palette": "white"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
             "sheet": "assets/lpc/characters/weapon/blunt/mace/walk/mace.png",
-            "zIndex": 140
+            "zIndex": 140,
+            "anims": {
+              "thrust": {
+                "sheet": "assets/lpc/characters/weapon/blunt/mace/thrust/mace.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/blunt/mace/hurt/mace.png",
+                "frameSize": 64
+              }
+            }
           }
         ],
         "female": [
           {
             "sheet": "assets/lpc/characters/weapon/blunt/mace/universal_behind/walk/mace.png",
-            "zIndex": 9
+            "zIndex": 9,
+            "anims": {
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/blunt/mace/universal_behind/hurt/mace.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/feet/shoes/basic/thin/walk.png",
-            "zIndex": 15
+            "zIndex": 15,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/torso/clothes/robe/female/walk/white.png",
-            "zIndex": 35
+            "zIndex": 35,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/torso/clothes/robe/female/slash/white.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/torso/clothes/robe/female/spellcast/white.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/torso/clothes/robe/female/hurt/white.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/weapon/blunt/mace/walk/mace.png",
-            "zIndex": 140
+            "zIndex": 140,
+            "anims": {
+              "thrust": {
+                "sheet": "assets/lpc/characters/weapon/blunt/mace/thrust/mace.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/blunt/mace/hurt/mace.png",
+                "frameSize": 64
+              }
+            }
           }
         ]
       },
@@ -522,11 +1116,47 @@
         "male": [
           {
             "sheet": "assets/lpc/characters/weapon/magic/simple/background/walk/simple.png",
-            "zIndex": 9
+            "zIndex": 9,
+            "anims": {
+              "thrust": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/background/thrust/simple.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/background/spellcast/simple.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/background/hurt/simple.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/feet/shoes/basic/male/walk.png",
-            "zIndex": 15
+            "zIndex": 15,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/male/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
@@ -534,6 +1164,28 @@
             "recolor": {
               "material": "cloth",
               "palette": "purple"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/legs/pants/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/legs/pants/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/legs/pants/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/legs/pants/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/legs/pants/male/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
@@ -542,29 +1194,129 @@
             "recolor": {
               "material": "cloth",
               "palette": "purple"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
             "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/walk/simple.png",
-            "zIndex": 140
+            "zIndex": 140,
+            "anims": {
+              "thrust": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/thrust/simple.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/spellcast/simple.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/hurt/simple.png",
+                "frameSize": 64
+              }
+            }
           }
         ],
         "female": [
           {
             "sheet": "assets/lpc/characters/weapon/magic/simple/background/walk/simple.png",
-            "zIndex": 9
+            "zIndex": 9,
+            "anims": {
+              "thrust": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/background/thrust/simple.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/background/spellcast/simple.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/background/hurt/simple.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/feet/shoes/basic/thin/walk.png",
-            "zIndex": 15
+            "zIndex": 15,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/feet/shoes/basic/thin/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/torso/clothes/robe/female/walk/purple.png",
-            "zIndex": 35
+            "zIndex": 35,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/torso/clothes/robe/female/slash/purple.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/torso/clothes/robe/female/spellcast/purple.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/torso/clothes/robe/female/hurt/purple.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/walk/simple.png",
-            "zIndex": 140
+            "zIndex": 140,
+            "anims": {
+              "thrust": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/thrust/simple.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/spellcast/simple.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/hurt/simple.png",
+                "frameSize": 64
+              }
+            }
           }
         ]
       },
@@ -572,7 +1324,29 @@
         "male": [
           {
             "sheet": "assets/lpc/characters/quiver/walk/quiver.png",
-            "zIndex": 8
+            "zIndex": 8,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/quiver/slash/quiver.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/quiver/thrust/quiver.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/quiver/spellcast/quiver.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/quiver/shoot/quiver.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/quiver/hurt/quiver.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
@@ -580,11 +1354,55 @@
             "recolor": {
               "material": "cloth",
               "palette": "leather"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/legs/pants/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/legs/pants/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/legs/pants/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/legs/pants/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/legs/pants/male/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
             "sheet": "assets/lpc/characters/feet/boots/basic/male/walk.png",
-            "zIndex": 25
+            "zIndex": 25,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/male/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/walk.png",
@@ -592,6 +1410,28 @@
             "recolor": {
               "material": "cloth",
               "palette": "forest"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
@@ -600,13 +1440,79 @@
             "recolor": {
               "material": "cloth",
               "palette": "forest"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/hurt.png",
+                "frameSize": 64
+              }
             }
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/universal/background/shoot/medium.png",
+            "zIndex": -1,
+            "anims": {
+              "shoot": {
+                "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/universal/background/shoot/medium.png",
+                "frameSize": 64
+              }
+            },
+            "actionOnly": true
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/universal/foreground/shoot/medium.png",
+            "zIndex": 141,
+            "anims": {
+              "shoot": {
+                "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/universal/foreground/shoot/medium.png",
+                "frameSize": 64
+              }
+            },
+            "actionOnly": true
           }
         ],
         "female": [
           {
             "sheet": "assets/lpc/characters/quiver/walk/quiver.png",
-            "zIndex": 8
+            "zIndex": 8,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/quiver/slash/quiver.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/quiver/thrust/quiver.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/quiver/spellcast/quiver.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/quiver/shoot/quiver.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/quiver/hurt/quiver.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/legs/pants/thin/walk.png",
@@ -614,11 +1520,55 @@
             "recolor": {
               "material": "cloth",
               "palette": "leather"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/legs/pants/thin/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
             "sheet": "assets/lpc/characters/feet/boots/basic/thin/walk.png",
-            "zIndex": 25
+            "zIndex": 25,
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/feet/boots/basic/thin/hurt.png",
+                "frameSize": 64
+              }
+            }
           },
           {
             "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/female/walk.png",
@@ -626,6 +1576,28 @@
             "recolor": {
               "material": "cloth",
               "palette": "forest"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/female/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/female/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/female/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/female/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/female/hurt.png",
+                "frameSize": 64
+              }
             }
           },
           {
@@ -634,10 +1606,481 @@
             "recolor": {
               "material": "cloth",
               "palette": "forest"
+            },
+            "anims": {
+              "slash": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/slash.png",
+                "frameSize": 64
+              },
+              "thrust": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/thrust.png",
+                "frameSize": 64
+              },
+              "spellcast": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/spellcast.png",
+                "frameSize": 64
+              },
+              "shoot": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/shoot.png",
+                "frameSize": 64
+              },
+              "hurt": {
+                "sheet": "assets/lpc/characters/hat/cloth/hood/adult/hurt.png",
+                "frameSize": 64
+              }
             }
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/universal/background/shoot/medium.png",
+            "zIndex": -1,
+            "anims": {
+              "shoot": {
+                "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/universal/background/shoot/medium.png",
+                "frameSize": 64
+              }
+            },
+            "actionOnly": true
+          },
+          {
+            "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/universal/foreground/shoot/medium.png",
+            "zIndex": 141,
+            "anims": {
+              "shoot": {
+                "sheet": "assets/lpc/characters/weapon/ranged/bow/normal/universal/foreground/shoot/medium.png",
+                "frameSize": 64
+              }
+            },
+            "actionOnly": true
           }
         ]
       }
+    },
+    "monster": {
+      "skeleton": [
+        {
+          "sheet": "assets/lpc/characters/weapon/sword/arming/universal/bg/walk/steel.png",
+          "zIndex": 9,
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/weapon/sword/arming/attack_slash/bg/steel.png",
+              "frameSize": 128
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/weapon/sword/arming/universal/bg/hurt/steel.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/body/bodies/skeleton/walk.png",
+          "zIndex": 10,
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/body/bodies/skeleton/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/body/bodies/skeleton/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/body/bodies/skeleton/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/body/bodies/skeleton/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/body/bodies/skeleton/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/head/heads/skeleton/adult/walk.png",
+          "zIndex": 100,
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/head/heads/skeleton/adult/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/head/heads/skeleton/adult/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/head/heads/skeleton/adult/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/head/heads/skeleton/adult/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/head/heads/skeleton/adult/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/weapon/sword/arming/universal/fg/walk/steel.png",
+          "zIndex": 140,
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/weapon/sword/arming/attack_slash/fg/steel.png",
+              "frameSize": 128
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/weapon/sword/arming/universal/fg/hurt/steel.png",
+              "frameSize": 64
+            }
+          }
+        }
+      ],
+      "goblin": [
+        {
+          "sheet": "assets/lpc/characters/weapon/magic/simple/background/walk/simple.png",
+          "zIndex": 9,
+          "anims": {
+            "thrust": {
+              "sheet": "assets/lpc/characters/weapon/magic/simple/background/thrust/simple.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/weapon/magic/simple/background/spellcast/simple.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/weapon/magic/simple/background/hurt/simple.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/body/bodies/male/walk.png",
+          "zIndex": 10,
+          "recolor": {
+            "material": "body",
+            "palette": "green"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/body/bodies/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/body/bodies/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/body/bodies/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/body/bodies/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/body/bodies/male/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
+          "zIndex": 20,
+          "recolor": {
+            "material": "cloth",
+            "palette": "brown"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/legs/pants/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/legs/pants/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/legs/pants/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/legs/pants/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/legs/pants/male/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/walk.png",
+          "zIndex": 35,
+          "recolor": {
+            "material": "cloth",
+            "palette": "leather"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/torso/clothes/longsleeve/longsleeve/male/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/head/heads/goblin/adult/walk.png",
+          "zIndex": 100,
+          "recolor": {
+            "material": "body",
+            "palette": "green"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/head/heads/goblin/adult/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/head/heads/goblin/adult/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/head/heads/goblin/adult/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/head/heads/goblin/adult/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/head/heads/goblin/adult/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/walk/simple.png",
+          "zIndex": 140,
+          "anims": {
+            "thrust": {
+              "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/thrust/simple.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/spellcast/simple.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/weapon/magic/simple/foreground/hurt/simple.png",
+              "frameSize": 64
+            }
+          }
+        }
+      ],
+      "orc": [
+        {
+          "sheet": "assets/lpc/characters/weapon/blunt/waraxe/behind/walk/waraxe.png",
+          "zIndex": 9,
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/weapon/blunt/waraxe/attack_slash/behind/waraxe.png",
+              "frameSize": 192
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/body/bodies/male/walk.png",
+          "zIndex": 10,
+          "recolor": {
+            "material": "body",
+            "palette": "dark_green"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/body/bodies/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/body/bodies/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/body/bodies/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/body/bodies/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/body/bodies/male/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/legs/pants/male/walk.png",
+          "zIndex": 20,
+          "recolor": {
+            "material": "cloth",
+            "palette": "black"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/legs/pants/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/legs/pants/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/legs/pants/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/legs/pants/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/legs/pants/male/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/feet/boots/basic/male/walk.png",
+          "zIndex": 25,
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/feet/boots/basic/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/feet/boots/basic/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/feet/boots/basic/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/feet/boots/basic/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/feet/boots/basic/male/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/torso/armour/leather/male/walk.png",
+          "zIndex": 60,
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/torso/armour/leather/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/torso/armour/leather/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/torso/armour/leather/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/torso/armour/leather/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/torso/armour/leather/male/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/head/heads/orc/male/walk.png",
+          "zIndex": 100,
+          "recolor": {
+            "material": "body",
+            "palette": "dark_green"
+          },
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/head/heads/orc/male/slash.png",
+              "frameSize": 64
+            },
+            "thrust": {
+              "sheet": "assets/lpc/characters/head/heads/orc/male/thrust.png",
+              "frameSize": 64
+            },
+            "spellcast": {
+              "sheet": "assets/lpc/characters/head/heads/orc/male/spellcast.png",
+              "frameSize": 64
+            },
+            "shoot": {
+              "sheet": "assets/lpc/characters/head/heads/orc/male/shoot.png",
+              "frameSize": 64
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/head/heads/orc/male/hurt.png",
+              "frameSize": 64
+            }
+          }
+        },
+        {
+          "sheet": "assets/lpc/characters/weapon/blunt/waraxe/walk/waraxe.png",
+          "zIndex": 140,
+          "anims": {
+            "slash": {
+              "sheet": "assets/lpc/characters/weapon/blunt/waraxe/attack_slash/waraxe.png",
+              "frameSize": 192
+            },
+            "hurt": {
+              "sheet": "assets/lpc/characters/weapon/blunt/waraxe/hurt/waraxe.png",
+              "frameSize": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  "creatures": {
+    "bat": {
+      "sheet": "assets/lpc/creatures/bat.png",
+      "frameSize": 64,
+      "moveFrames": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "attackFrames": [
+        4,
+        5,
+        6
+      ]
     }
   },
   "tileset": "assets/lpc/tiles/terrain_atlas.png"

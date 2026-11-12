@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import es from '../../data/i18n/es.json';
-import { CATALOG, CLASS_IDS, defaultAppearance, isValidAppearance, resolveLayers } from './catalog';
+import { allLayers, CATALOG, CLASS_IDS, defaultAppearance, isValidAppearance, monsterLayers, resolveLayers } from './catalog';
 
 const PUBLIC = fileURLToPath(new URL('../../public/', import.meta.url));
 
@@ -40,6 +40,9 @@ test('every catalog sheet exists in public/', () => {
   for (const ls of Object.values(CATALOG.layers.body)) for (const l of ls) sheets.add(l.sheet);
   for (const l of Object.values(CATALOG.layers.hair)) sheets.add(l.sheet);
   for (const byBody of Object.values(CATALOG.layers.outfit)) for (const ls of Object.values(byBody)) for (const l of ls) sheets.add(l.sheet);
+  for (const ls of Object.values(CATALOG.layers.monster)) for (const l of ls) sheets.add(l.sheet);
+  for (const c of Object.values(CATALOG.creatures)) sheets.add(c.sheet);
+  for (const l of allLayers()) for (const a of Object.values(l.anims ?? {})) sheets.add(a.sheet);
   for (const s of sheets) expect(existsSync(PUBLIC + s), s).toBe(true);
 });
 
@@ -52,4 +55,18 @@ test('every labelKey exists in es.json', () => {
   const keys = [...CATALOG.bodies, ...CATALOG.skins, ...CATALOG.hairStyles, ...CATALOG.hairColors].map((o) => o.labelKey);
   for (const c of CLASS_IDS) keys.push(`class.${c}`, `class.${c}.role`);
   for (const k of keys) expect(texts[k], k).toBeTypeOf('string');
+});
+
+test('every class has slash/spellcast/shoot/thrust coverage for its body and the monsters exist', () => {
+  const layers = resolveLayers('warrior', defaultAppearance('warrior'));
+  expect(layers.find((l) => l.sheet.includes('bodies/male/walk'))?.anims?.slash).toBeDefined();
+  expect(resolveLayers('explorer', defaultAppearance('explorer')).some((l) => l.actionOnly && l.anims?.shoot)).toBe(true);
+  for (const id of ['skeleton', 'goblin', 'orc']) expect(monsterLayers(id).length).toBeGreaterThan(2);
+  expect(CATALOG.creatures.bat?.frameSize).toBe(64);
+  expect(monsterLayers('nope')).toEqual([]);
+});
+
+test('oversize anim sheets have a frame size above 64', () => {
+  const sword = resolveLayers('warrior', defaultAppearance('warrior')).find((l) => l.sheet.includes('sword/arming/universal/fg'));
+  expect(sword?.anims?.slash?.frameSize).toBe(128);
 });

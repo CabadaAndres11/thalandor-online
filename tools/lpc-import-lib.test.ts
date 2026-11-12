@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import {
   buildCatalog,
   creditFor,
+  discoverAnims,
   importLpc,
   parseCsv,
   readCredits,
@@ -130,4 +131,68 @@ test('stripColorChunks removes colour-management chunks and keeps the image data
 test('stripColorChunks leaves non-PNG data untouched', () => {
   const data = Buffer.from('not a png');
   expect(stripColorChunks(data)).toEqual(data);
+});
+
+describe('combat assets', () => {
+  const combatSel: LpcSelection = {
+    ...selection,
+    outfits: {
+      warrior: {
+        male: [
+          {
+            src: 'weapon/sword/arming/universal/fg/walk/steel.png',
+            z: 140,
+            anims: { slash: 'weapon/sword/arming/attack_slash/fg/steel.png' },
+          },
+        ],
+      },
+    },
+    monsterLooks: { skeleton: [{ src: 'body/bodies/male/walk.png', z: 10, recolor: 'body', palette: 'amber' }] },
+    creatures: {
+      bat: {
+        file: 'creatures/bat.png',
+        moveFrames: [0, 1, 2, 3, 4],
+        attackFrames: [5, 6],
+        credit: { file: 'creatures/bat.png', authors: ['Charles Sanchez'], licenses: ['CC-BY-SA 3.0'], urls: ['https://example.org/bat'] },
+      },
+    },
+  };
+
+  test('discovers action animations next to walk sheets with their frame size', () => {
+    const cat = buildCatalog(combatSel, readPalettes(REPO, combatSel), (l) => discoverAnims(REPO, l));
+    expect(cat.layers.body.male![0]!.anims).toEqual({ slash: { sheet: 'assets/lpc/characters/body/bodies/male/slash.png', frameSize: 64 } });
+  });
+
+  test('explicit anim override uses the oversize frame size', () => {
+    const cat = buildCatalog(combatSel, readPalettes(REPO, combatSel), (l) => discoverAnims(REPO, l));
+    expect(cat.layers.outfit.warrior!.male![0]!.anims?.slash).toEqual({
+      sheet: 'assets/lpc/characters/weapon/sword/arming/attack_slash/fg/steel.png',
+      frameSize: 128,
+    });
+  });
+
+  test('action-only layers (bow) keep the flag and their explicit sheet', () => {
+    const sel: LpcSelection = { ...combatSel, outfits: { explorer: { male: [{ src: 'body/bodies/male/slash.png', z: 141, actionOnly: true, anims: { slash: 'body/bodies/male/slash.png' } }] } } };
+    const cat = buildCatalog(sel, readPalettes(REPO, sel), (l) => discoverAnims(REPO, l));
+    const layer = cat.layers.outfit.explorer!.male![0]!;
+    expect(layer.actionOnly).toBe(true);
+    expect(layer.anims?.slash?.sheet).toBe('assets/lpc/characters/body/bodies/male/slash.png');
+  });
+
+  test('monster looks keep a fixed body palette', () => {
+    const cat = buildCatalog(combatSel, readPalettes(REPO, combatSel));
+    expect(cat.layers.monster.skeleton![0]!.recolor).toEqual({ material: 'body', palette: 'amber' });
+  });
+
+  test('creatures and action sheets are copied and credited', () => {
+    const out = mkdtempSync(join(tmpdir(), 'lpc-out-'));
+    importLpc({ repoDir: REPO, tilesDir: REPO, creaturesDir: REPO, outRoot: out, selection: combatSel });
+    expect(existsSync(join(out, 'public/assets/lpc/creatures/bat.png'))).toBe(true);
+    expect(existsSync(join(out, 'public/assets/lpc/characters/weapon/sword/arming/attack_slash/fg/steel.png'))).toBe(true);
+    expect(existsSync(join(out, 'public/assets/lpc/characters/body/bodies/male/slash.png'))).toBe(true);
+    const cat = JSON.parse(readFileSync(join(out, 'data/appearance/catalog.json'), 'utf8'));
+    expect(cat.creatures.bat).toEqual({ sheet: 'assets/lpc/creatures/bat.png', frameSize: 64, moveFrames: [0, 1, 2, 3, 4], attackFrames: [5, 6] });
+    const credits = readFileSync(join(out, 'CREDITS.md'), 'utf8');
+    for (const s of ['Charles Sanchez', 'Erin', 'attack_slash/fg/steel.png', 'body/bodies/male/slash.png']) expect(credits).toContain(s);
+  });
 });

@@ -13,7 +13,7 @@ export interface Appearance {
   hairColor: string;
 }
 
-export const CATALOG = catalogJson as AppearanceCatalog;
+export const CATALOG = catalogJson as unknown as AppearanceCatalog;
 
 const has = (list: { id: string }[], id: unknown) => typeof id === 'string' && list.some((o) => o.id === id);
 
@@ -45,4 +45,20 @@ export function resolveLayers(classId: ClassId, a: Appearance): LayerRef[] {
     ...(CATALOG.layers.hair[a.hairStyle] ? [CATALOG.layers.hair[a.hairStyle]!] : []),
   ];
   return layers.sort((x, y) => x.zIndex - y.zIndex);
+}
+
+/** Fixed layer stack of a humanoid monster, back to front ([] if unknown). */
+export function monsterLayers(id: string): LayerRef[] {
+  const ls = Object.hasOwn(CATALOG.layers.monster, id) ? CATALOG.layers.monster[id]! : [];
+  return [...ls].sort((x, y) => x.zIndex - y.zIndex);
+}
+
+/** Every layer in the catalog (players and monsters). */
+export function allLayers(): LayerRef[] {
+  const out: LayerRef[] = [];
+  for (const ls of Object.values(CATALOG.layers.body)) out.push(...ls);
+  out.push(...Object.values(CATALOG.layers.hair));
+  for (const byBody of Object.values(CATALOG.layers.outfit)) for (const ls of Object.values(byBody)) out.push(...ls);
+  for (const ls of Object.values(CATALOG.layers.monster)) out.push(...ls);
+  return out;
 }

@@ -27,8 +27,10 @@ export function recolorPixels(data: Uint8ClampedArray, map: Map<number, number>)
 }
 
 /** Which palette a layer needs for this appearance, or null if it is drawn as-is. */
-export function layerPalette(recolor: Recolor | undefined, a: Appearance): { material: Material; name: string } | null {
+export function layerPalette(recolor: Recolor | undefined, a?: Appearance): { material: Material; name: string } | null {
   if (!recolor) return null;
+  if (recolor.palette) return { material: recolor.material, name: recolor.palette };
+  if (!a) return null;
   if (recolor.material === 'body') return { material: 'body', name: a.skin };
   if (recolor.material === 'hair') return { material: 'hair', name: a.hairColor };
   return recolor.palette ? { material: 'cloth', name: recolor.palette } : null;
