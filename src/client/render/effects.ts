@@ -20,6 +20,9 @@ const PROJECTILE_LOOK: Record<string, { color: number; radius: number; streak: b
   arrow: { color: 0xe8dcc0, radius: 2, streak: true },
   net: { color: 0xc8a46a, radius: 6, streak: false },
   nature: { color: 0x7cd05a, radius: 4, streak: false },
+  fire: { color: 0xf07a30, radius: 6, streak: false },
+  frost: { color: 0x9ad0f5, radius: 4, streak: false },
+  holy_fire: { color: 0xf0b040, radius: 5, streak: false },
 };
 
 const TEXT_STYLE: Record<'damage' | 'crit' | 'heal' | 'miss', { color: string; size: number }> = {
@@ -39,6 +42,7 @@ interface Proj {
 /** Combat visuals driven by host events: floating numbers, projectiles, areas and ground warnings. */
 export class Effects {
   private readonly projectiles = new Map<number, Proj>();
+  private readonly zones = new Set<Phaser.GameObjects.Arc>();
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -55,7 +59,7 @@ export class Effects {
           const f = floatingText(e);
           const p = this.unitPos(e.dst);
           if (!f || !p) break;
-          const text = f.text.startsWith('hud.') ? t(f.text) : f.text;
+          const text = (f.text.startsWith('hud.') ? t(f.text) : f.text) + (e.blocked ? ` (${t('hud.blocked')})` : '');
           const style = TEXT_STYLE[f.kind];
           const hurtSelf = e.dst === this.selfId() && !e.heal && f.kind !== 'miss';
           this.floatText(p, text, hurtSelf ? '#ff6a5a' : style.color, style.size);
@@ -97,6 +101,36 @@ export class Effects {
         case 'area':
           this.ring({ x: e.x, y: e.y }, e.r, SCHOOL_COLOR[e.school], 350);
           break;
+        case 'zone': {
+          const color = SCHOOL_COLOR[e.school];
+          const z = this.scene.add.circle(e.x, e.y, e.r, color, 0.16).setStrokeStyle(2, color, 0.7).setDepth(1);
+          this.zones.add(z);
+          this.scene.tweens.add({
+            targets: z,
+            alpha: 0.45,
+            yoyo: true,
+            repeat: -1,
+            duration: 500,
+          });
+          this.scene.time.delayedCall(e.ms, () => {
+            this.zones.delete(z);
+            z.destroy();
+          });
+          break;
+        }
+        case 'levelup': {
+          const p = this.unitPos(e.id);
+          if (!p) break;
+          this.ring(p, 40, 0xf2d060, 700);
+          this.ring(p, 24, 0xfff0a0, 500);
+          this.floatText(p, t('hud.level', { level: e.level }), '#ffd84a', 24);
+          break;
+        }
+        case 'proc': {
+          const p = this.unitPos(e.id);
+          if (p) this.floatText(p, t(`passive.${e.passiveId}`), '#ffd84a', 18);
+          break;
+        }
         default:
           break;
       }
@@ -119,6 +153,8 @@ export class Effects {
   destroy(): void {
     for (const p of this.projectiles.values()) p.obj.destroy();
     this.projectiles.clear();
+    for (const z of this.zones) z.destroy();
+    this.zones.clear();
   }
 
   private ring(at: Vec2, r: number, color: number, ms: number): void {

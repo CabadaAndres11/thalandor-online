@@ -83,3 +83,27 @@ test('keeps newer fields written elsewhere and only patches the location', async
   expect(saved.appearance.hairColor).toBe('white');
   expect(saved.lastLocation).toEqual({ mapId: 'test-arena', x: 100, y: 200 });
 });
+
+test('saveProgress stores level, xp and choices without losing a concurrent location save', async () => {
+  const { store, saver } = await setup();
+  const p = {
+    level: 4,
+    xp: 12,
+    xpToNext: 0,
+    attributes: { strength: 0, agility: 0, intellect: 3, stamina: 0, spirit: 0 },
+    freeAttrPoints: 12,
+    talents: { arcane_1a: 2 },
+    freeTalentPoints: 1,
+    specId: null,
+    hotbar: ['mage_blink', null, null, null],
+    slots: { lmb: null, rmb: null, s1: null, s2: null, s3: null, s4: null },
+    unlocked: [],
+    passives: [],
+    stats: {},
+  };
+  void saver.saveNow();
+  await saver.saveProgress(p);
+  const saved = (await store.get('id-1'))!;
+  expect(saved).toMatchObject({ level: 4, xp: 12, attributes: p.attributes, talents: p.talents, specId: null, hotbar: p.hotbar });
+  expect(saved.lastLocation).toEqual({ mapId: 'test-arena', x: 100, y: 200 });
+});

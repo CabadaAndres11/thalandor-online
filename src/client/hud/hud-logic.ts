@@ -31,9 +31,9 @@ export interface HotbarSlot {
 const KEYS: Record<Slot, string> = { lmb: 'CI', rmb: 'CD', s1: '1', s2: '2', s3: '3', s4: '4', dodge: '␣' };
 const ORDER: Slot[] = ['lmb', 'rmb', 's1', 's2', 's3', 's4', 'dodge'];
 
-/** The 7 hotbar squares of a class, in display order. */
-export function hotbarFor(classId: string): HotbarSlot[] {
-  const slots = CLASSES[classId]?.slots;
+/** The 7 hotbar squares, in display order: the given loadout (from the host) or the class defaults. */
+export function hotbarFor(classId: string, loadout?: Partial<Record<Exclude<Slot, 'dodge'>, string | null>>): HotbarSlot[] {
+  const slots = loadout ?? CLASSES[classId]?.slots;
   return ORDER.map((slot) => {
     const id = slot === 'dodge' ? 'dodge' : (slots?.[slot] ?? null);
     const ab = id ? ability(id) : undefined;
@@ -47,6 +47,12 @@ export function hotbarFor(classId: string): HotbarSlot[] {
       nameKey: ab?.nameKey ?? null,
     };
   });
+}
+
+/** Experience bar: fraction of the level done and its label. */
+export function xpView(p: { level: number; xp: number; xpToNext: number }): { fraction: number; label: string } {
+  if (p.xpToNext <= 0) return { fraction: 1, label: `${p.level}` };
+  return { fraction: Math.min(1, p.xp / p.xpToNext), label: `${p.xp} / ${p.xpToNext}` };
 }
 
 /** Text and style of a floating combat number; i18n keys for dodge/absorb. null = nothing to show. */
