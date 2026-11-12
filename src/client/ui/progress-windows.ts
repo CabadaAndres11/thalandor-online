@@ -13,6 +13,8 @@ export interface ProgressWindowsOptions {
   request: (req: ProgressRequest) => void;
   /** True while the chat has focus: window keys are ignored. */
   isTyping: () => boolean;
+  /** Equipment panel for the character window. */
+  equipment?: () => HTMLElement;
 }
 
 type Which = 'character' | 'talents' | 'spec';
@@ -80,6 +82,11 @@ export class ProgressWindows {
       this.show('spec');
       return;
     }
+    if (this.open) this.render();
+  }
+
+  /** Re-renders the open window (e.g. after the inventory changed). */
+  refresh(): void {
     if (this.open) this.render();
   }
 
@@ -204,6 +211,8 @@ export class ProgressWindows {
     }
     body.append(attrs, stats, right);
     this.root.append(body);
+    const eq = this.opts.equipment?.();
+    if (eq) this.root.append(el('h3', 'win-sub', t('inventory.equipment')), eq, el('div', 'muted', t('inventory.unequipHelp')));
   }
 
   private renderTalents(p: ProgressInfo): void {

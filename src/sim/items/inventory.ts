@@ -4,6 +4,7 @@ import type { World } from '../world';
 import {
   EQUIP_SLOTS,
   isPotion,
+  ITEM_RULES,
   itemBase,
   itemValue,
   LOOT,
@@ -128,7 +129,10 @@ export function merchantStock(u: Unit): StockEntry[] {
   if (!u.classId) return out;
   const level = Math.max(1, Math.min(30, u.level));
   const seen = new Set<string>();
-  for (const b of basesFor(level, { classId: u.classId })) {
+  // The class's own armour type first (a warrior is offered plate, not cloth).
+  const own = ITEM_RULES.classes[u.classId]?.armor;
+  const bases = basesFor(level, { classId: u.classId }).sort((x, y) => Number(y.kind === own) - Number(x.kind === own));
+  for (const b of bases) {
     if (seen.has(b.slot) || out.length >= 2 + LOOT.merchant.stockCommons) continue;
     seen.add(b.slot);
     out.push({ id: b.id, baseId: b.id, price: Math.round(itemValue({ uid: 'x', baseId: b.id, level, rarity: 'common', affixes: [], durability: 100 }) * 1.0) });

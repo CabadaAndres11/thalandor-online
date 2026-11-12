@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
-import { CATALOG, defaultAppearance, type Appearance, type ClassId } from '../../appearance/catalog';
+import { CATALOG, defaultAppearance, type Appearance, type ClassId, type GearLooks } from '../../appearance/catalog';
+import { isPotion } from '../../sim/items/defs';
+import { itemName } from '../ui/item-logic';
+import { t } from '../i18n';
 import type { TiledMap } from '../../sim/collision-map';
 import { TICK_MS } from '../../sim/constants';
 import { MONSTERS } from '../../sim/combat/defs';
@@ -21,11 +24,18 @@ export interface GameSceneData {
   hud: Hud;
   /** True while the chat box has focus: game keys are ignored. */
   isTyping: () => boolean;
+  /** E pressed next to the merchant. */
+  onMerchant?: () => void;
 }
 
 const SELF_KEY = -1;
 const CAMERA_ZOOM = 1.5;
-const playerLook = (classId: ClassId, a: Appearance) => `p|${classId}|${a.body}|${a.skin}|${a.hairStyle}|${a.hairColor}`;
+const playerLook = (classId: ClassId, a: Appearance, gear: GearLooks = {}) =>
+  `p|${classId}|${a.body}|${a.skin}|${a.hairStyle}|${a.hairColor}|${Object.entries(gear).sort().map(([s, l]) => `${s}:${l}`).join(',')}`;
+const MERCHANT_KEY = -2;
+const MERCHANT_LOOK: GearLooks = { chest: 'chest_shirt_maroon', head: 'head_cap_brown', legs: 'legs_pants_brown' };
+const MERCHANT_RANGE = 64;
+const RARITY_TINT: Record<string, number> = { common: 0xe8e4d8, uncommon: 0x5fd068, rare: 0x4a90f0, epic: 0xb06af0 };
 /** KeyboardEvent.code -> slot. Read from DOM events (not Phaser keys) so text typed in the chat never casts. */
 const SLOT_KEYS: Record<string, PressSlot> = { Digit1: 's1', Digit2: 's2', Digit3: 's3', Digit4: 's4', Numpad1: 's1', Numpad2: 's2', Numpad3: 's3', Numpad4: 's4', Space: 'dodge' };
 
@@ -70,7 +80,17 @@ export class GameScene extends Phaser.Scene {
     const onKey = (e: KeyboardEvent) => {
       const slot = SLOT_KEYS[e.code];
       const target = e.target as HTMLElement | null;
-      if (!slot || e.repeat || (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA'))) return;
+      if (e.repeat || (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) || this.data_.isTyping()) return;
+      if (e.code === 'KeyQ' || e.code === 'KeyR') {
+        this.data_.session.requestProgress({ k: 'use', potion: e.code === 'KeyQ' ? 'health' : 'resource' });
+        this.data_.hud.flash(e.code === 'KeyQ' ? 'potionQ' : 'potionR');
+        return;
+      }
+      if (e.code === 'KeyE' && this.nearMerchant()) {
+        this.data_.onMerchant?.();
+        return;
+      }
+      if (!slot) return;
       if (slot === 'dodge') e.preventDefault();
       this.pressSlot(slot);
     };
@@ -104,6 +124,11 @@ export class GameScene extends Phaser.Scene {
       clearInterval(this.inputTimer);
       for (const a of this.avatars.values()) a.destroy();
       this.avatars.clear();
+      for (const o of this.lootObjects.values()) {
+        o.glow.destroy();
+        o.label.destroy();
+      }
+      this.lootObjects.clear();
       this.effects.destroy();
       hud.hide();
     });
@@ -112,6 +137,50 @@ export class GameScene extends Phaser.Scene {
   /** Whether the pointer was pressed on the game canvas (not on HTML UI on top of it). */
   private onCanvas(p: Phaser.Input.Pointer): boolean {
     return !p.downElement || p.downElement === this.game.canvas;
+  }
+
+  private nearMerchant(): boolean {
+    const m = this.data_.session.merchant;
+    const s = this.screenPos.get(SELF_KEY);
+    return !!m && !!s && Math.hypot(m.x - s.x, m.y - s.y) <= MERCHANT_RANGE;
+  }
+
+  /** The merchant NPC (drawn like a player, standing still). */
+  private drawMerchant(now: number): void {
+    const m = this.data_.session.merchant;
+    if (!m) return;
+    const a = defaultAppearance('cleric');
+    const avatar = this.avatarForPlayer(MERCHANT_KEY, t('merchant.name'), 'cleric', a, MERCHANT_LOOK);
+    avatar.setState({ pos: m, facing: 2, moving: false, action: null, name: t('merchant.name'), hp: 1, maxHp: 1, state: 'alive', showBar: false, hostile: false }, now);
+  }
+
+  private lootObjects = new Map<number, { glow: Phaser.GameObjects.Arc; label: Phaser.GameObjects.Text }>();
+
+  /** Own drops on the ground: a glow in the rarity colour and the item's name. */
+  private drawLoot(): void {
+    const drops = this.data_.session.loot;
+    for (const [id, o] of this.lootObjects) {
+      if (!drops.has(id)) {
+        o.glow.destroy();
+        o.label.destroy();
+        this.lootObjects.delete(id);
+      }
+    }
+    for (const [id, d] of drops) {
+      if (this.lootObjects.has(id)) continue;
+      const item = d.item;
+      const tint = item ? (isPotion(item) ? 0xd04040 : RARITY_TINT[item.rarity]!) : 0xf0c040;
+      const text = item ? itemName(item) : t('inventory.gold', { n: d.gold ?? 0 });
+      const glow = this.add.circle(d.x, d.y, item ? 5 : 4, tint, 0.9).setStrokeStyle(2, 0xffffff, 0.5).setDepth(d.y - 1);
+      this.tweens.add({ targets: glow, alpha: 0.45, yoyo: true, repeat: -1, duration: 600 });
+      const label = this.add
+        .text(d.x, d.y - 8, text, { fontFamily: 'Georgia, serif', fontSize: '14px', color: '#' + tint.toString(16).padStart(6, '0'), stroke: '#101010', strokeThickness: 3 })
+        .setOrigin(0.5, 1)
+        .setScale(0.5)
+        .setResolution(2)
+        .setDepth(1e6 - 1);
+      this.lootObjects.set(id, { glow, label });
+    }
   }
 
   private aim(): Vec2 {
@@ -154,10 +223,14 @@ export class GameScene extends Phaser.Scene {
     const rs = session.renderState(now);
     const seen = new Set<EntityId>();
     this.playerIds.clear();
+    if (session.merchant) {
+      seen.add(MERCHANT_KEY);
+      this.drawMerchant(now);
+    }
     if (rs.self) {
       seen.add(SELF_KEY);
       this.screenPos.set(SELF_KEY, rs.self.pos);
-      this.avatarForPlayer(SELF_KEY, self.name, self.classId, self.appearance).setState(
+      this.avatarForPlayer(SELF_KEY, self.name, self.classId, self.appearance, session.selfGear).setState(
         { ...rs.self, name: self.name, showBar: false, hostile: false, faded: !!rs.self.stealth },
         now,
       );
@@ -180,17 +253,21 @@ export class GameScene extends Phaser.Scene {
         this.screenPos.delete(id);
       }
     }
+    this.drawLoot();
     this.effects.update(delta, now);
     hud.update(rs, session.meState);
+    hud.setPotions(session.inventory, session.potionCooldownMs(now));
+    hud.setMerchantPrompt(this.nearMerchant());
   }
 
   private playerAvatar(id: EntityId, o: UnitRender): Avatar {
     const classId = (o.classId ?? 'warrior') as ClassId;
-    return this.avatarForPlayer(id, o.name, classId, o.appearance ?? defaultAppearance(classId));
+    return this.avatarForPlayer(id, o.name, classId, o.appearance ?? defaultAppearance(classId), o.gear ?? {});
   }
 
-  private avatarForPlayer(id: EntityId, name: string, classId: ClassId, appearance: Appearance): Avatar {
-    return this.avatarFor(id, playerLook(classId, appearance), () => new LpcAvatar(this, readyLayers(classId, appearance), name, playerLook(classId, appearance)));
+  private avatarForPlayer(id: EntityId, name: string, classId: ClassId, appearance: Appearance, gear: GearLooks = {}): Avatar {
+    const key = playerLook(classId, appearance, gear);
+    return this.avatarFor(id, key, () => new LpcAvatar(this, readyLayers(classId, appearance, gear), name, key));
   }
 
   private monsterAvatar(id: EntityId, o: UnitRender): Avatar | null {

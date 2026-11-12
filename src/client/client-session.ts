@@ -6,7 +6,8 @@ import type { CombatEvent } from '../sim/combat/events';
 import { ability, CLASSES } from '../sim/combat/defs';
 import type { ActionAnim } from '../appearance/catalog-types';
 import { decodeHost, encode, type NetCharacter, type RejectReason, type RosterEntry } from '../net/protocol';
-import type { ProgressInfo, ProgressRequest, RequestResult } from '../sim/progression/requests';
+import type { InventoryInfo, ProgressInfo, ProgressRequest, RequestResult } from '../sim/progression/requests';
+import type { LootDrop } from '../sim/items/loot-world';
 import { dodgeDirection } from '../sim/movement';
 import { facingFromVector, DOWN, type Facing } from '../sim/facing';
 import type { Appearance, ClassId } from '../appearance/catalog';
@@ -27,6 +28,7 @@ export interface ClientEvents {
   roster: { players: RosterEntry[] };
   combat: { list: CombatEvent[] };
   progress: { p: ProgressInfo };
+  inventory: { inv: InventoryInfo };
   progressRefused: { reason: Exclude<RequestResult, 'ok'> };
   disconnected: Record<string, never>;
 }
@@ -47,6 +49,8 @@ export interface UnitRender {
   action: { anim: ActionAnim; startedAt: number } | null;
   classId?: ClassId;
   appearance?: Appearance;
+  /** Gear look per visible slot. */
+  gear?: Record<string, string>;
   stealth?: boolean;
 }
 
@@ -83,7 +87,7 @@ export class ClientSession {
   private readonly predictor: Predictor;
   private readonly buffer = new SnapshotBuffer();
   private readonly clock = new ServerClock();
-  private readonly listeners: Listeners = { welcome: [], rejected: [], chat: [], joined: [], left: [], roster: [], combat: [], progress: [], progressRefused: [], disconnected: [] };
+  private readonly listeners: Listeners = { welcome: [], rejected: [], chat: [], joined: [], left: [], roster: [], combat: [], progress: [], inventory: [], progressRefused: [], disconnected: [] };
   private readonly classId: string;
   private seq = 0;
   private pressSeq = 0;
@@ -103,6 +107,12 @@ export class ClientSession {
   private localAction: { anim: ActionAnim; startedAt: number } | null = null;
   private me: MeSnapshot | null = null;
   private prog: ProgressInfo | null = null;
+  private inv: InventoryInfo | null = null;
+  private invAt = 0;
+  /** Own drops on the ground, by id. */
+  readonly loot = new Map<number, LootDrop>();
+  /** Where the merchant stands, if this map has one. */
+  merchant: Vec2 | null = null;
 
   constructor(
     private readonly conn: Connection,
@@ -129,6 +139,21 @@ export class ClientSession {
   /** The host's view of this player's progress, or null before the first one. */
   get progress(): ProgressInfo | null {
     return this.prog;
+  }
+
+  /** Gold, bag and equipment as the host last reported them. */
+  get inventory(): InventoryInfo | null {
+    return this.inv;
+  }
+
+  /** Remaining potion cooldown (ms), counted down locally since the last inventory message. */
+  potionCooldownMs(localMs: number): number {
+    return this.inv ? Math.max(0, this.inv.potionCdMs - (localMs - this.invAt)) : 0;
+  }
+
+  /** Gear looks of the local player (from the roster). */
+  get selfGear(): Record<string, string> {
+    return (this.playerId !== null ? this.roster.get(this.playerId)?.gear : undefined) ?? {};
   }
 
   /** Asks the host to change the character's progress (attributes, talents, spec, hotbar). */
@@ -227,6 +252,7 @@ export class ClientSession {
       if (info) {
         r.classId = info.classId;
         r.appearance = info.appearance;
+        if (info.gear) r.gear = info.gear;
       }
       others.set(id, r);
     }
@@ -260,6 +286,7 @@ export class ClientSession {
     switch (msg.t) {
       case 'welcome':
         this.playerId = msg.playerId;
+        this.merchant = msg.merchant ?? null;
         this.emit('welcome', { playerId: msg.playerId, mapId: msg.mapId });
         break;
       case 'reject':
@@ -270,6 +297,10 @@ export class ClientSession {
         this.onSnapshot(msg.s, msg.me);
         break;
       case 'events':
+        for (const e of msg.list) {
+          if (e.e === 'loot') for (const d of e.drops) this.loot.set(d.id, d);
+          else if (e.e === 'lootGone' || e.e === 'pickup') this.loot.delete(e.id);
+        }
         this.emit('combat', { list: msg.list });
         break;
       case 'roster': {
@@ -290,6 +321,11 @@ export class ClientSession {
       case 'progress':
         this.prog = msg.p;
         this.emit('progress', { p: msg.p });
+        break;
+      case 'inventory':
+        this.inv = msg.inv;
+        this.invAt = this.now();
+        this.emit('inventory', { inv: msg.inv });
         break;
       case 'progress-refused':
         this.emit('progressRefused', { reason: msg.reason });

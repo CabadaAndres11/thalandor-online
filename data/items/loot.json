@@ -16,6 +16,6 @@
   "potion": { "healPct": 0.35, "resourcePct": 0.35, "cooldownMs": 30000, "stack": 20, "priceBase": 5, "pricePerLevel": 2 },
   "pickupRadius": 24,
   "lootTtlMs": 120000,
-  "lootScatter": 28,
+  "lootScatter": 64,
   "merchant": { "range": 64, "stockCommons": 4 }
 }

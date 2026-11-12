@@ -52,7 +52,7 @@ export function dropLoot(world: World, m: Unit): void {
 function scatter(world: World, at: Vec2): Vec2 {
   for (let i = 0; i < 8; i++) {
     const a = world.rng() * Math.PI * 2;
-    const r = LOOT.lootScatter * (0.3 + 0.7 * world.rng());
+    const r = LOOT.lootScatter * (0.6 + 0.4 * world.rng());
     const p = { x: at.x + Math.cos(a) * r, y: at.y + Math.sin(a) * r };
     if (world.isSpawnable(p, 4)) return p;
   }

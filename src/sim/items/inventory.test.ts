@@ -142,3 +142,9 @@ test('a real death (not downed) wears equipment', () => {
   expect(p.state).toBe('dead');
   expect(p.equipment.head?.durability).toBe(100 - LOOT.durabilityLossOnDeath);
 });
+
+test('the merchant offers the class own armour type first', () => {
+  const { p } = setup('warrior');
+  const kinds = merchantStock(p).filter((s) => s.baseId).map((s) => s.baseId!.split('_')[0]);
+  expect(kinds.every((k) => k === 'plate' || k === 'sword' || k === 'axe' || k === 'mace' || k === 'shield')).toBe(true);
+});

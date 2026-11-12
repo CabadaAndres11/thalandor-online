@@ -1,5 +1,7 @@
 import type { MeSnapshot } from '../../sim/world';
-import type { ProgressInfo } from '../../sim/progression/requests';
+import type { InventoryInfo, ProgressInfo } from '../../sim/progression/requests';
+import { isPotion, LOOT } from '../../sim/items/defs';
+import { POTION_ICON } from '../ui/item-logic';
 import type { RenderState } from '../client-session';
 import { t } from '../i18n';
 import { el } from '../ui/dom';
@@ -37,6 +39,8 @@ export class Hud {
   private readonly channelFill = el('div', 'channel-fill');
   private readonly banner = el('div', 'hud-banner');
   private readonly prompt = el('div', 'hud-prompt');
+  private readonly merchantPrompt = el('div', 'hud-prompt');
+  private readonly potions: { kind: 'health' | 'resource'; root: HTMLElement; count: HTMLElement; sweep: HTMLElement; label: HTMLElement }[] = [];
   private slots: SlotEl[] = [];
   private classId = '';
   private loadoutKey = '';
@@ -56,7 +60,26 @@ export class Hud {
     xpRow.append(this.level, this.xp);
     this.channel.append(this.channelFill);
     this.channel.hidden = true;
-    this.root.append(this.banner, this.prompt, this.channel, this.combo, bars, this.bar, xpRow);
+    const row = el('div', 'hotbar-row');
+    const potions = el('div', 'hotbar potions');
+    for (const [kind, key] of [['health', 'Q'], ['resource', 'R']] as const) {
+      const root = el('div', 'slot potion empty');
+      root.dataset.slot = kind === 'health' ? 'potionQ' : 'potionR';
+      const img = el('img', 'slot-icon');
+      img.src = iconUrl(POTION_ICON[kind]!);
+      img.alt = '';
+      const sweep = el('div', 'slot-sweep');
+      const label = el('span', 'slot-cd');
+      const count = el('span', 'slot-cost', '0');
+      root.append(img, sweep, label, el('span', 'slot-key', key), count);
+      root.title = t(`item.potion.${kind}`);
+      potions.append(root);
+      this.potions.push({ kind, root, count, sweep, label });
+    }
+    row.append(this.bar, potions);
+    this.merchantPrompt.textContent = t('merchant.prompt');
+    this.merchantPrompt.hidden = true;
+    this.root.append(this.banner, this.prompt, this.merchantPrompt, this.channel, this.combo, bars, row, xpRow);
     this.root.hidden = true;
     parent.append(this.root);
   }
@@ -159,10 +182,27 @@ export class Hud {
 
   /** Brief highlight when a slot key is pressed. */
   flash(slot: string): void {
-    const s = this.slots.find((x) => x.def.slot === slot);
-    if (!s) return;
-    s.root.classList.remove('pressed');
-    void s.root.offsetWidth;
-    s.root.classList.add('pressed');
+    const root = this.slots.find((x) => x.def.slot === slot)?.root ?? this.potions.find((p) => p.root.dataset.slot === slot)?.root;
+    if (!root) return;
+    root.classList.remove('pressed');
+    void root.offsetWidth;
+    root.classList.add('pressed');
+  }
+
+  /** Potion counts in the bag and the shared cooldown. */
+  setPotions(inv: InventoryInfo | null, cdMs: number): void {
+    for (const p of this.potions) {
+      let n = 0;
+      for (const it of inv?.inventory ?? []) if (it && isPotion(it) && it.potion === p.kind) n += it.count;
+      p.count.textContent = String(n);
+      p.root.classList.toggle('empty', n === 0);
+      const view = cooldownView(cdMs, LOOT.potion.cooldownMs);
+      p.sweep.style.setProperty('--cd', String(view.fraction));
+      p.label.textContent = view.label;
+    }
+  }
+
+  setMerchantPrompt(near: boolean): void {
+    this.merchantPrompt.hidden = !near;
   }
 }

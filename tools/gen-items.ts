@@ -157,7 +157,6 @@ for (const [id, name, slot, icon, tier] of JEWELS) {
 writeFileSync('data/items/bases.json', JSON.stringify(bases, null, 2) + '\n');
 const esPath = 'data/i18n/es.json';
 const es = JSON.parse(readFileSync(esPath, 'utf8')) as Record<string, string>;
-for (const k of Object.keys(es)) if (k.startsWith('item.') && !k.startsWith('item.potion')) delete es[k];
 Object.assign(es, names);
 writeFileSync(esPath, JSON.stringify(es, null, 2) + '\n');
 console.log(`${Object.keys(bases).length} item bases`);

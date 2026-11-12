@@ -1,6 +1,6 @@
 import type { Character } from '../save/character';
 import type { CharacterStore } from '../save/store';
-import type { ProgressInfo } from '../sim/progression/requests';
+import type { InventoryInfo, ProgressInfo } from '../sim/progression/requests';
 
 export const AUTOSAVE_INTERVAL_MS = 30_000;
 
@@ -53,6 +53,11 @@ export class AutoSaver {
       specId: p.specId,
       hotbar: [...p.hotbar],
     });
+  }
+
+  /** Stores gold, bag and equipment exactly as the host reports them. */
+  saveInventory(inv: InventoryInfo): Promise<void> {
+    return this.patch({ gold: inv.gold, inventory: structuredClone(inv.inventory), equipment: structuredClone(inv.equipment) });
   }
 
   private patch(changes: Partial<Character>): Promise<void> {
