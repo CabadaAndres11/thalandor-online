@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 0.6 |
+| Versión del documento | 0.7 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.2.0 (Plan 2: personajes y estilo visual) |
 
@@ -213,7 +213,12 @@ final = (base de clase + atributos repartidos + suma de bonos planos) × (1 + su
 
 ---
 
-## 5. Combate
+## 5. Combate **[Diseñado]** (detalle de implementación en `docs/superpowers/specs/2026-11-12-plan-3-combate-design.md`)
+
+- **Esquiva común:** salto corto de 96 px con 0,3 s de invulnerabilidad y 3 s de recarga.
+- **Recarga global:** 0,5 s entre habilidades (no afecta a los ataques básicos ni a la esquiva).
+- **Levantar a un aliado derribado:** mantener **E** 3 s a su lado.
+- **Avisos en el suelo:** los ataques en área de los monstruos se marcan antes del impacto.
 
 - **Tiempo real.** Ataques y proyectiles con hitbox, y esquiva con breve invulnerabilidad.
 - **Amenaza (aggro):**
@@ -315,7 +320,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ### 9.2 HUD
 - Vida, recurso de clase y barra de experiencia.
-- Barra de habilidades con tiempos de recarga.
+- Barra de habilidades en **casillas cuadradas con icono** (clic izquierdo, clic derecho, 1–4 y Espacio), con barrido de recarga, tecla y casilla atenuada sin recurso suficiente. Los iconos son provisionales generados por código hasta tener arte definitivo (candidato gratuito: game-icons.net, CC-BY 3.0).
 - Marcos de grupo con la vida y el recurso de los compañeros.
 - Minimapa y seguimiento de misiones.
 - Números de daño flotantes, y nombre y vida sobre los enemigos.
@@ -523,4 +528,5 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 0.3 | 2026-11-11 | Plan 1 implementado: simulación host-autoritativa en Web Worker, predicción e interpolación, grupo por código con PeerJS/WebRTC, chat, mapa de prueba y despliegue en GitHub Pages. Las entradas se envían a 20/s con un temporizador fijo, independiente de los FPS. |
 | 0.4 | 2026-11-11 | Juego publicado en GitHub Pages (repositorio público CabadaAndres11/thalandor-online). Primera prueba manual del equipo en solitario y en grupo: correcta. |
 | 0.5 | 2026-11-11 | Arte: se elige LPC (capas, 64×64, tiles de 32). Apariencia: cuerpo, piel, peinado y color de pelo. Reglas de nombre. Nuevo orden de planes: el Plan 2 pasa a ser personajes y estilo visual, antes que el combate. |
+| 0.7 | 2026-11-12 | Diseño del Plan 3 (combate): fórmulas de daño, recursos, amenaza, derribo, motor de habilidades por datos, 4 monstruos de prueba (humanoides del generador LPC y criaturas del pack LPC Monsters), HUD con casillas de habilidad con icono. Hasta la progresión, todo el kit base está disponible desde nivel 1. |
 | 0.6 | 2026-11-11 | Plan 2 implementado: creación y selección de hasta 8 personajes con arte LPC por capas (pieles y pelo por recoloreado de paleta), guardado en IndexedDB con autoguardado y reaparición, exportar e importar, tiles de 32 px y mapa de prueba LPC. El explorador lleva carcaj al andar; el arco llegará con las animaciones de combate. |
