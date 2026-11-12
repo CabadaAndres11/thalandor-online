@@ -142,7 +142,8 @@ function pickAlly(world: World, u: Unit, aim: Vec2, range: number): Unit | null 
   let best: Unit | null = null;
   let bestD = Infinity;
   for (const t of world.allUnits()) {
-    if (t.team !== u.team || t.state !== 'alive') continue;
+    // The caster is the fallback target, never a candidate: an ally standing on top of it must win.
+    if (t === u || t.team !== u.team || t.state !== 'alive') continue;
     const d = dist(t.pos, aim);
     if (d <= BALANCE.combat.allyPickRadius + t.radius && d < bestD && dist(u.pos, t.pos) <= range) {
       best = t;

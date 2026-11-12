@@ -44,6 +44,15 @@ describe('shapes and targeting', () => {
     expect(cleric.hp).toBe(cleric.stats.maxHp);
   });
 
+  test('ally heal prefers an ally standing on top of the caster over the caster', () => {
+    const w = testWorld();
+    const cleric = addPlayer(w, 'cleric', { x: 300, y: 300 });
+    const ally = addPlayer(w, 'warrior', { x: 300, y: 300 });
+    ally.hp = 40;
+    useAbility(w, cleric, 'cleric_heal', { x: 300, y: 300 });
+    expect(ally.hp).toBeGreaterThan(40);
+  });
+
   test('holy nova damages enemies and heals allies around', () => {
     const w = testWorld();
     const cleric = addPlayer(w, 'cleric', { x: 300, y: 300 });

@@ -138,7 +138,9 @@ game.events.once('booted', () => void screens.showSelection());
 
 if (import.meta.env.DEV) {
   // Test hooks for Playwright (dev builds only).
-  const others = () => (current ? [...current.session.renderState(performance.now()).others.values()] : []);
+  const all = () => (current ? [...current.session.renderState(performance.now()).others.values()] : []);
+  // others()/othersFull() are about players; units() includes monsters.
+  const others = () => all().filter((o) => o.kind === 'player');
   (window as unknown as { __thalandor: unknown }).__thalandor = {
     game,
     playerCount: () => (game.scene.isActive('game') ? (game.scene.getScene('game') as GameScene).drawnPlayers : 0),
@@ -147,5 +149,16 @@ if (import.meta.env.DEV) {
     others: () => others().map((o) => ({ name: o.name, ...o.pos })),
     othersFull: () => others().map((o) => ({ name: o.name, classId: o.classId, appearance: o.appearance })),
     saveNow: () => current?.saver.saveNow(),
+    units: () => all().map((o) => ({ id: o.id, kind: o.kind, type: o.type, name: o.name, hp: o.hp, maxHp: o.maxHp, state: o.state, x: o.pos.x, y: o.pos.y })),
+    self: () => {
+      const s = current?.session.renderState(performance.now()).self;
+      return s ? { hp: s.hp, maxHp: s.maxHp, state: s.state, x: s.pos.x, y: s.pos.y } : null;
+    },
+    me: () => current?.session.meState ?? null,
+    /** World -> page pixel coordinates (the canvas sits at the page origin). */
+    toScreen: (x: number, y: number) => {
+      const cam = (game.scene.getScene('game') as GameScene).cameras.main;
+      return { x: (x - cam.worldView.x) * cam.zoom, y: (y - cam.worldView.y) * cam.zoom };
+    },
   };
 }

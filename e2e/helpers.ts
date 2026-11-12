@@ -7,6 +7,10 @@ export interface Hooks {
   others(): { name: string; x: number; y: number }[];
   othersFull(): { name: string; classId?: string; appearance?: Record<string, string> }[];
   saveNow(): Promise<void> | undefined;
+  units(): { id: number; kind: string; type: string; name: string; hp: number; maxHp: number; state: string; x: number; y: number }[];
+  self(): { hp: number; maxHp: number; state: string; x: number; y: number } | null;
+  me(): { resource: number; cd: Record<string, number> } | null;
+  toScreen(x: number, y: number): { x: number; y: number };
   game: { loop: { sleep(): void } };
 }
 declare global {
@@ -76,4 +80,18 @@ export async function holdKey(page: Page, key: string, ms: number): Promise<void
   await page.keyboard.down(key);
   await page.waitForTimeout(ms);
   await page.keyboard.up(key);
+}
+
+/** Sends a chat line (e.g. a /dev command in development builds). */
+export async function chat(page: Page, text: string): Promise<void> {
+  await page.keyboard.press('Enter');
+  await page.keyboard.type(text);
+  await page.keyboard.press('Enter');
+}
+
+/** Page coordinates of a unit (or null when not visible). */
+export async function screenOf(page: Page, pick: (u: ReturnType<Hooks['units']>[number]) => boolean): Promise<{ x: number; y: number } | null> {
+  const units = await page.evaluate(() => window.__thalandor.units());
+  const u = units.find(pick);
+  return u ? page.evaluate(([x, y]) => window.__thalandor.toScreen(x, y), [u.x, u.y] as [number, number]) : null;
 }
