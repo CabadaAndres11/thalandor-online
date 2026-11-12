@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { CATALOG, defaultAppearance, type Appearance, type ClassId, type GearLooks } from '../../appearance/catalog';
-import { isPotion } from '../../sim/items/defs';
+import { isPotion, LOOT } from '../../sim/items/defs';
 import { itemName } from '../ui/item-logic';
 import { t } from '../i18n';
 import type { TiledMap } from '../../sim/collision-map';
@@ -34,7 +34,7 @@ const playerLook = (classId: ClassId, a: Appearance, gear: GearLooks = {}) =>
   `p|${classId}|${a.body}|${a.skin}|${a.hairStyle}|${a.hairColor}|${Object.entries(gear).sort().map(([s, l]) => `${s}:${l}`).join(',')}`;
 const MERCHANT_KEY = -2;
 const MERCHANT_LOOK: GearLooks = { chest: 'chest_shirt_maroon', head: 'head_cap_brown', legs: 'legs_pants_brown' };
-const MERCHANT_RANGE = 64;
+const MERCHANT_RANGE = LOOT.merchant.range;
 const RARITY_TINT: Record<string, number> = { common: 0xe8e4d8, uncommon: 0x5fd068, rare: 0x4a90f0, epic: 0xb06af0 };
 /** KeyboardEvent.code -> slot. Read from DOM events (not Phaser keys) so text typed in the chat never casts. */
 const SLOT_KEYS: Record<string, PressSlot> = { Digit1: 's1', Digit2: 's2', Digit3: 's3', Digit4: 's4', Numpad1: 's1', Numpad2: 's2', Numpad3: 's3', Numpad4: 's4', Space: 'dodge' };

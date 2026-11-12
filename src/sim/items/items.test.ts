@@ -167,3 +167,18 @@ describe('validation', () => {
     expect(canWear({ ...good, baseId: 'ring_gold' }, 'ring2', 'mage', 30)).toBe(true);
   });
 });
+
+test('item ids do not depend on the simulation rng (no repeats across sessions)', () => {
+  const a = rollGear(ITEM_BASES.sword_arming!, 1, 'common', seq(0.5));
+  const b = rollGear(ITEM_BASES.sword_arming!, 1, 'common', seq(0.5));
+  expect(a.uid).not.toBe(b.uid);
+});
+
+test('equipment that must come off with a full bag is kept in overflow slots, never lost', () => {
+  const full = Array.from({ length: LOOT.inventorySize }, (_, i) => ({ uid: `b${i}`, baseId: 'ring_copper', level: 1, rarity: 'common', affixes: [], durability: 100 }));
+  const helm = { uid: 'helm', baseId: 'plate_head_nasal', level: 5, rarity: 'common', affixes: [], durability: 100 };
+  const b = sanitizeBelongings({ inventory: full, equipment: { head: helm } }, 'warrior', 3);
+  expect(b.inventory).toHaveLength(LOOT.inventorySize + 1);
+  expect(b.inventory.at(-1)?.uid).toBe('helm');
+  expect(sanitizeBelongings(b, 'warrior', 3).inventory.at(-1)?.uid).toBe('helm');
+});

@@ -3,7 +3,7 @@ import type { Unit } from '../combat/unit';
 import type { EntityId, Vec2 } from '../types';
 import type { World } from '../world';
 import { LOOT, type Item } from './defs';
-import { addItem } from './inventory';
+import { addItem, nearMerchant } from './inventory';
 import { rollLoot } from './roll';
 
 /** Something on the ground that only its owner sees and can pick up. */
@@ -59,9 +59,15 @@ function scatter(world: World, at: Vec2): Vec2 {
   return { ...at };
 }
 
-/** Owners pick up what they walk over; old drops vanish. */
+/** Owners pick up what they walk over; old drops vanish. Merchant windows close out of range. */
 export function stepLoot(world: World): void {
   const now = world.now;
+  for (const p of world.allPlayers()) {
+    if (p.atMerchant && (p.state !== 'alive' || !nearMerchant(world, p))) {
+      p.atMerchant = false;
+      world.markInventory(p.id);
+    }
+  }
   const keep: GroundLoot[] = [];
   for (const g of world.loot) {
     const owner = world.getPlayer(g.ownerId);
@@ -80,11 +86,13 @@ export function stepLoot(world: World): void {
       world.emit({ e: 'pickup', owner: owner.id, id: g.id, gold: g.gold });
       continue;
     }
+    const before = g.item && 'potion' in g.item ? g.item.count : 0;
     if (g.item && addItem(owner, g.item)) {
       world.markInventory(owner.id);
       world.emit({ e: 'pickup', owner: owner.id, id: g.id, item: g.item });
       continue;
     }
+    if (g.item && 'potion' in g.item && g.item.count !== before) world.markInventory(owner.id);
     if (!g.warned) {
       g.warned = true;
       world.emit({ e: 'bagFull', owner: owner.id });
@@ -94,7 +102,7 @@ export function stepLoot(world: World): void {
   world.loot = keep;
 }
 
-/** Drops a player still has on the ground (sent when it joins late or reconnects). */
+/** Drops a player has on the ground (for tests and tools; drops are lost when their owner leaves). */
 export function lootOf(world: World, ownerId: EntityId): LootDrop[] {
   return world.loot
     .filter((g) => g.ownerId === ownerId)

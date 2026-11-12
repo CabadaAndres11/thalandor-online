@@ -148,3 +148,13 @@ test('the merchant offers the class own armour type first', () => {
   const kinds = merchantStock(p).filter((s) => s.baseId).map((s) => s.baseId!.split('_')[0]);
   expect(kinds.every((k) => k === 'plate' || k === 'sword' || k === 'axe' || k === 'mace' || k === 'shield')).toBe(true);
 });
+
+test('walking away or dying closes the merchant window', () => {
+  const { w, p } = setup();
+  setMerchant(w, p, true);
+  w.drainInventory();
+  p.pos = { x: 700, y: 300 };
+  w.step();
+  expect(p.atMerchant).toBe(false);
+  expect(w.drainInventory()).toContain(p.id);
+});

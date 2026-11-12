@@ -60,13 +60,17 @@ export function sanitizeBelongings(raw: unknown, classId: string, level: number)
     else toBag.push(it);
   }
   const inventory: (Item | null)[] = Array<Item | null>(size).fill(null);
-  const rawInv = Array.isArray(r.inventory) ? r.inventory.slice(0, size) : [];
+  // Overflow slots (beyond the normal size) hold equipment that had to come off with a full bag.
+  const rawInv = Array.isArray(r.inventory) ? r.inventory.slice(0, size + EQUIP_SLOTS.length) : [];
   rawInv.forEach((x, i) => (inventory[i] = once(sanitizeItem(x))));
   for (const it of toBag) {
     const free = inventory.indexOf(null);
     if (free >= 0) inventory[free] = it;
+    else inventory.push(it);
   }
-  const gold = isInt(r.gold, 0, 1e9) ? r.gold : 0;
+  // Trailing empty overflow slots are not kept.
+  while (inventory.length > size && inventory[inventory.length - 1] === null) inventory.pop();
+  const gold = typeof r.gold === 'number' && Number.isFinite(r.gold) ? Math.max(0, Math.min(1e9, Math.floor(r.gold))) : 0;
   return { gold, inventory, equipment };
 }
 

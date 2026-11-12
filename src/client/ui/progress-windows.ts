@@ -108,7 +108,7 @@ export class ProgressWindows {
   }
 
   private key(e: KeyboardEvent): void {
-    if (this.opts.isTyping() || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (this.opts.isTyping() || e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
     const target = e.target as HTMLElement | null;
     if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
     if (e.code === 'KeyC') this.toggle('character');

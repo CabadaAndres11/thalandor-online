@@ -1,4 +1,5 @@
 import type { Rng } from '../combat/damage';
+import { CLASSES } from '../combat/defs';
 import {
   AFFIXES,
   affixRange,
@@ -17,10 +18,15 @@ import {
 
 const pick = <T>(list: readonly T[], rng: Rng): T => list[Math.min(list.length - 1, Math.floor(rng() * list.length))]!;
 
-/** A unique-enough id for an item (host side). */
-export function newUid(rng: Rng): string {
+/**
+ * A unique id for an item. It must not come from the simulation rng: that one is seeded the same in
+ * every session, so ids would repeat across sessions and the load-time dedupe would delete items.
+ */
+export function newUid(_rng?: Rng): string {
+  const bytes = new Uint8Array(10);
+  globalThis.crypto.getRandomValues(bytes);
   let s = 'i';
-  for (let i = 0; i < 10; i++) s += Math.floor(rng() * 36).toString(36);
+  for (const b of bytes) s += (b % 36).toString(36);
   return s;
 }
 
@@ -87,6 +93,8 @@ export function rollLoot(classId: string, monsterLevel: number, elite: boolean, 
     const it = rollItemFor(classId, level, elite, rng);
     if (it) items.push(it);
   }
-  if (rng() < LOOT.potionChance) items.push(newPotion(rng() < 0.5 ? 'health' : 'resource', 1, rng));
+  // Rage classes cannot drink resource potions: they only get health ones.
+  const rage = CLASSES[classId]?.resource === 'rage';
+  if (rng() < LOOT.potionChance) items.push(newPotion(rage || rng() < 0.5 ? 'health' : 'resource', 1, rng));
   return { gold: rollGold(level, elite, rng), items };
 }
