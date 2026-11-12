@@ -1,5 +1,5 @@
-import { CATALOG, resolveLayers, type Appearance, type ClassId } from '../../appearance/catalog';
-import type { LayerRef } from '../../appearance/catalog-types';
+import { allLayers, CATALOG, monsterLayers, resolveLayers, type Appearance, type ClassId } from '../../appearance/catalog';
+import type { ActionAnim, Anim, LayerRef } from '../../appearance/catalog-types';
 import { buildColorMap, layerPalette, recolorPixels } from '../../appearance/recolor';
 
 /** Sheet paths are relative to public/; BASE_URL keeps them working under the GitHub Pages subpath. */
@@ -26,12 +26,14 @@ export function loadSheet(sheet: string): Promise<HTMLImageElement> {
   return p;
 }
 
-/** Every character sheet in the catalog. */
+/** Every character/monster/creature sheet in the catalog, including action animations. */
 export function allCharacterSheets(): string[] {
   const set = new Set<string>();
-  for (const ls of Object.values(CATALOG.layers.body)) for (const l of ls) set.add(l.sheet);
-  for (const l of Object.values(CATALOG.layers.hair)) set.add(l.sheet);
-  for (const byBody of Object.values(CATALOG.layers.outfit)) for (const ls of Object.values(byBody)) for (const l of ls) set.add(l.sheet);
+  for (const l of allLayers()) {
+    set.add(l.sheet);
+    for (const a of Object.values(l.anims ?? {})) set.add(a.sheet);
+  }
+  for (const c of Object.values(CATALOG.creatures)) set.add(c.sheet);
   return [...set];
 }
 
@@ -39,19 +41,24 @@ export function preloadAllSheets(): Promise<HTMLImageElement[]> {
   return Promise.all(allCharacterSheets().map(loadSheet));
 }
 
+export function loadedImage(sheet: string): HTMLImageElement | undefined {
+  return loaded.get(sheet);
+}
+
 export interface ReadyLayer {
-  /** Unique per sheet + palette; usable as a texture key. */
+  /** Unique per layer + palette; prefix of texture keys. */
   key: string;
   canvas: HTMLCanvasElement;
   zIndex: number;
+  /** Ready canvases for each available action animation. */
+  anims: Partial<Record<ActionAnim, { canvas: HTMLCanvasElement; frameSize: number }>>;
+  actionOnly: boolean;
 }
 
-/** A layer drawn with its palette applied. The sheet must already be loaded. */
-export function readyLayer(layer: LayerRef, a: Appearance): ReadyLayer | null {
-  const img = loaded.get(layer.sheet);
+function recolor(sheet: string, pal: ReturnType<typeof layerPalette>): HTMLCanvasElement | null {
+  const img = loaded.get(sheet);
   if (!img) return null;
-  const pal = layerPalette(layer.recolor, a);
-  const key = pal ? `${layer.sheet}|${pal.material}:${pal.name}` : layer.sheet;
+  const key = pal ? `${sheet}|${pal.material}:${pal.name}` : sheet;
   let canvas = recolored.get(key);
   if (!canvas) {
     canvas = document.createElement('canvas');
@@ -68,12 +75,37 @@ export function readyLayer(layer: LayerRef, a: Appearance): ReadyLayer | null {
     }
     recolored.set(key, canvas);
   }
-  return { key, canvas, zIndex: layer.zIndex };
+  return canvas;
 }
 
-/** All layers of a character, back to front, ready to draw (skips any sheet not loaded yet). */
+/** A layer with its palette applied to every animation sheet. The sheets must already be loaded. */
+export function readyLayer(layer: LayerRef, a?: Appearance): ReadyLayer | null {
+  const pal = layerPalette(layer.recolor, a);
+  const canvas = recolor(layer.sheet, pal);
+  if (!canvas) return null;
+  const anims: ReadyLayer['anims'] = {};
+  for (const [anim, s] of Object.entries(layer.anims ?? {}) as [ActionAnim, { sheet: string; frameSize: number }][]) {
+    const c = recolor(s.sheet, pal);
+    if (c) anims[anim] = { canvas: c, frameSize: s.frameSize };
+  }
+  const key = pal ? `${layer.sheet}|${pal.material}:${pal.name}` : layer.sheet;
+  return { key, canvas, zIndex: layer.zIndex, anims, actionOnly: !!layer.actionOnly };
+}
+
+const ready = (layers: LayerRef[], a?: Appearance) => layers.map((l) => readyLayer(l, a)).filter((l): l is ReadyLayer => l !== null);
+
+/** All layers of a player character, back to front, ready to draw (skips sheets not loaded yet). */
 export function readyLayers(classId: ClassId, a: Appearance): ReadyLayer[] {
-  return resolveLayers(classId, a)
-    .map((l) => readyLayer(l, a))
-    .filter((l): l is ReadyLayer => l !== null);
+  return ready(resolveLayers(classId, a), a);
+}
+
+/** All layers of a humanoid monster look. */
+export function readyMonsterLayers(lookId: string): ReadyLayer[] {
+  return ready(monsterLayers(lookId));
+}
+
+/** Which source to draw for a layer in an animation (walk falls back to the base sheet). */
+export function layerSource(layer: ReadyLayer, anim: Anim): { canvas: HTMLCanvasElement; frameSize: number } | null {
+  if (anim === 'walk') return layer.actionOnly ? null : { canvas: layer.canvas, frameSize: 64 };
+  return layer.anims[anim] ?? null;
 }

@@ -13,6 +13,7 @@ import { ClientSession } from './client-session';
 import { t } from './i18n';
 import { Overlay } from './ui/overlay';
 import { Screens } from './ui/screens';
+import { Hud } from './hud/hud';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
 
@@ -23,6 +24,7 @@ const map = CollisionMap.fromTiled(mapJson);
 const uiRoot = document.getElementById('ui')!;
 const store = await openCharacterStore();
 const overlay = new Overlay(uiRoot);
+const hud = new Hud(uiRoot);
 const screens = new Screens(uiRoot, store, { onPlay, onJoin }, GAME_VERSION);
 const game = new Phaser.Game({
   type: Phaser.AUTO,
@@ -33,6 +35,10 @@ const game = new Phaser.Game({
   scale: { mode: Phaser.Scale.RESIZE, min: { width: 320, height: 240 } },
   scene: [BootScene, GameScene],
 });
+
+// Phaser only listens to window resizes: a tab loaded in the background starts at the minimum size and
+// must grow when its container gets a real size.
+new ResizeObserver(() => game.scale.refresh()).observe(document.getElementById('game')!);
 
 interface Current {
   session: ClientSession;
@@ -93,6 +99,7 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
     mapId: MAP_ID,
     mapJson,
     self: { name: character.name, classId: character.classId, appearance: character.appearance },
+    hud,
     isTyping: () => overlay.chatOpen,
   });
 }

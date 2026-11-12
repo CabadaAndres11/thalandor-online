@@ -1,6 +1,6 @@
 import { FRAME_SIZE, walkFrameAt, walkFrameRect } from '../../appearance/lpc-frames';
 import type { Appearance, ClassId } from '../../appearance/catalog';
-import { loadSheet, readyLayers } from './sheets';
+import { layerSource, loadSheet, readyLayers } from './sheets';
 import { resolveLayers } from '../../appearance/catalog';
 
 /** Which walk frame a menu preview shows at a given time (always walking). */
@@ -62,7 +62,8 @@ export class PreviewCanvas {
     const { facing, frame } = previewFrame(t, this.facing);
     const r = walkFrameRect(facing, frame);
     for (const layer of readyLayers(this.classId, this.appearance)) {
-      g.drawImage(layer.canvas, r.x, r.y, r.w, r.h, 0, 0, r.w * this.scale, r.h * this.scale);
+      const src = layerSource(layer, 'walk');
+      if (src) g.drawImage(src.canvas, r.x, r.y, r.w, r.h, 0, 0, r.w * this.scale, r.h * this.scale);
     }
   }
 }

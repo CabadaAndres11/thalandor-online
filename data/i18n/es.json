@@ -119,5 +119,11 @@
   "monster.skeleton": "Esqueleto guerrero",
   "monster.goblin_shaman": "Chamán goblin",
   "monster.bat": "Murciélago",
-  "monster.orc_elite": "Orco élite"
+  "monster.orc_elite": "Orco élite",
+  "hud.dodged": "Esquivado",
+  "hud.absorbed": "Absorbido",
+  "hud.downed": "Derribado: un aliado puede levantarte ({s} s)",
+  "hud.respawning": "Reapareciendo en {s} s",
+  "hud.revivePrompt": "Mantén E para levantar",
+  "hud.reviving": "Levantando… {pct}%"
 }
