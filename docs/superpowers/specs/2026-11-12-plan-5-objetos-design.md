@@ -31,7 +31,7 @@ El host es la autoridad y todo se guarda en el personaje.
 - **Armas por clase:**
   - Guerrero: espada, hacha, maza y escudo.
   - Clérigo: maza, bastón y escudo.
-  - Mago: bastón, varita y orbe.
+  - Mago: bastón y orbe (las varitas LPC no tienen animación de lanzar, se dejan para más adelante).
   - Explorador: arco, daga y carcaj.
   - Las armas dan poder de ataque o de hechizos; no hay rango de daño.
 - **Nivel del objeto:** el del monstruo que lo suelta. Las estadísticas base escalan con él.

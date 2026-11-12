@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 1.2 |
+| Versión del documento | 1.3 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.3.0 (Plan 3: combate y clases) |
 
@@ -106,6 +106,8 @@ La interfaz `Transport` permite cambiar en el futuro a un servidor dedicado sin 
 | Habilidades | 1 · 2 · 3 · 4 |
 | Esquiva / desplazamiento | Espacio |
 | Chat de grupo | Enter |
+| Pociones | Vida (Q) · Recurso (R) |
+| Interactuar | E (levantar a un aliado, hablar con el mercader) |
 | Ventanas | Personaje (C), Inventario (I), Talentos (N), Misiones (J), Mapa (M), Menú (Esc) |
 
 Todas las teclas son reasignables desde Opciones.
@@ -290,29 +292,56 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ---
 
-## 8. Botín, objetos y economía
+## 8. Botín, objetos y economía **[Implementado]** (Plan 5; detalle en `docs/superpowers/specs/2026-11-12-plan-5-objetos-design.md`. Alijo y capital en el Plan 6; comercio entre jugadores más adelante)
 
-- **Botín personal:** cada jugador ve y recoge el suyo.
+- **Botín personal:**
+  - Cada jugador cercano tiene su propia tirada al morir un monstruo.
+  - Los objetos caen sueltos en el suelo, con brillo y nombre del color de su rareza, y solo los ve su dueño.
+  - Se recogen pasando por encima y desaparecen a los 2 minutos.
+- **Qué cae:**
+  - **Oro:** casi siempre.
+  - **Objetos:** un 12 % de las veces en monstruos normales; el élite suelta 1 seguro y a veces 2.
+  - **Pociones:** a veces.
+  - **Utilidad:** el 75 % de los objetos es usable por la clase de quien lo recibe.
 - **Rarezas:**
 
-| Rareza | Estadísticas |
-|---|---|
-| Común | Fijas |
-| Poco común | Fijas + 1 propiedad aleatoria |
-| Raro | Fijas + 2 propiedades aleatorias |
-| Épico | Fijas + 3 propiedades aleatorias |
-| Único de jefe | Fijas, con nombre propio |
+| Rareza | Estadísticas | Color |
+|---|---|---|
+| Común | Fijas | blanco |
+| Poco común | Fijas + 1 propiedad aleatoria | verde |
+| Raro | Fijas + 2 propiedades aleatorias | azul |
+| Épico | Fijas + 3 propiedades aleatorias | morado |
+| Único de jefe | Fijas, con nombre propio (llega con los jefes) | — |
 
 - **Propiedades aleatorias:**
-  - Se sacan de tablas por nivel de objeto.
-  - Pueden ser **planas** (+12 Fuerza) o **porcentuales** (+5 % daño crítico).
-- **Ranuras de equipo:** arma principal, mano secundaria, cabeza, hombros, pecho, manos, piernas, pies, cuello, anillo ×2.
-- **Inventario:** espacio limitado y alijo ampliado en la capital.
+  - Se sacan de tablas por nivel de objeto (`data/items/affixes.json`).
+  - Son **planas** (+12 Fuerza) o **porcentuales** (+5 % vida), sin repetir estadística.
+- **Objetos base:**
+  - Hay 101 en `data/items/bases.json`, generados con `npx tsx tools/gen-items.ts`.
+  - Cada uno tiene ranura, tipo, banda de niveles, estadísticas que escalan con el nivel y **aspecto propio**.
+- **Ranuras de equipo:** arma principal, mano secundaria, cabeza, hombros, pecho, manos, piernas, pies, cuello y anillo ×2.
+- **Tipos por clase:**
+  - Tela: Mago y Clérigo. Cuero y malla: Explorador. Malla y placas: Guerrero. Cada clase puede llevar además los tipos inferiores.
+  - Armas: Guerrero (espada, hacha, maza y escudo), Clérigo (maza, bastón, escudo y orbe), Mago (bastón y orbe) y Explorador (arco, daga y carcaj).
+- **Requisito de nivel:** no se puede equipar un objeto de nivel superior al del personaje.
+- **Equipo visible:**
+  - El aspecto del personaje cambia según el objeto equipado: arma, mano secundaria, cabeza, hombros, pecho, manos, piernas y pies.
+  - Hay 179 piezas LPC en varios metales y colores (`tools/gear-looks.ts`). El resto del grupo también las ve.
+- **Inventario:** 30 casillas (I).
+  - Clic derecho para equipar o usar.
+  - El tooltip compara con lo equipado.
+  - **No se puede vender ni tirar fuera de un mercader.**
 - **Oro:**
-  - Se obtiene de monstruos, misiones y ventas.
-  - Se gasta en reparaciones, reinicio de talentos, cambio de especialización y objetos de vendedor.
-- **Durabilidad:** baja al morir y se repara en la capital.
-- **Intercambio entre jugadores:** fuera de la demo.
+  - Se obtiene de monstruos (y de misiones en el Plan 6).
+  - Se gasta en el mercader: pociones, objetos comunes y reparaciones. Más adelante también en reinicio de talentos y cambio de especialización.
+- **Mercader provisional** (Mercader Brom, en el mapa de prueba, con E):
+  - Vende pociones y objetos comunes de tu clase.
+  - Compra al 25 % del valor.
+  - Repara el equipo.
+  - Se mudará a la capital en el Plan 6.
+- **Durabilidad:** cada pieza equipada pierde un 10 % al morir (no al quedar derribado). A 0 no da estadísticas.
+- **Pociones:** vida (Q) y recurso (R), con el 35 % y una recarga compartida de 30 s, en pilas de 20.
+- **Intercambio entre jugadores:** más adelante.
 
 ---
 
@@ -334,7 +363,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 - Minimapa y seguimiento de misiones.
 - Números de daño flotantes, y nombre y vida sobre los enemigos.
 
-### 9.3 Ventanas **[En curso]** (Personaje con C, Talentos con N y Especialización)
+### 9.3 Ventanas **[En curso]** (Personaje con equipo (C), Inventario (I), Talentos (N), Especialización y Mercader)
 - Personaje (equipo y reparto de atributos), Inventario, Talentos, Diario de misiones y Mapa del mundo.
 - Opciones: controles, volumen y pantalla completa.
 
@@ -344,7 +373,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ---
 
-## 10. Guardado **[Implementado]** (IndexedDB, autoguardado de posición, exportar e importar, migraciones)
+## 10. Guardado **[Implementado]** (IndexedDB, autoguardado de posición, progreso e inventario; exportar e importar; migraciones, formato v3)
 
 - **Autoguardado:** la posición cada 30 s, al cambiar de zona y al salir; el progreso (nivel, experiencia, atributos, talentos, especialización y barra) cada vez que el host lo cambia. Formato del guardado: versión 2.
 - **Almacenamiento:** en **IndexedDB**.
@@ -356,6 +385,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 ## 11. Arte y audio **[En curso]** (personajes y tiles LPC; falta audio)
 
 - **Estilo:** pixel art **LPC (Liberated Pixel Cup)**. Personajes de 64×64 por capas (cuerpo, pelo, ropa, armas) y tiles de **32×32**.
+- **Equipo:** 179 aspectos de equipo LPC (yelmos, hombreras, petos, mallas, túnicas, guantes, grebas, botas, armas y escudos), recoloreados con las paletas de metal y tela de LPC.
 - **Animaciones LPC:** andar, tajo, estocada, lanzar hechizo, disparar, recibir daño y morir, en 4 direcciones.
 - **Fuentes de assets:**
   - Solo packs gratuitos con licencia que permita uso y modificación (CC0, CC-BY o licencias equivalentes de itch.io), por ejemplo de Kenney, OpenGameArt o itch.io.
@@ -610,3 +640,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 1.0 | 2026-11-12 | Plan 4 implementado (versión 0.4.0): experiencia y niveles hasta el 30 con reparto en grupo, atributos con crecimiento por clase y bloqueo, árbol de talentos, desbloqueos por nivel, las 8 especializaciones con sus mecánicas (combo, sigilo, venenos, reflejo, zonas, canalizaciones, proyectiles que explotan o atraviesan, pasivas con disparadores), ventanas de Personaje, Talentos y Especialización, barra de experiencia y guardado v2. |
 | 1.1 | 2026-11-12 | Versión 0.4.1: menú con Esc (en solitario pausa el mundo; en grupo la partida sigue), los clics en las ventanas ya no lanzan el ataque básico. |
 | 1.2 | 2026-11-12 | Versión 0.4.2: árbol de talentos circular (46 nodos, se avanza desde el centro en cualquier dirección, radios híbridos, notables y culminantes); los talentos del árbol anterior se reinician solos. Las teclas de habilidad ya no se activan al escribir en el chat. |
+| 1.3 | 2026-11-12 | Plan 5 implementado (versión 0.5.0): botín personal en el suelo, 101 objetos base con rarezas y propiedades aleatorias, equipo visible en el personaje (179 piezas LPC), inventario de 30 casillas, oro, mercader provisional (comprar, vender y reparar), durabilidad, pociones (Q y R) y guardado v3. Solo se vende al mercader y no se equipan objetos de nivel superior. |
