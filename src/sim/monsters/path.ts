@@ -13,14 +13,32 @@ export function lineOfSight(map: CollisionMap, a: Vec2, b: Vec2): boolean {
   return true;
 }
 
+/** True when a circle of radius r can travel straight from a to b without touching solid tiles. */
+export function clearPath(map: CollisionMap, a: Vec2, b: Vec2, r: number): boolean {
+  const d = Math.hypot(b.x - a.x, b.y - a.y);
+  const steps = Math.max(1, Math.ceil(d / 4));
+  for (let i = 1; i <= steps; i++) {
+    const t = i / steps;
+    const x = a.x + (b.x - a.x) * t;
+    const y = a.y + (b.y - a.y) * t;
+    const x0 = Math.floor((x - r) / TILE_SIZE);
+    const x1 = Math.floor((x + r - 1e-6) / TILE_SIZE);
+    const y0 = Math.floor((y - r) / TILE_SIZE);
+    const y1 = Math.floor((y + r - 1e-6) / TILE_SIZE);
+    for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) if (map.isSolidTile(tx, ty)) return false;
+  }
+  return true;
+}
+
 const center = (tx: number, ty: number): Vec2 => ({ x: tx * TILE_SIZE + TILE_SIZE / 2, y: ty * TILE_SIZE + TILE_SIZE / 2 });
 
 /**
  * A* over the collision grid (8 directions, no corner cutting). Returns waypoints (tile centres)
  * ending exactly at `to`; a direct [to] when there is a clear line; [] when unreachable.
  */
-export function findPath(map: CollisionMap, from: Vec2, to: Vec2, maxNodes = 4000): Vec2[] {
-  if (lineOfSight(map, from, to)) return [{ ...to }];
+export function findPath(map: CollisionMap, from: Vec2, to: Vec2, maxNodes = 4000, radius = 0): Vec2[] {
+  // A body with a radius needs the whole swept circle free, not just the centre line.
+  if (radius > 0 ? clearPath(map, from, to, radius) : lineOfSight(map, from, to)) return [{ ...to }];
   const W = map.widthTiles;
   const sx = Math.floor(from.x / TILE_SIZE);
   const sy = Math.floor(from.y / TILE_SIZE);

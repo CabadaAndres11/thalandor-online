@@ -124,3 +124,27 @@ describe('spawns and group scaling', () => {
     expect(mob.hp / mob.stats.maxHp).toBeCloseTo(0.5, 2);
   });
 });
+
+describe('chasing around obstacles (regressions)', () => {
+  test('a monster flush with a pillar edge still reaches the player', () => {
+    const w = testWorld({ solid: [[10, 5], [10, 6], [10, 7]] });
+    const p = addPlayer(w, 'warrior', { x: 318, y: 300 });
+    const mob = w.addMonster('skeleton', { x: 318, y: 140 });
+    w.addThreat(mob, p, 1);
+    steps(w, 200);
+    expect(Math.hypot(mob.pos.x - p.pos.x, mob.pos.y - p.pos.y)).toBeLessThan(40);
+  });
+
+  test('an unreachable target makes the monster give up instead of searching every tick', () => {
+    const solid: [number, number][] = [];
+    for (let x = 18; x <= 22; x++) for (let y = 8; y <= 12; y++) if (x === 18 || x === 22 || y === 8 || y === 12) solid.push([x, y]);
+    const w = testWorld({ solid });
+    const p = addPlayer(w, 'mage', { x: 20 * TILE_SIZE + 16, y: 10 * TILE_SIZE + 16 });
+    const mob = w.addMonster('skeleton', { x: 20 * TILE_SIZE + 16, y: 4 * TILE_SIZE + 16 });
+    w.addThreat(mob, p, 1);
+    steps(w, 3);
+    // It gives up (and, already home, goes back to idle) instead of chasing forever.
+    expect(mob.ai!.state).not.toBe('combat');
+    expect(mob.ai!.threat.size).toBe(0);
+  });
+});

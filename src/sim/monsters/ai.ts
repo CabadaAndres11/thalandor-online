@@ -21,16 +21,18 @@ function moveToward(world: World, m: Unit, target: Vec2, speedFactor = 1): void 
   m.moving = true;
 }
 
-/** Follows a cached A* path to `goal`, repathing every few hundred ms. */
-function pathTo(world: World, m: Unit, goal: Vec2, speedFactor = 1): void {
+/** Follows a cached A* path to `goal`, repathing every few hundred ms. Returns false when the goal is unreachable. */
+function pathTo(world: World, m: Unit, goal: Vec2, speedFactor = 1): boolean {
   const ai = m.ai!;
-  if (world.now >= ai.nextRepathAt || ai.path.length === 0) {
-    ai.path = findPath(world.map, m.pos, goal);
+  if (world.now >= ai.nextRepathAt) {
+    ai.path = findPath(world.map, m.pos, goal, 4000, m.radius);
     ai.nextRepathAt = world.now + BALANCE.monsters.repathMs;
+    if (ai.path.length === 0) return false;
   }
   while (ai.path.length > 1 && dist(m.pos, ai.path[0]!) < 6) ai.path.shift();
   const next = ai.path[0];
   if (next) moveToward(world, m, next, speedFactor);
+  return true;
 }
 
 function startReturn(world: World, m: Unit): void {
@@ -78,7 +80,8 @@ export function stepMonster(world: World, m: Unit): void {
       ai.nextWanderAt = now + BALANCE.monsters.wanderEveryMs;
       return;
     }
-    if (!cannotMove(m, now)) pathTo(world, m, ai.spawn, 1.3);
+    // A home that cannot be reached (map edited, spawn walled in): snap back instead of being stuck forever.
+    if (!cannotMove(m, now) && !pathTo(world, m, ai.spawn, 1.3)) m.pos = { ...ai.spawn };
     return;
   }
 
@@ -109,11 +112,11 @@ export function stepMonster(world: World, m: Unit): void {
       return;
     }
     const mainRange = ability(def.abilities[0]!)?.range ?? keep;
-    if (d > mainRange - 20 || !lineOfSight(world.map, m.pos, target.pos)) pathTo(world, m, target.pos);
+    if ((d > mainRange - 20 || !lineOfSight(world.map, m.pos, target.pos)) && !pathTo(world, m, target.pos)) startReturn(world, m);
     else m.facing = facingFromVector(target.pos.x - m.pos.x, target.pos.y - m.pos.y, m.facing);
     return;
   }
   const reach = m.radius + target.radius + 4;
-  if (d > reach) pathTo(world, m, target.pos);
+  if (d > reach && !pathTo(world, m, target.pos)) startReturn(world, m);
   else m.facing = facingFromVector(target.pos.x - m.pos.x, target.pos.y - m.pos.y, m.facing);
 }
