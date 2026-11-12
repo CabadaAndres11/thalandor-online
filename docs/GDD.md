@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 0.8 |
+| Versión del documento | 0.9 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.3.0 (Plan 3: combate y clases) |
 
@@ -168,7 +168,9 @@ Cada nivel otorga **5 puntos de atributo** para repartir libremente.
 | **Aguante** | Vida máxima |
 | **Espíritu** | Regeneración de vida y maná |
 
-Cada clase tiene atributos base propios por nivel, definidos en `data/classes/`.
+Cada clase sube además 2 atributos principales por nivel (`growth` en `data/classes.json`).
+
+La Fuerza da probabilidad de **bloqueo** (0,2 % por punto): un bloqueo reduce a la mitad el daño físico cuerpo a cuerpo.
 
 ### 4.5 Árbol de talentos
 - **Puntos:** 1 por nivel a partir del 2, es decir, **29 puntos al nivel 30**.
@@ -176,7 +178,8 @@ Cada clase tiene atributos base propios por nivel, definidos en `data/classes/`.
 - **Estructura:** un nodo central y **5 rutas**, cada una con unos 4 niveles de profundidad. Para desbloquear un nivel hay que haber gastado puntos en el nivel anterior de esa ruta.
 - **Nodos multirrango:** se pueden invertir varios puntos en el mismo nodo.
 - **Puentes entre rutas vecinas:** nodos que combinan estadísticas de dos rutas.
-- **Reinicio:** el reinicio completo cuesta oro y se hace con el instructor de la capital.
+- **Reinicio:** el reinicio completo cuesta oro y se hace con el instructor de la capital. Hasta que existan la capital y el oro, es gratis y en cualquier momento fuera de combate (igual que cambiar de especialización).
+- **Nodos:** la lista completa está en el **anexo C**.
 
 | Ruta | Enfoque | Ejemplos de nodos |
 |---|---|---|
@@ -197,12 +200,15 @@ final = (base de clase + atributos repartidos + suma de bonos planos) × (1 + su
 - Los porcentajes de una misma estadística se **suman** entre sí antes de multiplicar; no se multiplican en cadena.
 - **Datos:** todas las constantes y fórmulas de conversión (por ejemplo, Agilidad → % crítico) viven en `data/balance.json`.
 
-### 4.7 Progresión
+### 4.7 Progresión **[Diseñado]** (Plan 4)
 - **Nivel máximo de la demo:** 30.
 - **Experiencia:**
   - Se gana con muertes de monstruos y con misiones.
   - En grupo, la experiencia de cada muerte se reparte entre los miembros cercanos, con un bonus por jugar en grupo.
-- **Curva de experiencia:** definida en `data/balance.json`.
+- **Curva de experiencia:** subir del nivel L al siguiente cuesta `100 × L^1,6` (unas 244.000 en total del 1 al 30, pensado para 10–15 h con misiones).
+- **Experiencia por monstruo:** `8 × nivel^1,2`, multiplicada por 4 si es élite. Baja si el monstruo está más de 2 niveles por debajo (mínimo 10 %).
+- **Reparto en grupo:** entre los jugadores a ≤ 800 px, con un bonus de `1 + 0,1 × (miembros − 1)`.
+- **Al subir de nivel:** vida y recurso al máximo, aviso en el chat para todos.
 
 ### 4.8 Creación de personaje **[Implementado]**
 - Hasta **8 personajes** por jugador.
@@ -513,9 +519,85 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ---
 
+## Anexo C — Árbol de talentos
+
+**Estructura de cada ruta:**
+- Nivel 1: 2 nodos de 3 rangos, disponibles desde el principio.
+- Nivel 2: 2 nodos de 3 rangos; requiere 3 puntos en la ruta.
+- Nivel 3: 1 nodo de 3 rangos; requiere 6.
+- Nivel 4 (culminante): 1 nodo de 1 rango; requiere 9.
+
+Completar una ruta cuesta 16 puntos. Los datos están en `data/talents.json`.
+
+**Poderío**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Fuerza bruta (1) | 3 | +3 % poder de ataque |
+| Precisión (1) | 3 | +1 % crítico |
+| Golpes certeros (2) | 3 | +5 % daño crítico |
+| Brutalidad (2) | 3 | +2 % daño realizado |
+| Ímpetu (3) | 3 | +6 poder de ataque |
+| Maestría marcial (4) | 1 | +8 % poder de ataque |
+
+**Arcano**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Poder arcano (1) | 3 | +3 % poder de hechizos |
+| Reserva (1) | 3 | +4 % recurso máximo |
+| Agudeza (2) | 3 | +5 % daño crítico |
+| Flujo (2) | 3 | +5 % regeneración de maná |
+| Foco (3) | 3 | +6 poder de hechizos |
+| Archimago (4) | 1 | +8 % poder de hechizos |
+
+**Bastión**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Coraza (1) | 3 | +4 % armadura |
+| Robustez (1) | 3 | +3 % vida |
+| Guardia (2) | 3 | −2 % daño recibido |
+| Escudo firme (2) | 3 | +2 % bloqueo |
+| Muralla (3) | 3 | +15 armadura |
+| Inquebrantable (4) | 1 | +8 % vida |
+
+**Celeridad**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Paso ligero (1) | 3 | +3 % velocidad de movimiento |
+| Reflejos felinos (1) | 3 | +1 % esquiva |
+| Presteza (2) | 3 | −3 % recargas |
+| Ojo rápido (2) | 3 | +1 % crítico |
+| Ritmo (3) | 3 | −2 % recargas |
+| Torbellino del tiempo (4) | 1 | −8 % recargas |
+
+**Vitalidad**
+
+| Nodo | Rangos | Por rango |
+|---|---|---|
+| Regeneración (1) | 3 | +1 vida por segundo |
+| Manos sanadoras (1) | 3 | +3 % curación realizada |
+| Sed vital (2) | 3 | +1 % robo de vida |
+| Receptividad (2) | 3 | +3 % curación recibida |
+| Vigor (3) | 3 | +2 % vida |
+| Fuente de vida (4) | 1 | +8 % curación recibida |
+
+**Puentes** (2 rangos; requieren 3 puntos en cada ruta vecina):
+
+| Puente | Por rango |
+|---|---|
+| Poderío – Celeridad | +1 % crítico y +2 % velocidad de movimiento |
+| Celeridad – Vitalidad | −2 % recargas y +0,5 vida por segundo |
+| Vitalidad – Bastión | +2 % vida y +2 % curación recibida |
+| Bastión – Arcano | +2 % armadura y +2 % recurso máximo |
+| Arcano – Poderío | +4 % daño crítico y +1 % daño realizado |
+
+---
+
 ## Anexos pendientes
 - **B. Guion e historia:** se desarrollará conjuntamente. Incluye los nombres definitivos de zonas y personajes, las misiones y los jefes.
-- **C. Nodos concretos del árbol de talentos.**
 - **D. Tablas de balance:** curva de experiencia, atributos base, conversiones de estadísticas.
 
 ---
@@ -531,3 +613,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 0.6 | 2026-11-11 | Plan 2 implementado: creación y selección de hasta 8 personajes con arte LPC por capas (pieles y pelo por recoloreado de paleta), guardado en IndexedDB con autoguardado y reaparición, exportar e importar, tiles de 32 px y mapa de prueba LPC. El explorador lleva carcaj al andar; el arco llegará con las animaciones de combate. |
 | 0.7 | 2026-11-12 | Diseño del Plan 3 (combate): fórmulas de daño, recursos, amenaza, derribo, motor de habilidades por datos, 4 monstruos de prueba (humanoides del generador LPC y criaturas del pack LPC Monsters), HUD con casillas de habilidad con icono. Hasta la progresión, todo el kit base está disponible desde nivel 1. |
 | 0.8 | 2026-11-12 | Plan 3 implementado: combate en tiempo real con las 4 clases (kit base y pasivas), esquiva predicha, amenaza, derribo y levantar con E, 4 monstruos con IA (persecución con A*, retorno, manada, distancia) que reaparecen y escalan con el grupo, animaciones LPC de ataque y HUD con casillas de habilidad. |
+| 0.9 | 2026-11-12 | Diseño del Plan 4 (progresión): curva de experiencia, reparto en grupo, crecimiento por clase, bloqueo, anexo C con el árbol de talentos completo, desbloqueos por nivel y mecánicas de especialización. Reinicio y cambio de especialización gratis fuera de combate hasta que existan capital y oro. |
