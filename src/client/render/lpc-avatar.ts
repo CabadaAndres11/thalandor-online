@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { WorldLabels, type WorldLabel } from './world-labels';
 import type { ActionAnim, Anim, CreatureLook } from '../../appearance/catalog-types';
 import { actionFrameAt, ANIM_GEOMETRY, frameRect, walkFrameAt } from '../../appearance/lpc-frames';
 import type { Vec2 } from '../../sim/types';
@@ -60,23 +61,17 @@ function pick(s: AvatarState, timeMs: number): { anim: Anim; frame: number; faci
 }
 
 class Overhead {
-  readonly label: Phaser.GameObjects.Text;
+  /** The name is HTML over the canvas (sharp); without a label layer (tests) there is no name. */
+  readonly label: WorldLabel | null;
   readonly bar: Phaser.GameObjects.Graphics;
 
-  constructor(scene: Phaser.Scene, name: string) {
-    this.label = scene.add
-      .text(0, 0, name, { fontFamily: 'Georgia, serif', fontSize: '16px', color: '#f1e9d2', stroke: '#101010', strokeThickness: 3 })
-      .setOrigin(0.5, 1)
-      .setScale(0.5)
-      .setResolution(2)
-      .setDepth(1e6);
+  constructor(scene: Phaser.Scene, _name: string) {
+    this.label = WorldLabels.of(scene)?.create() ?? null;
     this.bar = scene.add.graphics().setDepth(1e6);
   }
 
   update(s: AvatarState, x: number, top: number): void {
-    this.label.setPosition(x, top - (s.showBar ? 5 : 0));
-    if (this.label.text !== s.name) this.label.setText(s.name);
-    this.label.setVisible(s.name !== '');
+    this.label?.set(x, top - (s.showBar ? 5 : 0), s.name);
     this.bar.clear();
     if (!s.showBar || s.state === 'dead' || s.maxHp <= 0) return;
     const pct = Math.max(0, Math.min(1, s.hp / s.maxHp));
@@ -85,7 +80,7 @@ class Overhead {
   }
 
   destroy(): void {
-    this.label.destroy();
+    this.label?.destroy();
     this.bar.destroy();
   }
 }

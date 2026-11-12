@@ -167,11 +167,12 @@ export class Effects {
 
   private floatText(at: Vec2, text: string, color: string, size: number): void {
     const label = this.scene.add
-      .text(at.x + (Math.random() - 0.5) * 12, at.y - 46, text, { fontFamily: 'Georgia, serif', fontSize: `${size}px`, color, stroke: '#101010', strokeThickness: 4 })
+      .text(at.x + (Math.random() - 0.5) * 12, at.y - 46, text, { fontFamily: 'Georgia, serif', fontSize: `${size / 2}px`, color, stroke: '#101010', strokeThickness: 2 })
       .setOrigin(0.5, 1)
-      .setScale(0.5)
-      .setResolution(2)
+      // Rasterised at the camera zoom so it lands 1:1 on screen, and smoothed (the game uses nearest filtering).
+      .setResolution(Math.max(2, this.scene.cameras.main.zoom * (window.devicePixelRatio || 1)))
       .setDepth(1e6 + 1);
+    label.texture.setFilter(Phaser.Textures.FilterMode.LINEAR);
     this.scene.tweens.add({ targets: label, y: label.y - 22, alpha: 0, duration: 900, ease: 'Cubic.easeOut', onComplete: () => label.destroy() });
   }
 }

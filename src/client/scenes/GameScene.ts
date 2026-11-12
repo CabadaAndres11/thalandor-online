@@ -12,6 +12,7 @@ import type { ClientSession, UnitRender } from '../client-session';
 import type { Hud } from '../hud/hud';
 import { inputFromKeys } from '../input';
 import { Effects } from '../render/effects';
+import { WorldLabels, type WorldLabel } from '../render/world-labels';
 import { CreatureAvatar, LpcAvatar, type Avatar } from '../render/lpc-avatar';
 import { readyLayers, readyMonsterLayers } from '../render/sheets';
 import { TERRAIN_KEY } from './BootScene';
@@ -107,6 +108,7 @@ export class GameScene extends Phaser.Scene {
     cam.setRoundPixels(true);
     cam.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
 
+    this.labels = new WorldLabels(this, document.getElementById('ui')!);
     this.effects = new Effects(
       this,
       (id) => (id === session.playerId ? (this.screenPos.get(SELF_KEY) ?? null) : (this.screenPos.get(id) ?? null)),
@@ -129,6 +131,8 @@ export class GameScene extends Phaser.Scene {
         o.label.destroy();
       }
       this.lootObjects.clear();
+      this.labels?.destroy();
+      this.labels = null;
       this.effects.destroy();
       hud.hide();
     });
@@ -154,7 +158,8 @@ export class GameScene extends Phaser.Scene {
     avatar.setState({ pos: m, facing: 2, moving: false, action: null, name: t('merchant.name'), hp: 1, maxHp: 1, state: 'alive', showBar: false, hostile: false }, now);
   }
 
-  private lootObjects = new Map<number, { glow: Phaser.GameObjects.Arc; label: Phaser.GameObjects.Text }>();
+  private lootObjects = new Map<number, { glow: Phaser.GameObjects.Arc; label: WorldLabel }>();
+  private labels: WorldLabels | null = null;
 
   /** Own drops on the ground: a glow in the rarity colour and the item's name. */
   private drawLoot(): void {
@@ -173,12 +178,9 @@ export class GameScene extends Phaser.Scene {
       const text = item ? itemName(item) : t('inventory.gold', { n: d.gold ?? 0 });
       const glow = this.add.circle(d.x, d.y, item ? 5 : 4, tint, 0.9).setStrokeStyle(2, 0xffffff, 0.5).setDepth(d.y - 1);
       this.tweens.add({ targets: glow, alpha: 0.45, yoyo: true, repeat: -1, duration: 600 });
-      const label = this.add
-        .text(d.x, d.y - 8, text, { fontFamily: 'Georgia, serif', fontSize: '14px', color: '#' + tint.toString(16).padStart(6, '0'), stroke: '#101010', strokeThickness: 3 })
-        .setOrigin(0.5, 1)
-        .setScale(0.5)
-        .setResolution(2)
-        .setDepth(1e6 - 1);
+      const label = this.labels!.create('world-label loot-label');
+      label.setColor('#' + tint.toString(16).padStart(6, '0'));
+      label.set(d.x, d.y - 6, text);
       this.lootObjects.set(id, { glow, label });
     }
   }
@@ -258,6 +260,7 @@ export class GameScene extends Phaser.Scene {
     hud.update(rs, session.meState);
     hud.setPotions(session.inventory, session.potionCooldownMs(now));
     hud.setMerchantPrompt(this.nearMerchant());
+    this.labels?.flush();
   }
 
   private playerAvatar(id: EntityId, o: UnitRender): Avatar {

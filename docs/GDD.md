@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 1.5 |
+| Versión del documento | 1.6 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.3.0 (Plan 3: combate y clases) |
 
@@ -646,3 +646,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 1.3 | 2026-11-12 | Plan 5 implementado (versión 0.5.0): botín personal en el suelo, 101 objetos base con rarezas y propiedades aleatorias, equipo visible en el personaje (179 piezas LPC), inventario de 30 casillas, oro, mercader provisional (comprar, vender y reparar), durabilidad, pociones (Q y R) y guardado v3. Solo se vende al mercader y no se equipan objetos de nivel superior. |
 | 1.4 | 2026-11-13 | Versión 0.5.1: las flechas y demás proyectiles impactan en todo el cuerpo dibujado (cápsula de los pies a la cabeza), no solo en los pies. Norma de interfaz sin scroll; nueva ventana de Habilidades (K); la ventana de Personaje muestra el equipo junto a un sprite en vivo. |
 | 1.5 | 2026-11-13 | Versión 0.5.2: los iconos de los objetos con aspecto visible se dibujan a partir de su propio sprite; la selección de personaje muestra el equipo puesto; Inventario y Personaje se pueden ver a la vez; el menú de Esc incluye Inventario y Habilidades. |
+| 1.6 | 2026-11-13 | Versión 0.5.3: los nombres de jugadores, PNJ, monstruos y objetos del suelo se dibujan como texto HTML sobre el juego (nítidos con cualquier escalado de pantalla); los números de daño se rasterizan a su tamaño real. |
