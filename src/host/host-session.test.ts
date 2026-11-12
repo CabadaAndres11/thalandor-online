@@ -188,7 +188,7 @@ test('invalid classId and appearance are replaced by defaults', async () => {
   const { net } = setup();
   const c = await join(net, { character: { classId: 'bard', appearance: { body: 'dragon', skin: 'x', hairStyle: 'y', hairColor: 'z' } } });
   const roster = ofType(c, 'roster').at(-1)!;
-  expect(roster.players[0]).toEqual({ id: 1, name: 'Ana', classId: 'warrior', appearance: defaultAppearance('warrior') });
+  expect(roster.players[0]).toEqual({ id: 1, name: 'Ana', classId: 'warrior', appearance: defaultAppearance('warrior'), gear: {} });
 });
 
 test('invalid progression is reset on join', async () => {
@@ -358,4 +358,44 @@ test('solo pause freezes the world but keeps snapshots; a group game never pause
   await join(net, { name: 'Beto' });
   session.tick();
   expect(world.snapshot().tick).toBe(tick + 1);
+});
+
+describe('items over the network', () => {
+  const helm = { uid: 'h1', baseId: 'plate_head_nasal', level: 1, rarity: 'common', affixes: [], durability: 100 };
+
+  test('belongings are sanitized on join and sent back; equipped looks go in the roster', async () => {
+    const { net } = setup();
+    const c = await join(net, { character: { belongings: { gold: 12, inventory: [{ ...helm, uid: 'bad', level: 99 }], equipment: { head: helm } } } });
+    const inv = ofType(c, 'inventory').at(-1)!.inv;
+    expect(inv.gold).toBe(12);
+    expect(inv.inventory.filter(Boolean)).toEqual([]);
+    expect(inv.equipment.head?.uid).toBe('h1');
+    expect(ofType(c, 'roster').at(-1)!.players[0]!.gear).toEqual({ head: 'head_nasal_iron' });
+  });
+
+  test('loot events reach only their owner', async () => {
+    const { net, session, world } = setup();
+    const a = await join(net, { name: 'Ana' });
+    const b = await join(net, { name: 'Beto' });
+    world.loot.push({ id: 1, ownerId: 1, pos: { x: 600, y: 600 }, gold: 3, expiresAt: 1e9 });
+    world.emit({ e: 'loot', owner: 1, drops: [{ id: 1, x: 600, y: 600, gold: 3 }] });
+    session.tick();
+    await vi.runAllTimersAsync();
+    const lootOf = (c: TestClient) => ofType(c, 'events').flatMap((m) => m.list).filter((e) => e.e === 'loot');
+    expect(lootOf(a)).toHaveLength(1);
+    expect(lootOf(b)).toHaveLength(0);
+  });
+
+  test('equipping through a request updates inventory and the roster', async () => {
+    const { net, session } = setup();
+    const c = await join(net, { character: { belongings: { gold: 0, inventory: [helm], equipment: {} } } });
+    c.send({ t: 'progress-req', req: { k: 'equip', index: 0 } });
+    c.send({ t: 'progress-req', req: { k: 'sell', index: 0 } });
+    await vi.runAllTimersAsync();
+    session.tick();
+    await vi.runAllTimersAsync();
+    expect(ofType(c, 'inventory').at(-1)!.inv.equipment.head?.uid).toBe('h1');
+    expect(ofType(c, 'roster').at(-1)!.players[0]!.gear).toEqual({ head: 'head_nasal_iron' });
+    expect(ofType(c, 'progress-refused').map((m) => m.reason)).toEqual(['far']);
+  });
 });

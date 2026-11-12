@@ -79,3 +79,24 @@ test('progress requests: valid shapes pass, unknown kinds and bad fields are dro
   expect(decodeHost(JSON.stringify({ t: 'progress-refused', reason: 'combat' }))).toEqual({ t: 'progress-refused', reason: 'combat' });
   expect(decodeHost(JSON.stringify({ t: 'progress', p: { level: 1 } }))).toBeNull();
 });
+
+test('item requests and inventory messages', () => {
+  const ok: ClientMessage[] = [
+    { t: 'progress-req', req: { k: 'equip', index: 3 } },
+    { t: 'progress-req', req: { k: 'equip', index: 3, place: 'ring2' } },
+    { t: 'progress-req', req: { k: 'unequip', place: 'head' } },
+    { t: 'progress-req', req: { k: 'use', potion: 'health' } },
+    { t: 'progress-req', req: { k: 'buy', id: 'potion_health' } },
+    { t: 'progress-req', req: { k: 'sell', index: 0 } },
+    { t: 'progress-req', req: { k: 'repair' } },
+    { t: 'progress-req', req: { k: 'merchant', open: true } },
+  ];
+  for (const m of ok) expect(decodeClient(encode(m))).toEqual(m);
+  for (const req of [{ k: 'unequip', place: 'tail' }, { k: 'use', potion: 'mana' }, { k: 'merchant', open: 'yes' }, { k: 'equip', index: 1, place: 'x' }]) {
+    expect(decodeClient(JSON.stringify({ t: 'progress-req', req }))).toBeNull();
+  }
+  const inv = { gold: 1, inventory: [null], equipment: {}, potionCdMs: 0, merchant: null };
+  expect(decodeHost(JSON.stringify({ t: 'inventory', inv }))).toEqual({ t: 'inventory', inv });
+  expect(decodeHost(JSON.stringify({ t: 'inventory', inv: { gold: 'x' } }))).toBeNull();
+  expect(decodeHost(JSON.stringify({ t: 'progress-refused', reason: 'gold' }))).toEqual({ t: 'progress-refused', reason: 'gold' });
+});

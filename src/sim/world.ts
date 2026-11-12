@@ -12,6 +12,7 @@ import { applyDamage, applyHeal, type DamageOpts, monsterHpScale, rescaleMonster
 import type { Rng } from './combat/damage';
 import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, isStealthed, passiveValue, type PlayerProgress, type Unit } from './combat/unit';
 import { shareXp } from './progression/xp';
+import { dropLoot, stepLoot, type GroundLoot } from './items/loot-world';
 import type { Belongings } from './items/validate';
 import { stepMonster } from './monsters/ai';
 
@@ -119,6 +120,8 @@ export class World {
   projectiles: Projectile[] = [];
   areas: PendingArea[] = [];
   zones: Zone[] = [];
+  loot: GroundLoot[] = [];
+  private lootSeq = 1;
   private events: CombatEvent[] = [];
   private progressDirty = new Set<EntityId>();
   private inventoryDirty = new Set<EntityId>();
@@ -178,6 +181,10 @@ export class World {
     return out;
   }
 
+  nextLootId(): number {
+    return this.lootSeq++;
+  }
+
   nextProjectileId(): number {
     return this.nextProj++;
   }
@@ -197,6 +204,7 @@ export class World {
 
   removePlayer(id: EntityId): void {
     this.units.delete(id);
+    this.loot = this.loot.filter((g) => g.ownerId !== id);
     this.pending.delete(id);
     this.dropFromThreat(id);
   }
@@ -287,6 +295,7 @@ export class World {
   onMonsterDied(m: Unit): void {
     m.ai?.threat.clear();
     shareXp(this, m);
+    dropLoot(this, m);
     const slot = this.slots.find((s) => s.unitId === m.id);
     if (slot) slot.respawnAt = this.now + slot.def.respawnMs;
   }
@@ -302,6 +311,7 @@ export class World {
     stepProjectiles(this);
     stepAreas(this);
     stepZones(this);
+    stepLoot(this);
     stepStatusesAndResources(this);
     stepLife(this);
     this.stepSpawns();

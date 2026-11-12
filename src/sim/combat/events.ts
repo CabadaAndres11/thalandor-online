@@ -1,6 +1,8 @@
 import type { ActionAnim } from '../../appearance/catalog-types';
 import type { EntityId } from '../types';
 import type { School } from './defs';
+import type { Item } from '../items/defs';
+import type { LootDrop } from '../items/loot-world';
 
 /** Things that happened during a tick, sent reliably to every client in range. */
 export type CombatEvent =
@@ -29,4 +31,9 @@ export type CombatEvent =
   | { e: 'zone'; x: number; y: number; r: number; ms: number; school: School }
   /** A passive fired (cheat death, last stand...): for effects and chat. */
   | { e: 'proc'; id: EntityId; passiveId: string }
+  /** Private to `owner`: drops only it can see and pick up. */
+  | { e: 'loot'; owner: EntityId; drops: LootDrop[] }
+  | { e: 'lootGone'; owner: EntityId; id: number }
+  | { e: 'pickup'; owner: EntityId; id: number; item?: Item; gold?: number }
+  | { e: 'bagFull'; owner: EntityId }
   | { e: 'levelup'; id: EntityId; name: string; level: number };

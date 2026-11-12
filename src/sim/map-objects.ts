@@ -32,3 +32,21 @@ export function spawnsFromTiled(json: TiledMap): SpawnDef[] {
   }
   return out;
 }
+
+export interface NpcDef {
+  role: string;
+  name: string;
+  x: number;
+  y: number;
+}
+
+/** Non-player characters from the Tiled object layer "npcs" (property: role). */
+export function npcsFromTiled(json: TiledMap): NpcDef[] {
+  const layer = json.layers.find((l) => l.name === 'npcs' && l.type === 'objectgroup') as { objects?: (TiledObject & { name?: string })[] } | undefined;
+  const out: NpcDef[] = [];
+  for (const o of layer?.objects ?? []) {
+    const role = o.properties?.find((p) => p.name === 'role')?.value;
+    if (typeof role === 'string') out.push({ role, name: o.name ?? role, x: o.x, y: o.y });
+  }
+  return out;
+}
