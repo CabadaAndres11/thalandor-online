@@ -112,20 +112,20 @@
       .passive-row.locked { color: var(--muted); opacity: 0.6; }
       .spec-card { border: 1px solid var(--line); padding: 10px; background: #14120e; }
       .spec-card.on { border-color: var(--gold); }
-      .talent-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
-      .talent-col { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
-      .talent-route { text-align: center; color: var(--gold); font-size: 14px; }
-      .talent-tier { display: flex; gap: 6px; justify-content: center; }
-      .talent-tier.bridges { flex-wrap: wrap; }
-      .talent-node { font: inherit; font-size: 12px; width: 70px; min-height: 58px; padding: 4px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; color: var(--text); background: #14120e; border: 2px solid #4a3d28; cursor: pointer; }
-      .talent-node .talent-name { font-size: 11px; line-height: 1.15; text-align: center; }
-      .talent-node.can { border-color: #8a7444; }
-      .talent-node.can:hover { border-color: var(--gold); }
-      .talent-node.some { background: #2a2110; }
-      .talent-node.full { border-color: var(--gold); }
-      .talent-node.locked { opacity: 0.55; cursor: default; }
       .pause-menu { width: min(320px, calc(100vw - 24px)); }
       .pause-actions { display: flex; flex-direction: column; gap: 8px; }
+      .talent-circle { width: 100%; max-width: 640px; max-height: calc(100vh - 300px); align-self: center; }
+      .talent-link { stroke: #4a3d28; stroke-width: 2; }
+      .talent-link.lit { stroke: var(--gold); stroke-width: 3; }
+      .talent-node circle { fill: #14120e; stroke: #4a3d28; stroke-width: 2; }
+      .talent-node.notable circle { stroke-width: 3; }
+      .talent-node.keystone circle { stroke-width: 4; }
+      .talent-node.start circle { fill: #2f5a4a; stroke: #7fc0a0; }
+      .talent-node.can { cursor: pointer; }
+      .talent-node.can circle { stroke: #b49a5a; }
+      .talent-node.can:hover circle { stroke: var(--gold); fill: #2a2110; }
+      .talent-node.owned circle { fill: #8a6a28; stroke: var(--gold); }
+      .talent-dir { fill: var(--gold); font: 15px var(--font); }
       .hud-banner, .hud-prompt { padding: 6px 12px; background: #0b0a08d0; border: 1px solid var(--line); font-size: 15px; }
       .hud-banner { color: #ff9a8a; }
       .hud-prompt { color: var(--gold); }

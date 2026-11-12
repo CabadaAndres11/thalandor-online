@@ -74,17 +74,18 @@ test('attribute and talent requests spend free points only', () => {
   const w = testWorld();
   const p = addPlayer(w, 'warrior', { x: 300, y: 300 });
   expect(applyProgressRequest(w, p, { k: 'attr', attr: 'stamina' })).toBe('points');
-  expect(applyProgressRequest(w, p, { k: 'talent', node: 'bastion_1b' })).toBe('points');
+  expect(applyProgressRequest(w, p, { k: 'talent', node: 'bastion_1' })).toBe('points');
   devSetLevel(w, p, 2);
   const hp = p.stats.maxHp;
   for (let i = 0; i < 5; i++) expect(applyProgressRequest(w, p, { k: 'attr', attr: 'stamina' })).toBe('ok');
   expect(applyProgressRequest(w, p, { k: 'attr', attr: 'stamina' })).toBe('points');
   expect(p.stats.maxHp).toBe(hp + 50);
-  expect(applyProgressRequest(w, p, { k: 'talent', node: 'bastion_1b' })).toBe('ok');
-  expect(p.stats.maxHp).toBeCloseTo((hp + 50) * 1.03, 6);
-  expect(applyProgressRequest(w, p, { k: 'talent', node: 'bastion_1b' })).toBe('points');
+  const armor = p.stats.armor;
+  expect(applyProgressRequest(w, p, { k: 'talent', node: 'bastion_1' })).toBe('ok');
+  expect(p.stats.armor).toBeCloseTo(armor * 1.04, 6);
+  expect(applyProgressRequest(w, p, { k: 'talent', node: 'bastion_1' })).toBe('points');
   const info = progressInfo(p);
-  expect(info).toMatchObject({ level: 2, freeAttrPoints: 0, freeTalentPoints: 0, talents: { bastion_1b: 1 } });
+  expect(info).toMatchObject({ level: 2, freeAttrPoints: 0, freeTalentPoints: 0, talents: { bastion_1: 1 } });
 });
 
 test('resets are free out of combat and refused in combat', () => {
@@ -92,7 +93,7 @@ test('resets are free out of combat and refused in combat', () => {
   const p = addPlayer(w, 'warrior', { x: 300, y: 300 });
   devSetLevel(w, p, 5);
   applyProgressRequest(w, p, { k: 'attr', attr: 'strength' });
-  applyProgressRequest(w, p, { k: 'talent', node: 'might_1a' });
+  applyProgressRequest(w, p, { k: 'talent', node: 'might_1' });
   p.inCombatUntil = w.now + 5000;
   expect(applyProgressRequest(w, p, { k: 'resetTalents' })).toBe('combat');
   p.inCombatUntil = 0;
@@ -120,7 +121,7 @@ test('dev level keeps valid choices and drops impossible ones', () => {
   const p = grant(w, addPlayer(w, 'cleric', { x: 300, y: 300 }), {});
   devSetLevel(w, p, 12);
   applyProgressRequest(w, p, { k: 'spec', specId: 'cleric_holy' });
-  for (let i = 0; i < 3; i++) applyProgressRequest(w, p, { k: 'talent', node: 'vitality_1a' });
+  for (let i = 0; i < 3; i++) applyProgressRequest(w, p, { k: 'talent', node: ['vitality_1', 'vitality_2', 'vitality_3'][i]! });
   devSetLevel(w, p, 3);
   expect(p.specId).toBeNull();
   expect(p.talents).toEqual({});

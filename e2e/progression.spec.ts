@@ -46,18 +46,21 @@ test('level up with /dev, spend attribute points, and they persist after reloadi
   expect(await progress(page)).toMatchObject({ level: 2, attributes: { intellect: 3 }, freeAttrPoints: 2 });
 });
 
-test('talents: spend a point, respect requirements, reset', async ({ browser }) => {
+test('talents: buy connected nodes around the circle, then reset', async ({ browser }) => {
   test.setTimeout(60_000);
   const page = await newSolo(browser, 'Talentos', 'warrior');
   await chat(page, '/dev level 5');
   await expect.poll(async () => (await progress(page))?.freeTalentPoints).toBe(4);
   await page.keyboard.press('n');
-  await expect(page.locator('[data-talent=might_2a]')).toHaveClass(/locked/);
-  for (let i = 0; i < 3; i++) await page.locator('[data-talent=might_1a]').click();
-  await expect.poll(async () => (await progress(page))?.talents.might_1a).toBe(3);
-  await expect(page.locator('[data-talent=might_2a]')).toHaveClass(/can/);
-  await page.locator('[data-talent=might_2a]').click();
-  await expect.poll(async () => (await progress(page))?.freeTalentPoints).toBe(0);
+  await expect(page.locator('[data-talent=might_2]')).toHaveClass(/locked/);
+  await page.locator('[data-talent=might_1]').click();
+  await expect.poll(async () => (await progress(page))?.talents.might_1).toBe(1);
+  await expect(page.locator('[data-talent=might_2]')).toHaveClass(/can/);
+  for (const id of ['might_2', 'might_3', 'might_celerity_3']) {
+    await page.locator(`[data-talent=${id}]`).click();
+    await expect.poll(async () => (await progress(page))?.talents[id]).toBe(1);
+  }
+  expect((await progress(page))?.freeTalentPoints).toBe(0);
   await page.getByRole('button', { name: 'Reiniciar talentos' }).click();
   await expect.poll(async () => (await progress(page))?.talents).toEqual({});
   expect((await progress(page))?.freeTalentPoints).toBe(4);

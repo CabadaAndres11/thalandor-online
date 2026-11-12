@@ -19,25 +19,16 @@ export function describeMod(m: StatMod, ranks = 1): string {
   return `${signed(flat)} ${name}`;
 }
 
-/** Tooltip of a talent node or bridge: what one rank gives. */
+/** Tooltip of a talent node: its name and what it gives. */
 export function talentTooltip(id: string): string {
-  const def = TALENTS.nodes[id] ?? TALENTS.bridges[id];
-  if (!def) return '';
-  return `${t(`talent.${id}`)}\n${t('talents.perRank')}: ${def.modsPerRank.map((m) => describeMod(m)).join(', ')}`;
+  const node = Object.hasOwn(TALENTS.nodes, id) ? TALENTS.nodes[id] : undefined;
+  if (!node) return '';
+  const name = t(`talent.${id}`);
+  return node.mods.length ? `${name}\n${node.mods.map((m) => describeMod(m)).join(', ')}` : name;
 }
 
 /** Value of a summary stat for the character window. */
 export function formatStat(key: string, value: number): string {
   if (PERCENT_STATS.has(key)) return `${num(value * 100)} %`;
   return num(value);
-}
-
-/** The order and grouping of the talent window: routes in circular order, nodes by tier. */
-export function talentLayout(): { route: string; tiers: string[][] }[] {
-  return TALENTS.routes.map((route) => {
-    const tiers: string[][] = [[], [], [], []];
-    for (const [id, n] of Object.entries(TALENTS.nodes)) if (n.route === route) tiers[n.tier - 1]!.push(id);
-    for (const tier of tiers) tier.sort();
-    return { route, tiers };
-  });
 }

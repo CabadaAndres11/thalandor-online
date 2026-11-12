@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 1.1 |
+| Versión del documento | 1.2 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.3.0 (Plan 3: combate y clases) |
 
@@ -176,13 +176,13 @@ La Fuerza da probabilidad de **bloqueo** (0,2 % por punto): un bloqueo reduce a 
 ### 4.5 Árbol de talentos **[Implementado]**
 - **Puntos:** 1 por nivel a partir del 2, es decir, **29 puntos al nivel 30**.
 - **Árbol común a todas las clases.** Los nodos solo dan estadísticas: no modifican habilidades.
-- **Estructura:** **5 rutas** de 4 niveles de profundidad. Para desbloquear un nivel hay que haber gastado puntos en los niveles anteriores de esa ruta (3, 6 y 9 puntos).
-- **Nodos multirrango:** se pueden invertir varios puntos en el mismo nodo.
-- **Puentes entre rutas vecinas:** nodos que combinan estadísticas de dos rutas.
+- **Estructura circular:** se empieza en el centro y se avanza en cualquier dirección comprando nodos conectados a los que ya tienes (1 punto por nodo). Cada dirección está orientada a unas estadísticas.
+- **Híbridos:** entre cada pareja de direcciones vecinas hay un radio que mezcla las dos.
+- **Notables y culminantes:** el 3.er nodo de cada radio vale el doble; al final de cada dirección pura hay un nodo culminante.
 - **Reinicio:** el reinicio completo cuesta oro y se hace con el instructor de la capital. Hasta que existan la capital y el oro, es gratis y en cualquier momento fuera de combate (igual que cambiar de especialización).
 - **Nodos:** la lista completa está en el **anexo C**.
 
-| Ruta | Enfoque | Ejemplos de nodos |
+| Dirección | Enfoque | Ejemplos de nodos |
 |---|---|---|
 | **Poderío** | Daño físico | +poder de ataque, +% crítico, +% daño crítico |
 | **Arcano** | Daño mágico | +poder de hechizos, +maná, +% daño de hechizos |
@@ -190,7 +190,7 @@ La Fuerza da probabilidad de **bloqueo** (0,2 % por punto): un bloqueo reduce a 
 | **Celeridad** | Velocidad | +% movimiento, +% reducción de recarga, +% esquiva |
 | **Vitalidad** | Sostenimiento | +regeneración, +% curación hecha y recibida, +% robo de vida |
 
-Orden circular de las rutas, que determina los puentes: Poderío – Celeridad – Vitalidad – Bastión – Arcano – Poderío.
+Orden circular de las direcciones, que determina los radios híbridos: Poderío – Celeridad – Vitalidad – Bastión – Arcano – Poderío.
 
 ### 4.6 Cálculo de estadísticas **[Implementado]**
 ```
@@ -530,78 +530,62 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 
 ## Anexo C — Árbol de talentos
 
-**Estructura de cada ruta:**
-- Nivel 1: 2 nodos de 3 rangos, disponibles desde el principio.
-- Nivel 2: 2 nodos de 3 rangos; requiere 3 puntos en la ruta.
-- Nivel 3: 1 nodo de 3 rangos; requiere 6.
-- Nivel 4 (culminante): 1 nodo de 1 rango; requiere 9.
-
-Completar una ruta cuesta 16 puntos. Los datos están en `data/talents.json`.
+**Forma (46 nodos, `data/talents.json`, generado con `npx tsx tools/gen-talents.ts`):**
+- **Inicio:** un nodo central, gratis.
+- **10 radios de 4 nodos:** 5 direcciones puras y 5 híbridas entre direcciones vecinas.
+- **Anillos:** el 1.er y el 3.er paso de cada radio se conectan con los de los radios vecinos.
+- **Culminantes:** al final de cada radio puro, a 5 puntos del centro.
+- **Nodos híbridos:** dan el bonus principal de sus dos direcciones al 60 % (al 100 % en el notable).
 
 **Poderío**
 
-| Nodo | Rangos | Por rango |
+| Paso | Nodo | Bonus |
 |---|---|---|
-| Fuerza bruta (1) | 3 | +3 % poder de ataque |
-| Precisión (1) | 3 | +1 % crítico |
-| Golpes certeros (2) | 3 | +5 % daño crítico |
-| Brutalidad (2) | 3 | +2 % daño realizado |
-| Ímpetu (3) | 3 | +6 poder de ataque |
-| Maestría marcial (4) | 1 | +8 % poder de ataque |
-
-**Arcano**
-
-| Nodo | Rangos | Por rango |
-|---|---|---|
-| Poder arcano (1) | 3 | +3 % poder de hechizos |
-| Reserva (1) | 3 | +4 % recurso máximo |
-| Agudeza (2) | 3 | +5 % daño crítico |
-| Flujo (2) | 3 | +5 % regeneración de maná |
-| Foco (3) | 3 | +6 poder de hechizos |
-| Archimago (4) | 1 | +8 % poder de hechizos |
-
-**Bastión**
-
-| Nodo | Rangos | Por rango |
-|---|---|---|
-| Coraza (1) | 3 | +4 % armadura |
-| Robustez (1) | 3 | +3 % vida |
-| Guardia (2) | 3 | −2 % daño recibido |
-| Escudo firme (2) | 3 | +2 % bloqueo |
-| Muralla (3) | 3 | +15 armadura |
-| Inquebrantable (4) | 1 | +8 % vida |
+| 1 | Fuerza bruta | +3 % poder de ataque |
+| 2 | Precisión | +1 % probabilidad de crítico |
+| 3 (notable) | Golpes certeros | +4 % poder de ataque, +5 % daño crítico |
+| 4 | Brutalidad | +2 % daño realizado |
+| Culminante | Maestría marcial | +8 % poder de ataque, +10 % daño crítico |
 
 **Celeridad**
 
-| Nodo | Rangos | Por rango |
+| Paso | Nodo | Bonus |
 |---|---|---|
-| Paso ligero (1) | 3 | +3 % velocidad de movimiento |
-| Reflejos felinos (1) | 3 | +1 % esquiva |
-| Presteza (2) | 3 | −3 % recargas |
-| Ojo rápido (2) | 3 | +1 % crítico |
-| Ritmo (3) | 3 | −2 % recargas |
-| Torbellino del tiempo (4) | 1 | −8 % recargas |
+| 1 | Paso ligero | +3 % velocidad de movimiento |
+| 2 | Reflejos felinos | +1 % esquiva |
+| 3 (notable) | Ritmo | −3 % recargas, +3 % velocidad de movimiento |
+| 4 | Presteza | −2 % recargas |
+| Culminante | Torbellino del tiempo | −8 % recargas |
 
 **Vitalidad**
 
-| Nodo | Rangos | Por rango |
+| Paso | Nodo | Bonus |
 |---|---|---|
-| Regeneración (1) | 3 | +1 vida por segundo |
-| Manos sanadoras (1) | 3 | +3 % curación realizada |
-| Sed vital (2) | 3 | +1 % robo de vida |
-| Receptividad (2) | 3 | +3 % curación recibida |
-| Vigor (3) | 3 | +2 % vida |
-| Fuente de vida (4) | 1 | +8 % curación recibida |
+| 1 | Regeneración | +1 vida por segundo |
+| 2 | Manos sanadoras | +3 % curación realizada |
+| 3 (notable) | Sed vital | +1 % robo de vida, +4 % curación recibida |
+| 4 | Receptividad | +3 % curación recibida |
+| Culminante | Fuente de vida | +8 % curación recibida, +2 % robo de vida |
 
-**Puentes** (2 rangos; requieren 3 puntos en cada ruta vecina):
+**Bastión**
 
-| Puente | Por rango |
-|---|---|
-| Poderío – Celeridad | +1 % crítico y +2 % velocidad de movimiento |
-| Celeridad – Vitalidad | −2 % recargas y +0,5 vida por segundo |
-| Vitalidad – Bastión | +2 % vida y +2 % curación recibida |
-| Bastión – Arcano | +2 % armadura y +2 % recurso máximo |
-| Arcano – Poderío | +4 % daño crítico y +1 % daño realizado |
+| Paso | Nodo | Bonus |
+|---|---|---|
+| 1 | Coraza | +4 % armadura |
+| 2 | Robustez | +3 % vida |
+| 3 (notable) | Escudo firme | +2 % bloqueo, −2 % daño recibido |
+| 4 | Muralla | +15 armadura |
+| Culminante | Inquebrantable | +8 % vida, −3 % daño recibido |
+
+**Arcano**
+
+| Paso | Nodo | Bonus |
+|---|---|---|
+| 1 | Poder arcano | +3 % poder de hechizos |
+| 2 | Reserva | +4 % recurso máximo |
+| 3 (notable) | Agudeza | +5 % daño crítico, +4 % poder de hechizos |
+| 4 | Flujo | +5 % regeneración de maná |
+| Culminante | Archimago | +8 % poder de hechizos |
 
 ---
 
@@ -625,3 +609,4 @@ Completar una ruta cuesta 16 puntos. Los datos están en `data/talents.json`.
 | 0.9 | 2026-11-12 | Diseño del Plan 4 (progresión): curva de experiencia, reparto en grupo, crecimiento por clase, bloqueo, anexo C con el árbol de talentos completo, desbloqueos por nivel y mecánicas de especialización. Reinicio y cambio de especialización gratis fuera de combate hasta que existan capital y oro. |
 | 1.0 | 2026-11-12 | Plan 4 implementado (versión 0.4.0): experiencia y niveles hasta el 30 con reparto en grupo, atributos con crecimiento por clase y bloqueo, árbol de talentos, desbloqueos por nivel, las 8 especializaciones con sus mecánicas (combo, sigilo, venenos, reflejo, zonas, canalizaciones, proyectiles que explotan o atraviesan, pasivas con disparadores), ventanas de Personaje, Talentos y Especialización, barra de experiencia y guardado v2. |
 | 1.1 | 2026-11-12 | Versión 0.4.1: menú con Esc (en solitario pausa el mundo; en grupo la partida sigue), los clics en las ventanas ya no lanzan el ataque básico. |
+| 1.2 | 2026-11-12 | Versión 0.4.2: árbol de talentos circular (46 nodos, se avanza desde el centro en cualquier dirección, radios híbridos, notables y culminantes); los talentos del árbol anterior se reinician solos. Las teclas de habilidad ya no se activan al escribir en el chat. |

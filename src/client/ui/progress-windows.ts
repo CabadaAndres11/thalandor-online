@@ -6,7 +6,7 @@ import { SPECS, specsOf, UNLOCK } from '../../sim/progression/unlocks';
 import { iconUrl } from '../hud/icons';
 import { t } from '../i18n';
 import { button, el } from './dom';
-import { formatStat, talentLayout, talentTooltip } from './progress-logic';
+import { formatStat, talentTooltip } from './progress-logic';
 
 export interface ProgressWindowsOptions {
   classId: string;
@@ -208,34 +208,52 @@ export class ProgressWindows {
 
   private renderTalents(p: ProgressInfo): void {
     this.root.append(el('div', 'muted', t('talents.free', { n: p.freeTalentPoints })));
-    const grid = el('div', 'talent-grid');
-    for (const col of talentLayout()) {
-      const c = el('div', 'talent-col');
-      c.append(el('div', 'talent-route', t(`route.${col.route}`)));
-      for (const tier of col.tiers) {
-        const row = el('div', 'talent-tier');
-        for (const id of tier) row.append(this.talentNode(p, id));
-        c.append(row);
+    const NS = 'http://www.w3.org/2000/svg';
+    const W = 640;
+    const H = 540;
+    const S = 230;
+    const pos = (x: number, y: number) => ({ x: W / 2 + x * S, y: H / 2 + y * S });
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('class', 'talent-circle');
+    const mk = (tag: string, attrs: Record<string, string | number>, cls?: string) => {
+      const e = document.createElementNS(NS, tag);
+      for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+      if (cls) e.setAttribute('class', cls);
+      return e;
+    };
+    const owned = (id: string) => id === TALENTS.start || (p.talents[id] ?? 0) > 0;
+    // Links first, so nodes are drawn on top.
+    for (const [id, n] of Object.entries(TALENTS.nodes)) {
+      for (const l of n.links) {
+        if (l < id) continue;
+        const a = pos(n.x, n.y);
+        const b = pos(TALENTS.nodes[l]!.x, TALENTS.nodes[l]!.y);
+        svg.append(mk('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y }, owned(id) && owned(l) ? 'talent-link lit' : 'talent-link'));
       }
-      grid.append(c);
     }
-    this.root.append(grid);
-    this.root.append(el('div', 'muted', t('talents.bridges')));
-    const bridges = el('div', 'talent-tier bridges');
-    for (const id of Object.keys(TALENTS.bridges)) bridges.append(this.talentNode(p, id));
-    this.root.append(bridges, button('btn small', t('talents.reset'), () => this.opts.request({ k: 'resetTalents' })));
-  }
-
-  private talentNode(p: ProgressInfo, id: string): HTMLElement {
-    const def = TALENTS.nodes[id] ?? TALENTS.bridges[id]!;
-    const rank = p.talents[id] ?? 0;
-    const can = canSpend(p.talents, id, p.level);
-    const cls = ['talent-node', rank >= def.maxRank ? 'full' : '', rank > 0 ? 'some' : '', can ? 'can' : 'locked'].filter(Boolean).join(' ');
-    const b = button(cls, `${rank}/${def.maxRank}`, () => can && this.opts.request({ k: 'talent', node: id }));
-    b.dataset.talent = id;
-    b.title = talentTooltip(id);
-    b.prepend(el('span', 'talent-name', t(`talent.${id}`)));
-    return b;
+    const R = { start: 13, minor: 8, notable: 11, keystone: 15 };
+    for (const [id, n] of Object.entries(TALENTS.nodes)) {
+      const c = pos(n.x, n.y);
+      const can = canSpend(p.talents, id, p.level);
+      const state = owned(id) ? 'owned' : can ? 'can' : 'locked';
+      const g = mk('g', { 'data-talent': id }, `talent-node ${n.kind} ${state}`);
+      const title = mk('title', {});
+      title.textContent = talentTooltip(id);
+      g.append(title, mk('circle', { cx: c.x, cy: c.y, r: R[n.kind] }));
+      if (can) g.addEventListener('click', () => this.opts.request({ k: 'talent', node: id }));
+      svg.append(g);
+    }
+    for (const d of TALENTS.directions) {
+      const k = TALENTS.nodes[`${d}_key`];
+      if (!k) continue;
+      const len = Math.hypot(k.x, k.y) || 1;
+      const c = pos((k.x / len) * 1.08, (k.y / len) * 1.08);
+      const label = mk('text', { x: c.x, y: c.y, 'text-anchor': 'middle', 'dominant-baseline': 'middle' }, 'talent-dir');
+      label.textContent = t(`route.${d}`);
+      svg.append(label);
+    }
+    this.root.append(svg, el('div', 'muted', t('talents.help')), button('btn small', t('talents.reset'), () => this.opts.request({ k: 'resetTalents' })));
   }
 
   private renderSpec(p: ProgressInfo): void {

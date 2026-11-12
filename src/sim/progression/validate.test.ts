@@ -10,12 +10,12 @@ test('missing progress means a fresh level 1 character', () => {
 });
 
 test('coherent progress is kept', () => {
-  const raw = { level: 4, xp: 50, attributes: attrs(15), talents: { might_1a: 3 }, specId: null, hotbar: ['warrior_charge', null, null, null] };
+  const raw = { level: 4, xp: 50, attributes: attrs(15), talents: { might_1: 1, might_2: 1, might_3: 1 }, specId: null, hotbar: ['warrior_charge', null, null, null] };
   expect(sanitizeProgress('warrior', raw)).toEqual({ progress: raw, resets: [] });
 });
 
 test('too many attribute or talent points, impossible trees and foreign specs are reset', () => {
-  const r = sanitizeProgress('warrior', { level: 3, xp: 0, attributes: attrs(11), talents: { might_2a: 1 }, specId: 'mage_fire' });
+  const r = sanitizeProgress('warrior', { level: 3, xp: 0, attributes: attrs(11), talents: { might_3: 1 }, specId: 'mage_fire' });
   expect(r.progress.level).toBe(3);
   expect(r.progress.attributes).toEqual(attrs(0));
   expect(r.progress.talents).toEqual({});

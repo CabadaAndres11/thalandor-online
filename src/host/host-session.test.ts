@@ -207,10 +207,10 @@ test('invalid progression is reset on join', async () => {
 test('valid progression is applied on join', async () => {
   const { net, world } = setup();
   const attributes = { strength: 0, agility: 0, intellect: 0, stamina: 5, spirit: 0 };
-  await join(net, { character: { progress: { level: 2, xp: 0, attributes, talents: { bastion_1b: 1 } } } });
+  await join(net, { character: { progress: { level: 3, xp: 0, attributes, talents: { bastion_1: 1, bastion_2: 1 } } } });
   const p = world.getPlayer(1)!;
   expect(p.attrs.stamina).toBe(5);
-  expect(p.talents).toEqual({ bastion_1b: 1 });
+  expect(p.talents).toEqual({ bastion_1: 1, bastion_2: 1 });
 });
 
 test('roster broadcast on join and on leave', async () => {

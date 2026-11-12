@@ -26,13 +26,8 @@ export interface GameSceneData {
 const SELF_KEY = -1;
 const CAMERA_ZOOM = 1.5;
 const playerLook = (classId: ClassId, a: Appearance) => `p|${classId}|${a.body}|${a.skin}|${a.hairStyle}|${a.hairColor}`;
-const SLOT_KEYS: [string, PressSlot][] = [
-  ['ONE', 's1'],
-  ['TWO', 's2'],
-  ['THREE', 's3'],
-  ['FOUR', 's4'],
-  ['SPACE', 'dodge'],
-];
+/** KeyboardEvent.code -> slot. Read from DOM events (not Phaser keys) so text typed in the chat never casts. */
+const SLOT_KEYS: Record<string, PressSlot> = { Digit1: 's1', Digit2: 's2', Digit3: 's3', Digit4: 's4', Numpad1: 's1', Numpad2: 's2', Numpad3: 's3', Numpad4: 's4', Space: 'dodge' };
 
 export class GameScene extends Phaser.Scene {
   private data_!: GameSceneData;
@@ -72,9 +67,15 @@ export class GameScene extends Phaser.Scene {
 
     // Second argument false: do not capture keys, so the chat input can still receive them.
     this.keys = this.input.keyboard!.addKeys('W,A,S,D,E', false) as GameScene['keys'];
-    for (const [code, slot] of SLOT_KEYS) {
-      this.input.keyboard!.addKey(code, false).on('down', () => this.pressSlot(slot));
-    }
+    const onKey = (e: KeyboardEvent) => {
+      const slot = SLOT_KEYS[e.code];
+      const target = e.target as HTMLElement | null;
+      if (!slot || e.repeat || (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA'))) return;
+      if (slot === 'dodge') e.preventDefault();
+      this.pressSlot(slot);
+    };
+    document.addEventListener('keydown', onKey);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => document.removeEventListener('keydown', onKey));
     this.input.mouse?.disableContextMenu();
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
       // Clicks on HTML windows over the canvas (e.g. the "+" of an attribute) are not attacks.
