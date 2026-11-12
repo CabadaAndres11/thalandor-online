@@ -90,7 +90,7 @@ export class HostSession {
     if (msg.t === 'input') this.handleInput(peer.playerId, msg.input);
     else if (msg.t === 'chat') {
       const text = msg.text.trim().slice(0, MAX_CHAT_LENGTH);
-      if (this.opts.devCommands && text.startsWith('/dev ')) return this.devCommand(peer.playerId, text.slice(5).split(/s+/));
+      if (this.opts.devCommands && text.startsWith('/dev ')) return this.devCommand(peer.playerId, text.slice(5).split(/\s+/));
       if (text) this.broadcast({ t: 'chat', from: peer.name, text }, 'reliable');
     }
   }
