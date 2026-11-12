@@ -330,14 +330,14 @@ export class World {
       return;
     }
     if (!SLOTS.includes(press.slot)) return;
-    const abilityId = CLASSES[p.classId ?? '']?.slots[press.slot];
+    const abilityId = p.slots[press.slot];
     if (abilityId) useAbility(this, p, abilityId, aim);
   }
 
   /** Held basic-attack buttons fire again whenever ready. */
   private autoAttack(p: Unit): void {
     if (p.state !== 'alive' || !p.held || p.dash) return;
-    const slots = CLASSES[p.classId ?? '']?.slots;
+    const slots = p.slots;
     const aim = this.lastAim.get(p.id);
     if (!slots || !aim) return;
     if (p.held & BUTTON.lmb && slots.lmb) useAbility(this, p, slots.lmb, aim);
@@ -410,7 +410,7 @@ export class World {
 
   meSnapshot(u: Unit): MeSnapshot {
     const now = this.now;
-    const slots = CLASSES[u.classId ?? '']?.slots;
+    const slots = u.slots;
     const cd: Record<string, number> = {};
     if (slots) for (const [slot, id] of Object.entries(slots)) if (id) cd[slot] = Math.max(0, (u.cooldowns[id] ?? 0) - now);
     cd.dodge = Math.max(0, (u.cooldowns.dodge ?? 0) - now);

@@ -191,6 +191,28 @@ test('invalid classId and appearance are replaced by defaults', async () => {
   expect(roster.players[0]).toEqual({ id: 1, name: 'Ana', classId: 'warrior', appearance: defaultAppearance('warrior') });
 });
 
+test('invalid progression is reset on join', async () => {
+  const { net, world } = setup();
+  const attributes = { strength: 50, agility: 0, intellect: 0, stamina: 0, spirit: 0 };
+  const c = await join(net, { character: { progress: { level: 4, xp: 10, attributes, talents: { might_4: 1 }, specId: 'x' } } });
+  const p = world.getPlayer(1)!;
+  expect(ofType(c, 'welcome')).toHaveLength(1);
+  expect(p.level).toBe(4);
+  expect(p.xp).toBe(10);
+  expect(p.attrs.strength).toBe(0);
+  expect(p.talents).toEqual({});
+  expect(p.specId).toBeNull();
+});
+
+test('valid progression is applied on join', async () => {
+  const { net, world } = setup();
+  const attributes = { strength: 0, agility: 0, intellect: 0, stamina: 5, spirit: 0 };
+  await join(net, { character: { progress: { level: 2, xp: 0, attributes, talents: { bastion_1b: 1 } } } });
+  const p = world.getPlayer(1)!;
+  expect(p.attrs.stamina).toBe(5);
+  expect(p.talents).toEqual({ bastion_1b: 1 });
+});
+
 test('roster broadcast on join and on leave', async () => {
   const { net } = setup();
   const a = await join(net, { name: 'Ana', character: { classId: 'mage' } });

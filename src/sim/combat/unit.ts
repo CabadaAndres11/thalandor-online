@@ -5,6 +5,8 @@ import { DOWN, type Facing } from '../facing';
 import type { EntityId, Vec2 } from '../types';
 import { BALANCE, CLASSES, MONSTERS, type Attributes, type PassiveDef, type ResourceKind, type School, type StatKey, type StatMod } from './defs';
 import { computeStats, monsterBaseStats, NO_ATTRS, playerBaseStats, type Stats } from './stats';
+import { talentMods, type TalentAlloc } from '../progression/talents';
+import { activePassives, loadout, type Loadout } from '../progression/unlocks';
 
 export type Team = 'players' | 'monsters';
 export type LifeState = 'alive' | 'downed' | 'dead';
@@ -61,6 +63,12 @@ export interface Unit {
   xp: number;
   /** Attribute points allocated by the player. */
   attrs: Attributes;
+  talents: TalentAlloc;
+  specId: string | null;
+  /** Saved choice for slots 1–4 (null = default). */
+  hotbar: (string | null)[];
+  /** What each input slot casts, from class, spec, level and hotbar. */
+  slots: Loadout;
   pos: Vec2;
   radius: number;
   facing: Facing;
@@ -102,6 +110,10 @@ function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name'
     level: 1,
     xp: 0,
     attrs: { ...NO_ATTRS },
+    talents: {},
+    specId: null,
+    hotbar: [null, null, null, null],
+    slots: { lmb: null, rmb: null, s1: null, s2: null, s3: null, s4: null },
     pos: { ...pos },
     facing: DOWN,
     moving: false,
@@ -134,6 +146,9 @@ export interface PlayerProgress {
   level: number;
   xp: number;
   attributes: Attributes;
+  talents: TalentAlloc;
+  specId: string | null;
+  hotbar: (string | null)[];
 }
 
 export function createPlayerUnit(
@@ -159,10 +174,11 @@ export function createPlayerUnit(
     level,
     xp: info.progress?.xp ?? 0,
     attrs,
-    passives: c.passives,
-    mods: c.passives.flatMap((p) => p.mods ?? []),
+    talents: { ...(info.progress?.talents ?? {}) },
+    specId: info.progress?.specId ?? null,
+    hotbar: [...(info.progress?.hotbar ?? [null, null, null, null])],
   };
-  recomputeStats(u, 0);
+  rebuildPlayer(u, 0);
   u.hp = u.stats.maxHp;
   u.resource = u.resourceKind === 'rage' ? 0 : u.stats.maxResource;
   return u;
@@ -189,10 +205,13 @@ export function createMonsterUnit(id: EntityId, type: string, pos: Vec2, hpScale
   return u;
 }
 
-/** Rebuilds a player's base stats after a level or attribute change, keeping hp/resource ratios sane. */
-export function refreshPlayerBase(u: Unit, now: number): void {
+/** Rebuilds a player's stats, passives and slots after any progress change (level, attributes, talents, spec, hotbar). */
+export function rebuildPlayer(u: Unit, now: number): void {
   if (!u.classId) return;
   u.baseStats = playerBaseStats(CLASSES[u.classId]!, u.level, u.attrs);
+  u.passives = activePassives(u.classId, u.specId, u.level);
+  u.mods = [...u.passives.flatMap((p) => p.mods ?? []), ...talentMods(u.talents)];
+  u.slots = loadout(u.classId, u.specId, u.level, u.hotbar);
   recomputeStats(u, now);
 }
 

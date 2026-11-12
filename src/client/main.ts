@@ -66,7 +66,20 @@ function backToMenu(error?: string): void {
 function startGame(conn: Connection, character: Character, host: WorkerHostHandle | null): void {
   const session = new ClientSession(conn, {
     version: GAME_VERSION,
-    character: { name: character.name, classId: character.classId, appearance: character.appearance, lastLocation: character.lastLocation },
+    character: {
+      name: character.name,
+      classId: character.classId,
+      appearance: character.appearance,
+      lastLocation: character.lastLocation,
+      progress: {
+        level: character.level,
+        xp: character.xp,
+        attributes: character.attributes,
+        talents: character.talents,
+        specId: character.specId,
+        hotbar: character.hotbar,
+      },
+    },
     map,
   });
   const saver = new AutoSaver({ store, character, mapId: MAP_ID, getLocation: () => session.selfLocation() });

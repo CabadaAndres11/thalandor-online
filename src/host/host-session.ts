@@ -3,6 +3,7 @@ import { MONSTERS } from '../sim/combat/defs';
 import { MAX_PLAYERS } from '../sim/constants';
 import type { EntityId, PlayerInput } from '../sim/types';
 import type { World } from '../sim/world';
+import { sanitizeProgress } from '../sim/progression/validate';
 import { decodeClient, encode, type HostMessage, type NetCharacter, type RosterEntry } from '../net/protocol';
 import type { Channel, Connection } from '../net/transport';
 
@@ -103,7 +104,8 @@ export class HostSession {
     const appearance = isValidAppearance(c.appearance) ? { ...c.appearance } : defaultAppearance(classId);
     const saved = c.lastLocation;
     const at = saved && saved.mapId === this.opts.mapId && this.world.isSpawnable(saved) ? { x: saved.x, y: saved.y } : undefined;
-    const player = this.world.addPlayer({ name, classId, appearance }, at);
+    const { progress } = sanitizeProgress(classId, c.progress);
+    const player = this.world.addPlayer({ name, classId, appearance, progress }, at);
     peer.playerId = player.id;
     peer.name = name;
     this.sendTo(peer, { t: 'welcome', playerId: player.id, mapId: this.opts.mapId }, 'reliable');

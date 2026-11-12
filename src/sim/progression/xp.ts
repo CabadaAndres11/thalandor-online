@@ -1,5 +1,5 @@
 import { BALANCE, MONSTERS, type MonsterDef } from '../combat/defs';
-import { refreshPlayerBase, type Unit } from '../combat/unit';
+import { rebuildPlayer, type Unit } from '../combat/unit';
 import type { World } from '../world';
 
 const X = BALANCE.xp;
@@ -41,7 +41,7 @@ export function awardXp(world: World, p: Unit, amount: number): void {
   }
   if (p.level >= MAX_LEVEL) p.xp = 0;
   if (levelled) {
-    refreshPlayerBase(p, world.now);
+    rebuildPlayer(p, world.now);
     p.hp = p.stats.maxHp;
     if (p.resourceKind !== 'rage') p.resource = p.stats.maxResource;
   }

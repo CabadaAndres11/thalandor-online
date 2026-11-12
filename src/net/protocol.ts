@@ -9,6 +9,8 @@ export interface NetCharacter {
   classId: string;
   appearance: Appearance;
   lastLocation: { mapId: string; x: number; y: number } | null;
+  /** Level, xp and choices; untrusted, the host sanitizes it (sanitizeProgress). */
+  progress?: unknown;
 }
 
 export interface RosterEntry {
