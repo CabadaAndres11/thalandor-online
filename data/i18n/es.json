@@ -296,7 +296,7 @@
   "spec.current": "Actual",
   "spec.later": "Más tarde",
   "window.close": "Cerrar",
-  "window.keys": "C: personaje · I: inventario · N: talentos",
+  "window.keys": "C: personaje · I: inventario · K: habilidades · N: talentos",
   "hud.level": "Nivel {level}",
   "hud.maxLevel": "Nivel máximo",
   "hud.blocked": "Bloqueado",
@@ -549,5 +549,6 @@
   "refused.class": "Tu clase no puede equiparse eso.",
   "refused.far": "Tienes que estar junto al mercader.",
   "refused.cooldown": "Aún no puedes tomar otra poción.",
-  "refused.none": "No hay nada que hacer."
+  "refused.none": "No hay nada que hacer.",
+  "abilities.title": "Habilidades"
 }

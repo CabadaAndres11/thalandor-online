@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 1.3 |
+| Versión del documento | 1.4 |
 | Fecha | 2026-11-11 |
 | Versión del juego | 0.3.0 (Plan 3: combate y clases) |
 
@@ -108,7 +108,7 @@ La interfaz `Transport` permite cambiar en el futuro a un servidor dedicado sin 
 | Chat de grupo | Enter |
 | Pociones | Vida (Q) · Recurso (R) |
 | Interactuar | E (levantar a un aliado, hablar con el mercader) |
-| Ventanas | Personaje (C), Inventario (I), Talentos (N), Misiones (J), Mapa (M), Menú (Esc) |
+| Ventanas | Personaje (C), Inventario (I), Habilidades (K), Talentos (N), Misiones (J), Mapa (M), Menú (Esc) |
 
 Todas las teclas son reasignables desde Opciones.
 
@@ -363,7 +363,10 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 - Minimapa y seguimiento de misiones.
 - Números de daño flotantes, y nombre y vida sobre los enemigos.
 
-### 9.3 Ventanas **[En curso]** (Personaje con equipo (C), Inventario (I), Talentos (N), Especialización y Mercader)
+### 9.3 Ventanas **[En curso]** (Personaje con equipo y sprite en vivo (C), Inventario (I), Habilidades (K), Talentos (N), Especialización y Mercader)
+- **Norma:** ninguna ventana puede necesitar scroll para verse entera (en una pantalla de 1280×720). Si una ventana se llena, su contenido se reparte en otra ventana con su propia tecla.
+- **Personaje (C):** atributos y estadísticas a la izquierda; a la derecha, el equipo alrededor de un sprite en vivo del personaje con lo que lleva puesto.
+- **Habilidades (K):** especialización, habilidades desbloqueadas, asignación de la barra y pasivas con su descripción.
 - Personaje (equipo y reparto de atributos), Inventario, Talentos, Diario de misiones y Mapa del mundo.
 - Opciones: controles, volumen y pantalla completa.
 
@@ -641,3 +644,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 1.1 | 2026-11-12 | Versión 0.4.1: menú con Esc (en solitario pausa el mundo; en grupo la partida sigue), los clics en las ventanas ya no lanzan el ataque básico. |
 | 1.2 | 2026-11-12 | Versión 0.4.2: árbol de talentos circular (46 nodos, se avanza desde el centro en cualquier dirección, radios híbridos, notables y culminantes); los talentos del árbol anterior se reinician solos. Las teclas de habilidad ya no se activan al escribir en el chat. |
 | 1.3 | 2026-11-12 | Plan 5 implementado (versión 0.5.0): botín personal en el suelo, 101 objetos base con rarezas y propiedades aleatorias, equipo visible en el personaje (179 piezas LPC), inventario de 30 casillas, oro, mercader provisional (comprar, vender y reparar), durabilidad, pociones (Q y R) y guardado v3. Solo se vende al mercader y no se equipan objetos de nivel superior. |
+| 1.4 | 2026-11-13 | Versión 0.5.1: las flechas y demás proyectiles impactan en todo el cuerpo dibujado (cápsula de los pies a la cabeza), no solo en los pies. Norma de interfaz sin scroll; nueva ventana de Habilidades (K); la ventana de Personaje muestra el equipo junto a un sprite en vivo. |

@@ -52,6 +52,16 @@ const FACING_VECTORS: Vec2[] = [
   { x: 1, y: 0 },
 ];
 
+/**
+ * Distance from a point to a unit's body: a vertical segment from its feet up to its head.
+ * Units stand at their feet but are drawn ~40 px tall, so aiming at the drawn body must hit.
+ */
+export function bodyDistance(t: Unit, p: Vec2): number {
+  const top = t.pos.y - t.height;
+  const y = Math.max(top, Math.min(t.pos.y, p.y));
+  return Math.hypot(p.x - t.pos.x, p.y - y);
+}
+
 function dirTo(from: Vec2, to: Vec2, fallback: Vec2 = { x: 0, y: 1 }): Vec2 {
   const d = { x: to.x - from.x, y: to.y - from.y };
   const l = len(d);
@@ -576,7 +586,7 @@ export function stepProjectiles(world: World): void {
       }
       const target = world
         .allUnits()
-        .find((t) => t.state === 'alive' && isEnemy(caster, t) && !p.hit.includes(t.id) && dist(t.pos, p.pos) <= t.radius + p.radius);
+        .find((t) => t.state === 'alive' && isEnemy(caster, t) && !p.hit.includes(t.id) && bodyDistance(t, p.pos) <= t.radius + p.radius);
       if (!target) continue;
       const shape = ab.shape.type === 'projectile' ? ab.shape : null;
       if (shape?.explodeRadius) {

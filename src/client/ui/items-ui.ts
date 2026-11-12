@@ -202,21 +202,39 @@ export class ItemsUi {
   }
 }
 
-/** The 11 equipment places for the character window. */
-export function equipmentPanel(inv: InventoryInfo | null, ui: ItemsUi, ctx: { level: number; classId: string }, request: (r: ProgressRequest) => void): HTMLElement {
-  const panel = el('div', 'equip-grid');
-  for (const place of EQUIP_SLOTS) {
-    const item = inv?.equipment[place as EquipSlot] ?? null;
+const LEFT_PLACES: EquipSlot[] = ['head', 'shoulders', 'chest', 'hands', 'legs', 'feet'];
+const RIGHT_PLACES: EquipSlot[] = ['weapon', 'offhand', 'neck', 'ring1', 'ring2'];
+
+/** The 11 equipment places around the live character sprite (character window). */
+export function equipmentPanel(
+  inv: InventoryInfo | null,
+  ui: ItemsUi,
+  ctx: { level: number; classId: string },
+  request: (r: ProgressRequest) => void,
+  sprite: HTMLElement,
+): HTMLElement {
+  const column = (places: EquipSlot[]) => {
+    const col = el('div', 'equip-col');
+    for (const place of places) col.append(equipCell(place));
+    return col;
+  };
+  const equipCell = (place: EquipSlot) => {
+    const item = inv?.equipment[place] ?? null;
     const cell = el('div', 'equip-cell');
     const box = itemSlot(item, ui.tip, () => (item ? itemTooltip(item, { ...ctx }) : []), 'equip');
     box.dataset.place = place;
+    box.title = item ? '' : t(`slot.${place}`);
     box.oncontextmenu = (e) => {
       e.preventDefault();
       if (item) request({ k: 'unequip', place });
     };
-    cell.append(box, el('span', 'equip-label', t(`slot.${place}`)));
-    panel.append(cell);
-  }
+    cell.append(box);
+    return cell;
+  };
+  const panel = el('div', 'equip-doll');
+  const mid = el('div', 'equip-sprite');
+  mid.append(sprite);
+  panel.append(column(LEFT_PLACES), mid, column(RIGHT_PLACES));
   return panel;
 }
 

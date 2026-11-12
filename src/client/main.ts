@@ -17,6 +17,7 @@ import { ProgressWindows } from './ui/progress-windows';
 import { PauseMenu } from './ui/pause-menu';
 import { equipmentPanel, ItemsUi } from './ui/items-ui';
 import { itemName } from './ui/item-logic';
+import { PreviewCanvas } from './render/preview';
 import { Hud } from './hud/hud';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
@@ -102,11 +103,18 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
     request: (req) => session.requestProgress(req),
     isTyping: () => overlay.chatOpen || pause.open,
   });
+  // Live sprite of the character with its equipment, for the character window.
+  const spriteCanvas = document.createElement('canvas');
+  spriteCanvas.className = 'live-sprite';
+  const sprite = new PreviewCanvas(spriteCanvas, 3);
+  const refreshSprite = () => void sprite.setCharacter(character.classId, character.appearance, session.selfGear);
+  refreshSprite();
   const windows = new ProgressWindows(uiRoot, {
     classId: character.classId,
     request: (req) => session.requestProgress(req),
     isTyping: () => overlay.chatOpen || pause.open,
-    equipment: () => equipmentPanel(session.inventory, items, { level: session.progress?.level ?? 1, classId: character.classId }, (r) => session.requestProgress(r)),
+    equipment: () => equipmentPanel(session.inventory, items, { level: session.progress?.level ?? 1, classId: character.classId }, (r) => session.requestProgress(r), spriteCanvas),
+    onCharacterVisible: (v) => (v ? sprite.start() : sprite.stop()),
   });
   let othersInGame = 0;
   const pause = new PauseMenu(uiRoot, {
@@ -119,6 +127,7 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
   });
   session.on('roster', ({ players }) => (othersInGame = players.length - 1));
   current = { session, host, saver, character, windows, pause, items };
+  session.on('disconnected', () => sprite.stop());
   saver.start();
   // Events from a session that is no longer current must never touch the UI or the active game.
   const live =
@@ -129,6 +138,7 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
   session.on('rejected', live(({ reason }) => backToMenu(reason === 'version' ? t('error.version') : t('error.full'))));
   session.on('disconnected', live(() => backToMenu(t('error.hostClosed'))));
   session.on('chat', live(({ from, text }) => overlay.addChat(from, text)));
+  session.on('roster', live(() => refreshSprite()));
   session.on('joined', live(({ name: n }) => overlay.addChat(null, t('chat.joined', { name: n }))));
   session.on('left', live(({ name: n }) => overlay.addChat(null, t('chat.left', { name: n }))));
   session.on(

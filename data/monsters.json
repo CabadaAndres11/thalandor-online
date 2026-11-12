@@ -19,7 +19,8 @@
     ],
     "behavior": "melee",
     "elite": false,
-    "level": 2
+    "level": 2,
+    "hitHeight": 40
   },
   "goblin_shaman": {
     "nameKey": "monster.goblin_shaman",
@@ -42,7 +43,8 @@
     "behavior": "ranged",
     "keepDistance": 180,
     "elite": false,
-    "level": 3
+    "level": 3,
+    "hitHeight": 36
   },
   "bat": {
     "nameKey": "monster.bat",
@@ -64,7 +66,8 @@
     ],
     "behavior": "pack",
     "elite": false,
-    "level": 1
+    "level": 1,
+    "hitHeight": 34
   },
   "orc_elite": {
     "nameKey": "monster.orc_elite",
@@ -87,6 +90,7 @@
     ],
     "behavior": "melee",
     "elite": true,
-    "level": 5
+    "level": 5,
+    "hitHeight": 46
   }
 }

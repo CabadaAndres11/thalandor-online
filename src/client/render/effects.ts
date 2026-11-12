@@ -32,6 +32,9 @@ const TEXT_STYLE: Record<'damage' | 'crit' | 'heal' | 'miss', { color: string; s
   miss: { color: '#b8b8c8', size: 16 },
 };
 
+/** Projectiles are drawn where they are in the simulation (their hitbox check covers the drawn bodies). */
+const PROJECTILE_LIFT = 0;
+
 interface Proj {
   obj: Phaser.GameObjects.Shape;
   vx: number;
@@ -68,8 +71,8 @@ export class Effects {
         case 'proj': {
           const look = PROJECTILE_LOOK[e.look] ?? { color: 0xffffff, radius: 3, streak: false };
           const obj = look.streak
-            ? this.scene.add.rectangle(e.x, e.y, 14, 2, look.color).setRotation(Math.atan2(e.vy, e.vx))
-            : this.scene.add.circle(e.x, e.y, look.radius, look.color).setStrokeStyle(1, 0xffffff, 0.6);
+            ? this.scene.add.rectangle(e.x, e.y - PROJECTILE_LIFT, 14, 2, look.color).setRotation(Math.atan2(e.vy, e.vx))
+            : this.scene.add.circle(e.x, e.y - PROJECTILE_LIFT, look.radius, look.color).setStrokeStyle(1, 0xffffff, 0.6);
           obj.setDepth(5e5);
           this.projectiles.set(e.id, { obj, vx: e.vx, vy: e.vy, until: now + e.ttlMs + 200 });
           break;
@@ -80,7 +83,7 @@ export class Effects {
             p.obj.destroy();
             this.projectiles.delete(e.id);
           }
-          this.ring({ x: e.x, y: e.y }, 10, 0xffffff, 180);
+          this.ring({ x: e.x, y: e.y - PROJECTILE_LIFT }, 10, 0xffffff, 180);
           break;
         }
         case 'tele': {

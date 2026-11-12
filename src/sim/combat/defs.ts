@@ -186,6 +186,8 @@ export interface MonsterDef {
   level: number;
   stats: { maxHp: number; armor: number; power: number; moveSpeed: number };
   radius: number;
+  /** Height of the drawn body above the feet (projectile hitbox). */
+  hitHeight?: number;
   aggroRange: number;
   leashRange: number;
   abilities: string[];

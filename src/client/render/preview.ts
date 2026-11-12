@@ -1,5 +1,5 @@
 import { FRAME_SIZE, walkFrameAt, walkFrameRect } from '../../appearance/lpc-frames';
-import type { Appearance, ClassId } from '../../appearance/catalog';
+import type { Appearance, ClassId, GearLooks } from '../../appearance/catalog';
 import { layerSource, loadSheet, readyLayers } from './sheets';
 import { resolveLayers } from '../../appearance/catalog';
 
@@ -12,6 +12,7 @@ export function previewFrame(timeMs: number, facing: number): { facing: number; 
 export class PreviewCanvas {
   private classId: ClassId | null = null;
   private appearance: Appearance | null = null;
+  private gear: GearLooks = {};
   private facing = 2;
   private raf = 0;
   private token = 0;
@@ -24,12 +25,13 @@ export class PreviewCanvas {
     canvas.height = FRAME_SIZE * scale;
   }
 
-  async setCharacter(classId: ClassId, appearance: Appearance): Promise<void> {
+  async setCharacter(classId: ClassId, appearance: Appearance, gear: GearLooks = {}): Promise<void> {
     const token = ++this.token;
-    await Promise.all(resolveLayers(classId, appearance).map((l) => loadSheet(l.sheet).catch(() => null)));
+    await Promise.all(resolveLayers(classId, appearance, gear).map((l) => loadSheet(l.sheet).catch(() => null)));
     if (token !== this.token) return;
     this.classId = classId;
     this.appearance = appearance;
+    this.gear = gear;
   }
 
   setFacing(f: number): void {
@@ -61,7 +63,7 @@ export class PreviewCanvas {
     if (!this.classId || !this.appearance) return;
     const { facing, frame } = previewFrame(t, this.facing);
     const r = walkFrameRect(facing, frame);
-    for (const layer of readyLayers(this.classId, this.appearance)) {
+    for (const layer of readyLayers(this.classId, this.appearance, this.gear)) {
       const src = layerSource(layer, 'walk');
       if (src) g.drawImage(src.canvas, r.x, r.y, r.w, r.h, 0, 0, r.w * this.scale, r.h * this.scale);
     }

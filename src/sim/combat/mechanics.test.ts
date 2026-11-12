@@ -367,3 +367,21 @@ test('chill lengthens a slowed unit cooldowns; freezing shortens a cooldown', ()
   useAbility(w, mage, testAbility('freezer', { ...ARC, effects: [{ type: 'freeze', durationMs: 1000 }] }), m.pos);
   expect(mage.cooldowns.mage_frost_nova).toBe(w.now + 8000);
 });
+
+test('projectiles hit the drawn body, not only the feet', () => {
+  const w = testWorld();
+  const p = addPlayer(w, 'explorer', { x: 200, y: 300 });
+  const m = w.addMonster('skeleton', { x: 400, y: 300 });
+  m.statuses.push({ kind: 'root', until: 1e9, sourceId: p.id });
+  // Aim at the chest of the sprite (30 px above the feet): the arrow flies above the feet circle.
+  p.pos = { x: 200, y: 270 };
+  useAbility(w, p, testAbility('shot', { ...ARC, shape: { type: 'projectile', speed: 600, radius: 3, pierce: false, look: 'arrow' } }), { x: 400, y: 270 });
+  steps(w, TPS);
+  expect(m.stats.maxHp - m.hp).toBe(10);
+  // Well above the head it still misses.
+  const before = m.hp;
+  p.pos = { x: 200, y: 220 };
+  useAbility(w, p, 'shot', { x: 400, y: 220 });
+  steps(w, TPS);
+  expect(m.hp).toBe(before);
+});

@@ -1,6 +1,6 @@
 import type { Appearance, ClassId } from '../../appearance/catalog';
 import type { ActionAnim } from '../../appearance/catalog-types';
-import { PLAYER_RADIUS } from '../constants';
+import { BODY_HEIGHT, PLAYER_RADIUS } from '../constants';
 import { DOWN, type Facing } from '../facing';
 import type { EntityId, Vec2 } from '../types';
 import { BALANCE, CLASSES, MONSTERS, type Attributes, type PassiveDef, type ResourceKind, type School, type StatKey, type StatMod } from './defs';
@@ -92,6 +92,8 @@ export interface Unit {
   slots: Loadout;
   pos: Vec2;
   radius: number;
+  /** Body height above the feet: projectiles hit a capsule from the feet up to here. */
+  height: number;
   facing: Facing;
   moving: boolean;
   idleTicks: number;
@@ -157,7 +159,7 @@ export interface Channel {
   ctx: HitCtx;
 }
 
-function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name' | 'radius' | 'baseStats' | 'stats' | 'resourceKind'> {
+function blankUnit(id: EntityId, pos: Vec2): Omit<Unit, 'kind' | 'team' | 'name' | 'radius' | 'height' | 'baseStats' | 'stats' | 'resourceKind'> {
   return {
     id,
     level: 1,
@@ -232,6 +234,7 @@ export function createPlayerUnit(
     classId: info.classId,
     appearance: info.appearance,
     radius: PLAYER_RADIUS,
+    height: BODY_HEIGHT,
     resourceKind: c.resource,
     baseStats,
     stats: baseStats,
@@ -265,6 +268,7 @@ export function createMonsterUnit(id: EntityId, type: string, pos: Vec2, hpScale
     monsterType: type,
     level: def.level,
     radius: def.radius,
+    height: def.hitHeight ?? BODY_HEIGHT,
     resourceKind: 'none',
     baseStats,
     stats: baseStats,

@@ -13,11 +13,13 @@ export interface ProgressWindowsOptions {
   request: (req: ProgressRequest) => void;
   /** True while the chat has focus: window keys are ignored. */
   isTyping: () => boolean;
-  /** Equipment panel for the character window. */
+  /** Equipment around the live character sprite, for the right side of the character window. */
   equipment?: () => HTMLElement;
+  /** The character window opened or closed (to run the live sprite only while visible). */
+  onCharacterVisible?: (visible: boolean) => void;
 }
 
-type Which = 'character' | 'talents' | 'spec';
+type Which = 'character' | 'abilities' | 'talents' | 'spec';
 
 const SHOWN_STATS = [
   'maxHp', 'maxResource', 'attackPower', 'spellPower', 'critChance', 'critDamage', 'dodgeChance', 'blockChance',
@@ -45,7 +47,7 @@ function abilityIcon(id: string | null, cls: string): HTMLElement {
 }
 
 /**
- * Character (C), Talents (N) and Specialization windows. They only show the host's progress and send
+ * Character (C), Abilities (K), Talents (N) and Specialization windows. They only show the host's progress and send
  * requests; nothing changes locally until the host answers with a new progress message.
  */
 export class ProgressWindows {
@@ -100,11 +102,13 @@ export class ProgressWindows {
     this.picked = null;
     this.render();
     this.root.hidden = false;
+    this.opts.onCharacterVisible?.(which === 'character');
   }
 
   close(): void {
     this.open = null;
     this.root.hidden = true;
+    this.opts.onCharacterVisible?.(false);
   }
 
   private key(e: KeyboardEvent): void {
@@ -112,6 +116,7 @@ export class ProgressWindows {
     const target = e.target as HTMLElement | null;
     if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
     if (e.code === 'KeyC') this.toggle('character');
+    else if (e.code === 'KeyK') this.toggle('abilities');
     else if (e.code === 'KeyN') this.toggle('talents');
     else if (e.code === 'Escape' && this.open) this.close();
     else return;
@@ -123,12 +128,13 @@ export class ProgressWindows {
     this.root.replaceChildren();
     if (!p || !this.open) return;
     const head = el('div', 'win-head');
-    const titleKey = this.open === 'character' ? 'character.title' : this.open === 'talents' ? 'talents.title' : 'spec.title';
+    const titleKey = { character: 'character.title', abilities: 'abilities.title', talents: 'talents.title', spec: 'spec.title' }[this.open];
     head.append(el('h2', 'win-title', t(titleKey)), button('btn small', '✕', () => this.close()));
     head.lastElementChild!.setAttribute('aria-label', t('window.close'));
     this.root.dataset.window = this.open;
     this.root.append(head);
     if (this.open === 'character') this.renderCharacter(p);
+    else if (this.open === 'abilities') this.renderAbilities(p);
     else if (this.open === 'talents') this.renderTalents(p);
     else this.renderSpec(p);
     this.root.append(el('div', 'muted win-foot', t('window.keys')));
@@ -163,8 +169,19 @@ export class ProgressWindows {
       row.append(el('span', '', t(`stat.${k}`)), el('span', 'stat-value', formatStat(k, p.stats[k]!)));
       stats.append(row);
     }
+    const gear = el('section', 'win-section gear-section');
+    const eq = this.opts.equipment?.();
+    if (eq) gear.append(el('h3', '', t('inventory.equipment')), eq, el('div', 'muted', t('inventory.unequipHelp')));
+    body.append(attrs, stats, gear);
+    this.root.append(body);
+  }
+
+  private renderAbilities(p: ProgressInfo): void {
+    const c = CLASSES[this.opts.classId];
+    const body = el('div', 'win-cols');
     // Spec, abilities, passives
     const right = el('section', 'win-section');
+    const left = el('section', 'win-section');
     right.append(el('h3', '', t('character.spec')));
     const spec = p.specId ? SPECS[p.specId] : undefined;
     const specRow = el('div', 'attr-row');
@@ -201,18 +218,17 @@ export class ProgressWindows {
       bar.append(b);
     });
     right.append(bar);
-    right.append(el('h3', '', t('character.passives')));
+    left.append(el('h3', '', t('character.passives')));
     const passives = [...(c?.passives ?? []), ...(spec?.passives ?? [])];
     for (const ps of passives) {
       const active = p.passives.includes(ps.id);
-      const row = el('div', active ? 'passive-row' : 'passive-row locked', t(ps.nameKey));
-      row.title = t(`desc.${ps.id}`);
-      right.append(row);
+      const row = el('div', active ? 'passive-row' : 'passive-row locked');
+      row.append(el('span', 'passive-name', t(ps.nameKey)), el('span', 'passive-desc', t(`desc.${ps.id}`)));
+      left.append(row);
     }
-    body.append(attrs, stats, right);
+    body.append(right, left);
     this.root.append(body);
-    const eq = this.opts.equipment?.();
-    if (eq) this.root.append(el('h3', 'win-sub', t('inventory.equipment')), eq, el('div', 'muted', t('inventory.unequipHelp')));
+
   }
 
   private renderTalents(p: ProgressInfo): void {
