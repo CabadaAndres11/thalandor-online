@@ -64,7 +64,7 @@ export function createWorkerHandler(post: (m: WorkerToMain) => void, opts: { now
     switch (m.k) {
       case 'init': {
         const world = new World(CollisionMap.fromTiled(m.mapJson), spawnOf(m.mapJson), { spawns: spawnsFromTiled(m.mapJson) });
-        session = new HostSession(world, { version: m.version, mapId: m.mapId, defaultName: m.defaultName, now: opts.now });
+        session = new HostSession(world, { version: m.version, mapId: m.mapId, defaultName: m.defaultName, now: opts.now, devCommands: import.meta.env.DEV });
         const s = session;
         stopLoop = startTickLoop(() => s.tick(), { now: opts.now });
         break;

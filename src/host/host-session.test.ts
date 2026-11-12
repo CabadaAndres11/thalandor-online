@@ -249,3 +249,36 @@ test('presses are sanitized: bad aim replaced, buttons clamped', async () => {
   expect(p.held).toBe(255);
   expect(Number.isFinite(p.pos.x)).toBe(true);
 });
+
+describe('dev commands (development builds only)', () => {
+  function devSetup(devCommands: boolean) {
+    const world = new World(new CollisionMap(20, 20, new Uint8Array(400)), { x: 160, y: 160 });
+    const session = new HostSession(world, { version: '0.1.0', mapId: 'test-arena', defaultName: 'Aventurero', now: () => clock, devCommands });
+    const net = createMemoryNetwork();
+    net.createHost('ABC234').onConnection((c) => session.attach(c));
+    return { world, session, net };
+  }
+
+  test('spawn, hurt and kill work when enabled and are not broadcast', async () => {
+    const { world, net } = devSetup(true);
+    const c = await join(net);
+    c.send({ t: 'chat', text: '/dev spawn skeleton 60 0' });
+    c.send({ t: 'chat', text: '/dev hurt 50' });
+    await vi.runAllTimersAsync();
+    const me = world.getPlayer(1)!;
+    const mob = world.allUnits().find((u) => u.kind === 'monster');
+    expect(mob?.monsterType).toBe('skeleton');
+    expect(mob!.pos).toEqual({ x: me.pos.x + 60, y: me.pos.y });
+    expect(me.hp).toBe(me.stats.maxHp - 50);
+    expect(ofType(c, 'chat')).toHaveLength(0);
+  });
+
+  test('dev commands are plain chat when disabled', async () => {
+    const { world, net } = devSetup(false);
+    const c = await join(net);
+    c.send({ t: 'chat', text: '/dev spawn skeleton 60 0' });
+    await vi.runAllTimersAsync();
+    expect(world.allUnits().some((u) => u.kind === 'monster')).toBe(false);
+    expect(ofType(c, 'chat')).toHaveLength(1);
+  });
+});

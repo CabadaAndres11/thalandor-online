@@ -1,4 +1,5 @@
 import { defaultAppearance, isClassId, isValidAppearance } from '../appearance/catalog';
+import { MONSTERS } from '../sim/combat/defs';
 import { MAX_PLAYERS } from '../sim/constants';
 import type { EntityId, PlayerInput } from '../sim/types';
 import type { World } from '../sim/world';
@@ -14,6 +15,8 @@ export interface HostSessionOptions {
   mapId: string;
   /** Name used when a client sends an empty one (comes from i18n). */
   defaultName: string;
+  /** Development builds only: chat commands "/dev spawn|hurt|kill" for testing. */
+  devCommands?: boolean;
   now?: () => number;
 }
 
@@ -87,6 +90,7 @@ export class HostSession {
     if (msg.t === 'input') this.handleInput(peer.playerId, msg.input);
     else if (msg.t === 'chat') {
       const text = msg.text.trim().slice(0, MAX_CHAT_LENGTH);
+      if (this.opts.devCommands && text.startsWith('/dev ')) return this.devCommand(peer.playerId, text.slice(5).split(/s+/));
       if (text) this.broadcast({ t: 'chat', from: peer.name, text }, 'reliable');
     }
   }
@@ -104,6 +108,15 @@ export class HostSession {
     peer.name = name;
     this.sendTo(peer, { t: 'welcome', playerId: player.id, mapId: this.opts.mapId }, 'reliable');
     this.broadcastRoster();
+  }
+
+  private devCommand(playerId: EntityId, args: string[]): void {
+    const me = this.world.getPlayer(playerId);
+    if (!me) return;
+    const [cmd, a, b, c] = args;
+    if (cmd === 'spawn' && a && Object.hasOwn(MONSTERS, a)) this.world.addMonster(a, { x: me.pos.x + Number(b ?? 0), y: me.pos.y + Number(c ?? 0) });
+    else if (cmd === 'hurt') this.world.damage(me, Math.max(0, Number(a ?? 0)), null, 'physical');
+    else if (cmd === 'kill') this.world.damage(me, me.hp + 9999, null, 'physical');
   }
 
   private broadcastRoster(): void {
