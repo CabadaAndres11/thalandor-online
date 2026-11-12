@@ -5,9 +5,9 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del documento | 0.7 |
+| Versión del documento | 0.8 |
 | Fecha | 2026-11-11 |
-| Versión del juego | 0.2.0 (Plan 2: personajes y estilo visual) |
+| Versión del juego | 0.3.0 (Plan 3: combate y clases) |
 
 ---
 
@@ -95,7 +95,7 @@ La interfaz `Transport` permite cambiar en el futuro a un servidor dedicado sin 
 
 ---
 
-## 3. Controles **[En curso]** (solo movimiento WASD y chat con Enter)
+## 3. Controles **[Implementado]** (sin reasignación de teclas, que llega con la interfaz completa)
 
 | Acción | Tecla |
 |---|---|
@@ -114,7 +114,7 @@ Todas las teclas son reasignables desde Opciones.
 
 ## 4. Personajes y clases
 
-### 4.1 Recursos
+### 4.1 Recursos **[Implementado]**
 - **Vida:** todas las clases.
 - **Recurso de clase:**
   - **Ira** (Guerrero): se genera golpeando y recibiendo daño, y decae fuera de combate.
@@ -141,7 +141,7 @@ Todas las teclas son reasignables desde Opciones.
 - **Venenos y sangrados:** daño en el tiempo.
 - **Puntos de combo:** los ataques básicos acumulan puntos (máximo 5) que se gastan en remates.
 
-### 4.3 Habilidades
+### 4.3 Habilidades **[En curso]** (kit base y pasivas de clase implementados; especializaciones en el Plan 4)
 - **Habilidades activas:**
   - Cada clase empieza con ~5: ataque básico, ataque secundario y 3 habilidades.
   - Desbloquea más al subir de nivel.
@@ -213,7 +213,7 @@ final = (base de clase + atributos repartidos + suma de bonos planos) × (1 + su
 
 ---
 
-## 5. Combate **[Diseñado]** (detalle de implementación en `docs/superpowers/specs/2026-11-12-plan-3-combate-design.md`)
+## 5. Combate **[Implementado]** (detalle en `docs/superpowers/specs/2026-11-12-plan-3-combate-design.md`; sin desgaste de equipo hasta el Plan 5)
 
 - **Esquiva común:** salto corto de 96 px con 0,3 s de invulnerabilidad y 3 s de recarga.
 - **Recarga global:** 0,5 s entre habilidades (no afecta a los ataques básicos ni a la esquiva).
@@ -318,7 +318,7 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
    - **Al unirse**, el invitado aparece en su última ubicación guardada.
    - **"Ir con el grupo"** teletransporta junto al líder, solo fuera de combate.
 
-### 9.2 HUD
+### 9.2 HUD **[En curso]** (barras, casillas de habilidad, números flotantes y avisos de derribo; faltan marcos de grupo y minimapa)
 - Vida, recurso de clase y barra de experiencia.
 - Barra de habilidades en **casillas cuadradas con icono** (clic izquierdo, clic derecho, 1–4 y Espacio), con barrido de recarga, tecla y casilla atenuada sin recurso suficiente. Los iconos son provisionales generados por código hasta tener arte definitivo (candidato gratuito: game-icons.net, CC-BY 3.0).
 - Marcos de grupo con la vida y el recurso de los compañeros.
@@ -530,3 +530,4 @@ Todo ello en `data/`, sin modificar código. Este es un requisito de arquitectur
 | 0.5 | 2026-11-11 | Arte: se elige LPC (capas, 64×64, tiles de 32). Apariencia: cuerpo, piel, peinado y color de pelo. Reglas de nombre. Nuevo orden de planes: el Plan 2 pasa a ser personajes y estilo visual, antes que el combate. |
 | 0.6 | 2026-11-11 | Plan 2 implementado: creación y selección de hasta 8 personajes con arte LPC por capas (pieles y pelo por recoloreado de paleta), guardado en IndexedDB con autoguardado y reaparición, exportar e importar, tiles de 32 px y mapa de prueba LPC. El explorador lleva carcaj al andar; el arco llegará con las animaciones de combate. |
 | 0.7 | 2026-11-12 | Diseño del Plan 3 (combate): fórmulas de daño, recursos, amenaza, derribo, motor de habilidades por datos, 4 monstruos de prueba (humanoides del generador LPC y criaturas del pack LPC Monsters), HUD con casillas de habilidad con icono. Hasta la progresión, todo el kit base está disponible desde nivel 1. |
+| 0.8 | 2026-11-12 | Plan 3 implementado: combate en tiempo real con las 4 clases (kit base y pasivas), esquiva predicha, amenaza, derribo y levantar con E, 4 monstruos con IA (persecución con A*, retorno, manada, distancia) que reaparecen y escalan con el grupo, animaciones LPC de ataque y HUD con casillas de habilidad. |

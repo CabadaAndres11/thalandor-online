@@ -11,7 +11,18 @@ RPG de acción 2D en pixel art, con vista cenital, para jugar online con hasta 4
 
 **Tus personajes** se guardan en tu navegador y reapareces donde los dejaste. Con **Exportar** guardas una copia en un archivo, que también sirve para llevarlo a otro PC; con **Importar** la recuperas.
 
-**Controles:** WASD para moverse y Enter para abrir o enviar el chat (Esc lo cierra).
+**Controles:**
+
+| Acción | Tecla |
+|---|---|
+| Moverse | WASD |
+| Apuntar | Ratón |
+| Ataque básico (mantener para repetir) | Clic izquierdo |
+| Ataque secundario | Clic derecho |
+| Habilidades | 1 · 2 · 3 · 4 |
+| Esquivar | Espacio |
+| Levantar a un aliado derribado | Mantener E a su lado |
+| Chat | Enter (Esc lo cierra) |
 
 ### Si un amigo no consigue conectar
 
