@@ -2,6 +2,7 @@ import type { World } from '../world';
 import { ability, BALANCE, MONSTERS, type PassiveDef, type School } from './defs';
 import { BUTTON, passivesWith, passiveValue, recomputeStats, type Unit } from './unit';
 import { breakStealth, useAbility } from './actions';
+import { wearOnDeath } from '../items/inventory';
 
 const TICK_SEC = 0.05;
 const dist = (a: Unit, b: Unit) => Math.hypot(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
@@ -136,6 +137,7 @@ function kill(world: World, u: Unit, src: Unit | null = null): void {
 
 function die(world: World, u: Unit): void {
   u.state = 'dead';
+  if (u.kind === 'player') wearOnDeath(world, u);
   u.diedAt = world.now;
   u.respawnAt = world.now + BALANCE.death.respawnDelayMs;
   world.emit({ e: 'died', id: u.id });

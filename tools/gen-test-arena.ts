@@ -68,7 +68,7 @@ const map = {
   tilewidth: T,
   tileheight: T,
   nextlayerid: 5,
-  nextobjectid: SPAWNS.length + 1,
+  nextobjectid: SPAWNS.length + 2,
   properties: [
     { name: 'spawnX', type: 'int', value: (W / 2) * T },
     { name: 'spawnY', type: 'int', value: (H / 2) * T },
@@ -117,6 +117,31 @@ const map = {
           { name: 'respawnMs', type: 'int', value: sp.respawnMs },
         ],
       })),
+    },
+    {
+      id: 5,
+      name: 'npcs',
+      type: 'objectgroup',
+      visible: true,
+      opacity: 1,
+      x: 0,
+      y: 0,
+      // Temporary merchant (Plan 5) next to the spawn; it moves to the capital in Plan 6.
+      objects: [
+        {
+          id: SPAWNS.length + 1,
+          name: 'Merchant',
+          type: 'npc',
+          x: 23 * T + T / 2,
+          y: 14 * T + T / 2,
+          width: 0,
+          height: 0,
+          point: true,
+          visible: true,
+          rotation: 0,
+          properties: [{ name: 'role', type: 'string', value: 'merchant' }],
+        },
+      ],
     },
   ],
 };

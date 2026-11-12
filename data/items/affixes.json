@@ -1,0 +1,21 @@
+{
+  "strength": { "stat": "strength", "mode": "flat", "base": 1, "perLevel": 0.35 },
+  "agility": { "stat": "agility", "mode": "flat", "base": 1, "perLevel": 0.35 },
+  "intellect": { "stat": "intellect", "mode": "flat", "base": 1, "perLevel": 0.35 },
+  "stamina": { "stat": "stamina", "mode": "flat", "base": 1, "perLevel": 0.35 },
+  "spirit": { "stat": "spirit", "mode": "flat", "base": 1, "perLevel": 0.3 },
+  "armor": { "stat": "armor", "mode": "flat", "base": 2, "perLevel": 1.2 },
+  "attackPower": { "stat": "attackPower", "mode": "flat", "base": 2, "perLevel": 0.8 },
+  "spellPower": { "stat": "spellPower", "mode": "flat", "base": 2, "perLevel": 0.8 },
+  "critChance": { "stat": "critChance", "mode": "flat", "base": 0.005, "perLevel": 0.0005 },
+  "critDamage": { "stat": "critDamage", "mode": "flat", "base": 0.01, "perLevel": 0.002 },
+  "dodgeChance": { "stat": "dodgeChance", "mode": "flat", "base": 0.004, "perLevel": 0.0004 },
+  "blockChance": { "stat": "blockChance", "mode": "flat", "base": 0.005, "perLevel": 0.0006, "slots": ["offhand", "chest", "shoulders"] },
+  "cooldownReduction": { "stat": "cooldownReduction", "mode": "flat", "base": 0.005, "perLevel": 0.0004, "slots": ["neck", "ring", "hands", "head"] },
+  "lifesteal": { "stat": "lifesteal", "mode": "flat", "base": 0.003, "perLevel": 0.0003, "slots": ["weapon", "neck", "ring"] },
+  "moveSpeed": { "stat": "moveSpeed", "mode": "pct", "base": 0.01, "perLevel": 0.0007, "slots": ["feet"] },
+  "maxHp": { "stat": "maxHp", "mode": "pct", "base": 0.01, "perLevel": 0.0008 },
+  "healingDone": { "stat": "healingDone", "mode": "pct", "base": 0.01, "perLevel": 0.0008 },
+  "hpRegen": { "stat": "hpRegen", "mode": "flat", "base": 0.3, "perLevel": 0.06 },
+  "manaRegen": { "stat": "manaRegen", "mode": "pct", "base": 0.02, "perLevel": 0.002 }
+}

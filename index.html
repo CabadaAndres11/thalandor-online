@@ -126,6 +126,24 @@
       .talent-node.can:hover circle { stroke: var(--gold); fill: #2a2110; }
       .talent-node.owned circle { fill: #8a6a28; stroke: var(--gold); }
       .talent-dir { fill: var(--gold); font: 15px var(--font); }
+      .hotbar-row { display: flex; gap: 12px; align-items: flex-end; }
+      .slot.potion .slot-icon { padding: 6px; box-sizing: border-box; }
+      .side-window { left: auto; right: 12px; top: 60px; transform: none; width: min(330px, calc(100vw - 24px)); }
+      .shop-window { right: auto; left: 12px; }
+      .bag-grid { display: grid; grid-template-columns: repeat(6, 44px); gap: 4px; justify-content: center; }
+      .item-slot { position: relative; width: 44px; height: 44px; box-sizing: border-box; border: 2px solid #3a3226; background: #0e0c09; cursor: default; }
+      .item-slot .slot-icon { padding: 5px; box-sizing: border-box; }
+      .item-slot.broken { box-shadow: inset 0 0 0 2px #c03030; }
+      .item-slot.broken .slot-icon { filter: sepia(1) hue-rotate(-40deg) saturate(3); }
+      .item-count { position: absolute; right: 2px; bottom: 0; font-size: 11px; color: #fff; text-shadow: 0 1px 2px #000; }
+      .bag-gold { color: var(--gold); text-align: right; font-size: 15px; }
+      .item-tip { position: fixed; z-index: 50; max-width: 300px; padding: 8px 10px; background: rgba(12, 10, 8, 0.96); border: 1px solid var(--line); pointer-events: none !important; font-size: 13px; line-height: 1.35; }
+      .tip-title { font-size: 15px; margin-bottom: 2px; }
+      .shop-list { display: flex; flex-direction: column; gap: 6px; }
+      .shop-row { display: flex; align-items: center; gap: 8px; }
+      .shop-name { flex: 1; font-size: 14px; }
+      .equip-grid { display: grid; grid-template-columns: repeat(4, auto); gap: 6px 10px; justify-content: start; }
+      .equip-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; color: var(--muted); }
       .hud-banner, .hud-prompt { padding: 6px 12px; background: #0b0a08d0; border: 1px solid var(--line); font-size: 15px; }
       .hud-banner { color: #ff9a8a; }
       .hud-prompt { color: var(--gold); }

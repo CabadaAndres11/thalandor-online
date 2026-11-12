@@ -1,4 +1,4 @@
-import { allLayers, CATALOG, monsterLayers, resolveLayers, type Appearance, type ClassId } from '../../appearance/catalog';
+import { allLayers, CATALOG, monsterLayers, resolveLayers, type Appearance, type ClassId, type GearLooks } from '../../appearance/catalog';
 import type { ActionAnim, Anim, LayerRef } from '../../appearance/catalog-types';
 import { buildColorMap, layerPalette, recolorPixels } from '../../appearance/recolor';
 
@@ -95,8 +95,8 @@ export function readyLayer(layer: LayerRef, a?: Appearance): ReadyLayer | null {
 const ready = (layers: LayerRef[], a?: Appearance) => layers.map((l) => readyLayer(l, a)).filter((l): l is ReadyLayer => l !== null);
 
 /** All layers of a player character, back to front, ready to draw (skips sheets not loaded yet). */
-export function readyLayers(classId: ClassId, a: Appearance): ReadyLayer[] {
-  return ready(resolveLayers(classId, a), a);
+export function readyLayers(classId: ClassId, a: Appearance, gear: GearLooks = {}): ReadyLayer[] {
+  return ready(resolveLayers(classId, a, gear), a);
 }
 
 /** All layers of a humanoid monster look. */

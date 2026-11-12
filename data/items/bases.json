@@ -1,0 +1,2357 @@
+{
+  "cloth_head_hood": {
+    "nameKey": "item.cloth_head_hood",
+    "slot": "head",
+    "kind": "cloth",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "head_hood_brown",
+    "icon": "wing:#b8a07a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.15
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "cloth_head_wizard": {
+    "nameKey": "item.cloth_head_wizard",
+    "slot": "head",
+    "kind": "cloth",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "head_wizard_blue",
+    "icon": "star:#6f8fd8",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.15
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "cloth_head_wizard_black": {
+    "nameKey": "item.cloth_head_wizard_black",
+    "slot": "head",
+    "kind": "cloth",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "head_wizard_black",
+    "icon": "star:#9a7cd0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.15
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "cloth_shoulders_mantle": {
+    "nameKey": "item.cloth_shoulders_mantle",
+    "slot": "shoulders",
+    "kind": "cloth",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "shoulders_mantal_navy",
+    "icon": "shield:#6a7aa8",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.13
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "cloth_shoulders_mantle_purple": {
+    "nameKey": "item.cloth_shoulders_mantle_purple",
+    "slot": "shoulders",
+    "kind": "cloth",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "shoulders_mantal_purple",
+    "icon": "shield:#9a6ad0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.13
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "cloth_shoulders_mantle_maroon": {
+    "nameKey": "item.cloth_shoulders_mantle_maroon",
+    "slot": "shoulders",
+    "kind": "cloth",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "shoulders_mantal_maroon",
+    "icon": "shield:#b04a5a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.13
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "cloth_chest_shirt": {
+    "nameKey": "item.cloth_chest_shirt",
+    "slot": "chest",
+    "kind": "cloth",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "chest_shirt_white",
+    "icon": "shield:#d8d0c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.25
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "cloth_chest_robe_blue": {
+    "nameKey": "item.cloth_chest_robe_blue",
+    "slot": "chest",
+    "kind": "cloth",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "chest_robe_blue",
+    "icon": "shield:#5a7ad0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.25
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "cloth_chest_robe_purple": {
+    "nameKey": "item.cloth_chest_robe_purple",
+    "slot": "chest",
+    "kind": "cloth",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "chest_robe_purple",
+    "icon": "shield:#9a5ad0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.25
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "cloth_hands_wraps": {
+    "nameKey": "item.cloth_hands_wraps",
+    "slot": "hands",
+    "kind": "cloth",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "hands_bracers",
+    "icon": "drop:#b8a07a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.1
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "cloth_hands_gloves_silver": {
+    "nameKey": "item.cloth_hands_gloves_silver",
+    "slot": "hands",
+    "kind": "cloth",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "hands_gloves_silver",
+    "icon": "drop:#c0c8d0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.1
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "cloth_hands_gloves_gold": {
+    "nameKey": "item.cloth_hands_gloves_gold",
+    "slot": "hands",
+    "kind": "cloth",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "hands_gloves_gold",
+    "icon": "drop:#e0c060",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.1
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "cloth_legs_pants": {
+    "nameKey": "item.cloth_legs_pants",
+    "slot": "legs",
+    "kind": "cloth",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "legs_pants_white",
+    "icon": "shield:#d8d0c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "cloth_legs_pants_navy": {
+    "nameKey": "item.cloth_legs_pants_navy",
+    "slot": "legs",
+    "kind": "cloth",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "legs_pants_navy",
+    "icon": "shield:#5a6aa8",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "cloth_legs_pants_purple": {
+    "nameKey": "item.cloth_legs_pants_purple",
+    "slot": "legs",
+    "kind": "cloth",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "legs_pants_purple",
+    "icon": "shield:#9a5ad0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "cloth_feet_shoes": {
+    "nameKey": "item.cloth_feet_shoes",
+    "slot": "feet",
+    "kind": "cloth",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "feet_shoes",
+    "icon": "wind:#b8a07a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.1
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "cloth_feet_slippers": {
+    "nameKey": "item.cloth_feet_slippers",
+    "slot": "feet",
+    "kind": "cloth",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "feet_fold_gray",
+    "icon": "wind:#9aa0a8",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.1
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "cloth_feet_slippers_black": {
+    "nameKey": "item.cloth_feet_slippers_black",
+    "slot": "feet",
+    "kind": "cloth",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "feet_fold_black",
+    "icon": "wind:#5a5a6a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.1
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "leather_head_cap": {
+    "nameKey": "item.leather_head_cap",
+    "slot": "head",
+    "kind": "leather",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "head_cap_brown",
+    "icon": "wing:#9a6a3a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.3
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "leather_head_hood_forest": {
+    "nameKey": "item.leather_head_hood_forest",
+    "slot": "head",
+    "kind": "leather",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "head_hood_forest",
+    "icon": "wing:#4a8a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.3
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "leather_head_hood_black": {
+    "nameKey": "item.leather_head_hood_black",
+    "slot": "head",
+    "kind": "leather",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "head_hood_black",
+    "icon": "wing:#3a3a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.3
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "leather_shoulders_pads": {
+    "nameKey": "item.leather_shoulders_pads",
+    "slot": "shoulders",
+    "kind": "leather",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "shoulders_pauldrons_brown",
+    "icon": "shield:#9a6a3a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.25
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "leather_shoulders_pads_black": {
+    "nameKey": "item.leather_shoulders_pads_black",
+    "slot": "shoulders",
+    "kind": "leather",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "shoulders_pauldrons_black",
+    "icon": "shield:#4a4a5a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.25
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "leather_shoulders_pads_maroon": {
+    "nameKey": "item.leather_shoulders_pads_maroon",
+    "slot": "shoulders",
+    "kind": "leather",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "shoulders_pauldrons_maroon",
+    "icon": "shield:#8a3a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.25
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "leather_chest_jerkin": {
+    "nameKey": "item.leather_chest_jerkin",
+    "slot": "chest",
+    "kind": "leather",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "chest_leather",
+    "icon": "shield:#9a6a3a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.5
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "leather_chest_shirt_forest": {
+    "nameKey": "item.leather_chest_shirt_forest",
+    "slot": "chest",
+    "kind": "leather",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "chest_shirt_forest",
+    "icon": "shield:#4a8a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.5
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "leather_chest_shirt_black": {
+    "nameKey": "item.leather_chest_shirt_black",
+    "slot": "chest",
+    "kind": "leather",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "chest_shirt_black",
+    "icon": "shield:#3a3a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.5
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "leather_hands_bracers": {
+    "nameKey": "item.leather_hands_bracers",
+    "slot": "hands",
+    "kind": "leather",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "hands_bracers",
+    "icon": "drop:#9a6a3a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "leather_hands_gloves_bronze": {
+    "nameKey": "item.leather_hands_gloves_bronze",
+    "slot": "hands",
+    "kind": "leather",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "hands_gloves_bronze",
+    "icon": "drop:#c08a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "leather_hands_gloves_iron": {
+    "nameKey": "item.leather_hands_gloves_iron",
+    "slot": "hands",
+    "kind": "leather",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "hands_gloves_iron",
+    "icon": "drop:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "leather_legs_leggings": {
+    "nameKey": "item.leather_legs_leggings",
+    "slot": "legs",
+    "kind": "leather",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "legs_leggings_leather",
+    "icon": "shield:#9a6a3a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.4
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "leather_legs_leggings_forest": {
+    "nameKey": "item.leather_legs_leggings_forest",
+    "slot": "legs",
+    "kind": "leather",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "legs_leggings_forest",
+    "icon": "shield:#4a8a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.4
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "leather_legs_leggings_black": {
+    "nameKey": "item.leather_legs_leggings_black",
+    "slot": "legs",
+    "kind": "leather",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "legs_leggings_black",
+    "icon": "shield:#3a3a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.4
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "leather_feet_boots": {
+    "nameKey": "item.leather_feet_boots",
+    "slot": "feet",
+    "kind": "leather",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "feet_boots",
+    "icon": "wind:#9a6a3a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "leather_feet_boots_rimmed": {
+    "nameKey": "item.leather_feet_boots_rimmed",
+    "slot": "feet",
+    "kind": "leather",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "feet_rimmed_brown",
+    "icon": "wind:#8a5a2a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "leather_feet_boots_black": {
+    "nameKey": "item.leather_feet_boots_black",
+    "slot": "feet",
+    "kind": "leather",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "feet_rimmed_black",
+    "icon": "wind:#3a3a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.2
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "mail_head_coif": {
+    "nameKey": "item.mail_head_coif",
+    "slot": "head",
+    "kind": "mail",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "head_mail_iron",
+    "icon": "wing:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.15
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.18
+      }
+    ]
+  },
+  "mail_head_coif_steel": {
+    "nameKey": "item.mail_head_coif_steel",
+    "slot": "head",
+    "kind": "mail",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "head_mail_steel",
+    "icon": "wing:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.15
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.18
+      }
+    ]
+  },
+  "mail_head_nasal_silver": {
+    "nameKey": "item.mail_head_nasal_silver",
+    "slot": "head",
+    "kind": "mail",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "head_nasal_silver",
+    "icon": "wing:#d0d8e0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.15
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.18
+      }
+    ]
+  },
+  "mail_shoulders_pads": {
+    "nameKey": "item.mail_shoulders_pads",
+    "slot": "shoulders",
+    "kind": "mail",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "shoulders_pauldrons_gray",
+    "icon": "shield:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.4
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.13
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.15
+      }
+    ]
+  },
+  "mail_shoulders_legion_steel": {
+    "nameKey": "item.mail_shoulders_legion_steel",
+    "slot": "shoulders",
+    "kind": "mail",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "shoulders_legion_steel",
+    "icon": "shield:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.4
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.13
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.15
+      }
+    ]
+  },
+  "mail_shoulders_legion_silver": {
+    "nameKey": "item.mail_shoulders_legion_silver",
+    "slot": "shoulders",
+    "kind": "mail",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "shoulders_legion_silver",
+    "icon": "shield:#d0d8e0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.4
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.13
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.15
+      }
+    ]
+  },
+  "mail_chest_hauberk": {
+    "nameKey": "item.mail_chest_hauberk",
+    "slot": "chest",
+    "kind": "mail",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "chest_mail_iron",
+    "icon": "shield:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.8
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "mail_chest_hauberk_steel": {
+    "nameKey": "item.mail_chest_hauberk_steel",
+    "slot": "chest",
+    "kind": "mail",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "chest_mail_steel",
+    "icon": "shield:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.8
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "mail_chest_hauberk_silver": {
+    "nameKey": "item.mail_chest_hauberk_silver",
+    "slot": "chest",
+    "kind": "mail",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "chest_mail_silver",
+    "icon": "shield:#d0d8e0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.8
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "mail_hands_gloves": {
+    "nameKey": "item.mail_hands_gloves",
+    "slot": "hands",
+    "kind": "mail",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "hands_gloves_iron",
+    "icon": "drop:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.32
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.1
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.12
+      }
+    ]
+  },
+  "mail_hands_gloves_steel": {
+    "nameKey": "item.mail_hands_gloves_steel",
+    "slot": "hands",
+    "kind": "mail",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "hands_gloves_steel",
+    "icon": "drop:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.32
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.1
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.12
+      }
+    ]
+  },
+  "mail_hands_gloves_silver": {
+    "nameKey": "item.mail_hands_gloves_silver",
+    "slot": "hands",
+    "kind": "mail",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "hands_gloves_silver",
+    "icon": "drop:#d0d8e0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.32
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.1
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.12
+      }
+    ]
+  },
+  "mail_legs_chausses": {
+    "nameKey": "item.mail_legs_chausses",
+    "slot": "legs",
+    "kind": "mail",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "legs_leggings_gray",
+    "icon": "shield:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.64
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "mail_legs_chausses_black": {
+    "nameKey": "item.mail_legs_chausses_black",
+    "slot": "legs",
+    "kind": "mail",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "legs_leggings_black",
+    "icon": "shield:#5a5a6a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.64
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "mail_legs_chausses_steel": {
+    "nameKey": "item.mail_legs_chausses_steel",
+    "slot": "legs",
+    "kind": "mail",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "legs_plate_steel",
+    "icon": "shield:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.64
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "mail_feet_boots": {
+    "nameKey": "item.mail_feet_boots",
+    "slot": "feet",
+    "kind": "mail",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "feet_fold_gray",
+    "icon": "wind:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.32
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.1
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.12
+      }
+    ]
+  },
+  "mail_feet_boots_black": {
+    "nameKey": "item.mail_feet_boots_black",
+    "slot": "feet",
+    "kind": "mail",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "feet_fold_black",
+    "icon": "wind:#5a5a6a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.32
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.1
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.12
+      }
+    ]
+  },
+  "mail_feet_sabatons": {
+    "nameKey": "item.mail_feet_sabatons",
+    "slot": "feet",
+    "kind": "mail",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "feet_plate_steel",
+    "icon": "wind:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.32
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.1
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.12
+      }
+    ]
+  },
+  "plate_head_nasal": {
+    "nameKey": "item.plate_head_nasal",
+    "slot": "head",
+    "kind": "plate",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "head_nasal_iron",
+    "icon": "wing:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.72
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "plate_head_barbuta": {
+    "nameKey": "item.plate_head_barbuta",
+    "slot": "head",
+    "kind": "plate",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "head_barbuta_steel",
+    "icon": "wing:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.72
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "plate_head_greathelm": {
+    "nameKey": "item.plate_head_greathelm",
+    "slot": "head",
+    "kind": "plate",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "head_greathelm_gold",
+    "icon": "wing:#e0c060",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.72
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.3
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.24
+      }
+    ]
+  },
+  "plate_shoulders_legion": {
+    "nameKey": "item.plate_shoulders_legion",
+    "slot": "shoulders",
+    "kind": "plate",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "shoulders_legion_iron",
+    "icon": "shield:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.6
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "plate_shoulders_legion_bronze": {
+    "nameKey": "item.plate_shoulders_legion_bronze",
+    "slot": "shoulders",
+    "kind": "plate",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "shoulders_legion_bronze",
+    "icon": "shield:#c08a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.6
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "plate_shoulders_legion_gold": {
+    "nameKey": "item.plate_shoulders_legion_gold",
+    "slot": "shoulders",
+    "kind": "plate",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "shoulders_legion_gold",
+    "icon": "shield:#e0c060",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.6
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.25
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "plate_chest_plate": {
+    "nameKey": "item.plate_chest_plate",
+    "slot": "chest",
+    "kind": "plate",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "chest_plate_iron",
+    "icon": "shield:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 1.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "plate_chest_plate_steel": {
+    "nameKey": "item.plate_chest_plate_steel",
+    "slot": "chest",
+    "kind": "plate",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "chest_plate_steel",
+    "icon": "shield:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 1.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "plate_chest_plate_gold": {
+    "nameKey": "item.plate_chest_plate_gold",
+    "slot": "chest",
+    "kind": "plate",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "chest_plate_gold",
+    "icon": "shield:#e0c060",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 1.2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.5
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.4
+      }
+    ]
+  },
+  "plate_hands_gauntlets": {
+    "nameKey": "item.plate_hands_gauntlets",
+    "slot": "hands",
+    "kind": "plate",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "hands_gauntlets_iron",
+    "icon": "drop:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "plate_hands_gauntlets_steel": {
+    "nameKey": "item.plate_hands_gauntlets_steel",
+    "slot": "hands",
+    "kind": "plate",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "hands_gauntlets_steel",
+    "icon": "drop:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "plate_hands_gauntlets_gold": {
+    "nameKey": "item.plate_hands_gauntlets_gold",
+    "slot": "hands",
+    "kind": "plate",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "hands_gauntlets_gold",
+    "icon": "drop:#e0c060",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "plate_legs_greaves": {
+    "nameKey": "item.plate_legs_greaves",
+    "slot": "legs",
+    "kind": "plate",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "legs_plate_iron",
+    "icon": "shield:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.96
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "plate_legs_greaves_steel": {
+    "nameKey": "item.plate_legs_greaves_steel",
+    "slot": "legs",
+    "kind": "plate",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "legs_plate_steel",
+    "icon": "shield:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.96
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "plate_legs_greaves_gold": {
+    "nameKey": "item.plate_legs_greaves_gold",
+    "slot": "legs",
+    "kind": "plate",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "legs_plate_gold",
+    "icon": "shield:#e0c060",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.96
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.4
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.32
+      }
+    ]
+  },
+  "plate_feet_sabatons": {
+    "nameKey": "item.plate_feet_sabatons",
+    "slot": "feet",
+    "kind": "plate",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "feet_plate_iron",
+    "icon": "wind:#8a8a9a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "plate_feet_sabatons_steel": {
+    "nameKey": "item.plate_feet_sabatons_steel",
+    "slot": "feet",
+    "kind": "plate",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "look": "feet_plate_steel",
+    "icon": "wind:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "plate_feet_sabatons_gold": {
+    "nameKey": "item.plate_feet_sabatons_gold",
+    "slot": "feet",
+    "kind": "plate",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "feet_plate_gold",
+    "icon": "wind:#e0c060",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 1,
+        "perLevel": 0.48
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.2
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.16
+      }
+    ]
+  },
+  "sword_arming": {
+    "nameKey": "item.sword_arming",
+    "slot": "weapon",
+    "kind": "sword",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "weapon_arming_iron",
+    "icon": "sword:#b0b8c0",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 4,
+        "perLevel": 2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "sword_saber": {
+    "nameKey": "item.sword_saber",
+    "slot": "weapon",
+    "kind": "sword",
+    "minLevel": 1,
+    "maxLevel": 30,
+    "look": "weapon_saber",
+    "icon": "sword:#b0b8c0",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 4,
+        "perLevel": 2
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "sword_long": {
+    "nameKey": "item.sword_long",
+    "slot": "weapon",
+    "kind": "sword",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "weapon_longsword",
+    "icon": "sword:#b0b8c0",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 4,
+        "perLevel": 2.1
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "sword_gold": {
+    "nameKey": "item.sword_gold",
+    "slot": "weapon",
+    "kind": "sword",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "weapon_arming_gold",
+    "icon": "sword:#b0b8c0",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 4,
+        "perLevel": 2.1
+      },
+      {
+        "stat": "critChance",
+        "perLevel": 0.0005
+      }
+    ]
+  },
+  "axe_war": {
+    "nameKey": "item.axe_war",
+    "slot": "weapon",
+    "kind": "axe",
+    "minLevel": 1,
+    "maxLevel": 30,
+    "look": "weapon_waraxe",
+    "icon": "axe:#a0a8b0",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 5,
+        "perLevel": 2.2
+      }
+    ]
+  },
+  "mace_iron": {
+    "nameKey": "item.mace_iron",
+    "slot": "weapon",
+    "kind": "mace",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "weapon_mace",
+    "icon": "cross:#c0a060",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 3,
+        "perLevel": 1.2
+      },
+      {
+        "stat": "spellPower",
+        "base": 3,
+        "perLevel": 1.2
+      }
+    ]
+  },
+  "mace_flail": {
+    "nameKey": "item.mace_flail",
+    "slot": "weapon",
+    "kind": "mace",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "weapon_flail",
+    "icon": "cross:#c0a060",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 3,
+        "perLevel": 1.3
+      },
+      {
+        "stat": "spellPower",
+        "base": 3,
+        "perLevel": 1.3
+      }
+    ]
+  },
+  "staff_simple": {
+    "nameKey": "item.staff_simple",
+    "slot": "weapon",
+    "kind": "staff",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "weapon_staff_simple",
+    "icon": "spiral:#9a7cd0",
+    "stats": [
+      {
+        "stat": "spellPower",
+        "base": 4,
+        "perLevel": 2.2
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "staff_gnarled": {
+    "nameKey": "item.staff_gnarled",
+    "slot": "weapon",
+    "kind": "staff",
+    "minLevel": 1,
+    "maxLevel": 30,
+    "look": "weapon_staff_gnarled_medium",
+    "icon": "spiral:#9a7cd0",
+    "stats": [
+      {
+        "stat": "spellPower",
+        "base": 4,
+        "perLevel": 2.2
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "staff_crystal": {
+    "nameKey": "item.staff_crystal",
+    "slot": "weapon",
+    "kind": "staff",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "weapon_staff_crystal_blue",
+    "icon": "spiral:#9a7cd0",
+    "stats": [
+      {
+        "stat": "spellPower",
+        "base": 4,
+        "perLevel": 2.3
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.35
+      }
+    ]
+  },
+  "staff_ember": {
+    "nameKey": "item.staff_ember",
+    "slot": "weapon",
+    "kind": "staff",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "weapon_staff_crystal_red",
+    "icon": "spiral:#9a7cd0",
+    "stats": [
+      {
+        "stat": "spellPower",
+        "base": 4,
+        "perLevel": 2.3
+      },
+      {
+        "stat": "critDamage",
+        "perLevel": 0.002
+      }
+    ]
+  },
+  "bow_short": {
+    "nameKey": "item.bow_short",
+    "slot": "weapon",
+    "kind": "bow",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "weapon_bow_light",
+    "icon": "arrow:#c8a46a",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 4,
+        "perLevel": 1.9
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "bow_recurve": {
+    "nameKey": "item.bow_recurve",
+    "slot": "weapon",
+    "kind": "bow",
+    "minLevel": 1,
+    "maxLevel": 30,
+    "look": "weapon_recurve_medium",
+    "icon": "arrow:#c8a46a",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 4,
+        "perLevel": 2
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "bow_dark": {
+    "nameKey": "item.bow_dark",
+    "slot": "weapon",
+    "kind": "bow",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "weapon_recurve_dark",
+    "icon": "arrow:#c8a46a",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 4,
+        "perLevel": 2.1
+      },
+      {
+        "stat": "critChance",
+        "perLevel": 0.0005
+      }
+    ]
+  },
+  "dagger": {
+    "nameKey": "item.dagger",
+    "slot": "weapon",
+    "kind": "dagger",
+    "minLevel": 1,
+    "maxLevel": 30,
+    "look": "weapon_dagger",
+    "icon": "dagger:#c0c8d0",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 3,
+        "perLevel": 1.8
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.35
+      }
+    ]
+  },
+  "shield_round": {
+    "nameKey": "item.shield_round",
+    "slot": "offhand",
+    "kind": "shield",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "look": "offhand_round_brown",
+    "icon": "shield:#9a6a3a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 2,
+        "perLevel": 0.8
+      },
+      {
+        "stat": "blockChance",
+        "perLevel": 0.001
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.25
+      }
+    ]
+  },
+  "shield_kite": {
+    "nameKey": "item.shield_kite",
+    "slot": "offhand",
+    "kind": "shield",
+    "minLevel": 1,
+    "maxLevel": 30,
+    "look": "offhand_kite_gray",
+    "icon": "shield:#b0b8c0",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 2,
+        "perLevel": 0.9
+      },
+      {
+        "stat": "blockChance",
+        "perLevel": 0.0012
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.25
+      }
+    ]
+  },
+  "shield_spartan": {
+    "nameKey": "item.shield_spartan",
+    "slot": "offhand",
+    "kind": "shield",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "offhand_spartan",
+    "icon": "shield:#c08a4a",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 2,
+        "perLevel": 1
+      },
+      {
+        "stat": "blockChance",
+        "perLevel": 0.0013
+      },
+      {
+        "stat": "stamina",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "shield_round_gold": {
+    "nameKey": "item.shield_round_gold",
+    "slot": "offhand",
+    "kind": "shield",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "look": "offhand_round_gold",
+    "icon": "shield:#e0c060",
+    "stats": [
+      {
+        "stat": "armor",
+        "base": 2,
+        "perLevel": 1
+      },
+      {
+        "stat": "blockChance",
+        "perLevel": 0.0013
+      },
+      {
+        "stat": "strength",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "orb_glass": {
+    "nameKey": "item.orb_glass",
+    "slot": "offhand",
+    "kind": "orb",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "icon": "burst:#9ad0f5",
+    "stats": [
+      {
+        "stat": "spellPower",
+        "base": 2,
+        "perLevel": 0.8
+      },
+      {
+        "stat": "intellect",
+        "perLevel": 0.25
+      }
+    ]
+  },
+  "orb_ember": {
+    "nameKey": "item.orb_ember",
+    "slot": "offhand",
+    "kind": "orb",
+    "minLevel": 1,
+    "maxLevel": 30,
+    "icon": "burst:#f07a30",
+    "stats": [
+      {
+        "stat": "spellPower",
+        "base": 2,
+        "perLevel": 0.9
+      },
+      {
+        "stat": "critChance",
+        "perLevel": 0.0004
+      }
+    ]
+  },
+  "orb_void": {
+    "nameKey": "item.orb_void",
+    "slot": "offhand",
+    "kind": "orb",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "icon": "burst:#9a5ad0",
+    "stats": [
+      {
+        "stat": "spellPower",
+        "base": 2,
+        "perLevel": 1
+      },
+      {
+        "stat": "spirit",
+        "perLevel": 0.3
+      }
+    ]
+  },
+  "quiver": {
+    "nameKey": "item.quiver",
+    "slot": "offhand",
+    "kind": "quiver",
+    "minLevel": 1,
+    "maxLevel": 30,
+    "look": "offhand_quiver",
+    "icon": "arrow:#9a6a3a",
+    "stats": [
+      {
+        "stat": "attackPower",
+        "base": 1,
+        "perLevel": 0.6
+      },
+      {
+        "stat": "agility",
+        "perLevel": 0.25
+      }
+    ]
+  },
+  "neck_copper": {
+    "nameKey": "item.neck_copper",
+    "slot": "neck",
+    "kind": "jewelry",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "icon": "star:#c08a4a",
+    "stats": [
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "neck_silver": {
+    "nameKey": "item.neck_silver",
+    "slot": "neck",
+    "kind": "jewelry",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "icon": "star:#d0d8e0",
+    "stats": [
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "neck_gold": {
+    "nameKey": "item.neck_gold",
+    "slot": "neck",
+    "kind": "jewelry",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "icon": "star:#e0c060",
+    "stats": [
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "ring_copper": {
+    "nameKey": "item.ring_copper",
+    "slot": "ring",
+    "kind": "jewelry",
+    "minLevel": 1,
+    "maxLevel": 10,
+    "icon": "spiral:#c08a4a",
+    "stats": [
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "ring_silver": {
+    "nameKey": "item.ring_silver",
+    "slot": "ring",
+    "kind": "jewelry",
+    "minLevel": 8,
+    "maxLevel": 20,
+    "icon": "spiral:#d0d8e0",
+    "stats": [
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  },
+  "ring_gold": {
+    "nameKey": "item.ring_gold",
+    "slot": "ring",
+    "kind": "jewelry",
+    "minLevel": 18,
+    "maxLevel": 30,
+    "icon": "spiral:#e0c060",
+    "stats": [
+      {
+        "stat": "stamina",
+        "perLevel": 0.2
+      }
+    ]
+  }
+}

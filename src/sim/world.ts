@@ -12,6 +12,8 @@ import { applyDamage, applyHeal, type DamageOpts, monsterHpScale, rescaleMonster
 import type { Rng } from './combat/damage';
 import { BUTTON, cannotMove, createMonsterUnit, createPlayerUnit, DASH_TICKS, hasStatus, isStealthed, passiveValue, type PlayerProgress, type Unit } from './combat/unit';
 import { shareXp } from './progression/xp';
+import { dropLoot, stepLoot, type GroundLoot } from './items/loot-world';
+import type { Belongings } from './items/validate';
 import { stepMonster } from './monsters/ai';
 
 /** Ticks without a moving input before a player counts as standing (hides single lost packets). */
@@ -26,6 +28,7 @@ export interface PlayerInfo {
   classId: ClassId;
   appearance: Appearance;
   progress?: PlayerProgress;
+  belongings?: Belongings;
 }
 
 /** Kept for code that only deals with players. */
@@ -117,8 +120,13 @@ export class World {
   projectiles: Projectile[] = [];
   areas: PendingArea[] = [];
   zones: Zone[] = [];
+  loot: GroundLoot[] = [];
+  private lootSeq = 1;
   private events: CombatEvent[] = [];
   private progressDirty = new Set<EntityId>();
+  private inventoryDirty = new Set<EntityId>();
+  /** The temporary merchant (Plan 5; moves to the capital in Plan 6). */
+  merchant: { pos: Vec2; name: string } | null = null;
   private nextId = 1;
   private nextProj = 1;
   private readonly units = new Map<EntityId, Unit>();
@@ -150,6 +158,17 @@ export class World {
     this.progressDirty.add(id);
   }
 
+  /** A player's gold, bag or equipment changed and must be sent to it. */
+  markInventory(id: EntityId): void {
+    this.inventoryDirty.add(id);
+  }
+
+  drainInventory(): EntityId[] {
+    const out = [...this.inventoryDirty];
+    this.inventoryDirty.clear();
+    return out;
+  }
+
   drainProgress(): EntityId[] {
     const out = [...this.progressDirty];
     this.progressDirty.clear();
@@ -160,6 +179,10 @@ export class World {
     const out = this.events;
     this.events = [];
     return out;
+  }
+
+  nextLootId(): number {
+    return this.lootSeq++;
   }
 
   nextProjectileId(): number {
@@ -181,6 +204,7 @@ export class World {
 
   removePlayer(id: EntityId): void {
     this.units.delete(id);
+    this.loot = this.loot.filter((g) => g.ownerId !== id);
     this.pending.delete(id);
     this.dropFromThreat(id);
   }
@@ -271,6 +295,7 @@ export class World {
   onMonsterDied(m: Unit): void {
     m.ai?.threat.clear();
     shareXp(this, m);
+    dropLoot(this, m);
     const slot = this.slots.find((s) => s.unitId === m.id);
     if (slot) slot.respawnAt = this.now + slot.def.respawnMs;
   }
@@ -286,6 +311,7 @@ export class World {
     stepProjectiles(this);
     stepAreas(this);
     stepZones(this);
+    stepLoot(this);
     stepStatusesAndResources(this);
     stepLife(this);
     this.stepSpawns();

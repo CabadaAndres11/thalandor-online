@@ -4,7 +4,12 @@ import { MAX_PLAYERS } from '../sim/constants';
 import type { EntityId, PlayerInput } from '../sim/types';
 import type { World } from '../sim/world';
 import { sanitizeProgress } from '../sim/progression/validate';
-import { applyProgressRequest, devSetLevel, progressInfo } from '../sim/progression/requests';
+import { applyProgressRequest, devSetLevel, gearLooksOf, inventoryInfo, progressInfo } from '../sim/progression/requests';
+import { sanitizeBelongings } from '../sim/items/validate';
+import { addItem } from '../sim/items/inventory';
+import { basesFor, newPotion, rollGear } from '../sim/items/roll';
+import { RARITIES, type ItemSlot } from '../sim/items/defs';
+import type { CombatEvent } from '../sim/combat/events';
 import { awardXp } from '../sim/progression/xp';
 import { decodeClient, encode, type HostMessage, type NetCharacter, type RosterEntry } from '../net/protocol';
 import type { Channel, Connection } from '../net/transport';
@@ -30,6 +35,13 @@ interface Peer {
   lastSeen: number;
   gone: boolean;
   noTimeout: boolean;
+  /** Last gear looks sent in the roster (to rebroadcast when they change). */
+  looks?: string;
+}
+
+/** The only player allowed to see an event, or null when everyone can. */
+function ownerOf(e: CombatEvent): EntityId | null {
+  return e.e === 'loot' || e.e === 'lootGone' || e.e === 'pickup' || e.e === 'bagFull' ? e.owner : null;
 }
 
 const clampAxis = (v: number) => (Number.isFinite(v) ? Math.max(-1, Math.min(1, v)) : 0);
@@ -77,8 +89,12 @@ export class HostSession {
     // Snapshots keep flowing while paused so clients do not time out.
     if (!this.paused) this.world.step();
     const events = this.world.drainEvents();
-    const eventsMsg = events.length ? encode({ t: 'events', list: events }) : null;
+    // Loot events are private to their owner; the rest go to everyone.
+    const shared = events.filter((e) => ownerOf(e) === null);
+    const eventsMsg = shared.length ? encode({ t: 'events', list: shared }) : null;
     const dirty = new Set(this.world.drainProgress());
+    const invDirty = new Set(this.world.drainInventory());
+    let rosterChanged = false;
     const t = this.now();
     for (const p of this.peers) {
       if (!p.noTimeout && t - p.lastSeen > CONN_TIMEOUT_MS) {
@@ -87,11 +103,23 @@ export class HostSession {
       } else if (p.playerId !== null) {
         // Events first and reliable: hits and deaths must never be lost (damage numbers, death animations).
         if (eventsMsg) p.conn.send(eventsMsg, 'reliable');
+        const mine = events.filter((e) => ownerOf(e) === p.playerId);
+        if (mine.length) this.sendTo(p, { t: 'events', list: mine }, 'reliable');
         if (dirty.has(p.playerId)) this.sendProgress(p);
+        if (invDirty.has(p.playerId)) {
+          this.sendInventory(p);
+          const u = this.world.getPlayer(p.playerId);
+          const looks = u ? JSON.stringify(gearLooksOf(u)) : '';
+          if (looks !== p.looks) {
+            p.looks = looks;
+            rosterChanged = true;
+          }
+        }
         const { snap, me } = this.world.snapshotFor(p.playerId);
         p.conn.send(encode(me ? { t: 'snapshot', s: snap, me } : { t: 'snapshot', s: snap }), 'unreliable');
       }
     }
+    if (rosterChanged) this.broadcastRoster();
   }
 
   private onMessage(peer: Peer, raw: string): void {
@@ -125,11 +153,15 @@ export class HostSession {
     const saved = c.lastLocation;
     const at = saved && saved.mapId === this.opts.mapId && this.world.isSpawnable(saved) ? { x: saved.x, y: saved.y } : undefined;
     const { progress } = sanitizeProgress(classId, c.progress);
-    const player = this.world.addPlayer({ name, classId, appearance, progress }, at);
+    const belongings = sanitizeBelongings(c.belongings, classId, progress.level);
+    const player = this.world.addPlayer({ name, classId, appearance, progress, belongings }, at);
+    peer.looks = JSON.stringify(gearLooksOf(player));
     peer.playerId = player.id;
     peer.name = name;
-    this.sendTo(peer, { t: 'welcome', playerId: player.id, mapId: this.opts.mapId }, 'reliable');
+    const m = this.world.merchant;
+    this.sendTo(peer, { t: 'welcome', playerId: player.id, mapId: this.opts.mapId, ...(m ? { merchant: { x: m.pos.x, y: m.pos.y } } : {}) }, 'reliable');
     this.sendProgress(peer);
+    this.sendInventory(peer);
     this.broadcastRoster();
   }
 
@@ -142,6 +174,19 @@ export class HostSession {
     else if (cmd === 'kill') this.world.damage(me, me.hp + 9999, null, 'physical');
     else if (cmd === 'xp') awardXp(this.world, me, Math.max(0, Number(a ?? 0)) || 0);
     else if (cmd === 'level' && Number.isFinite(Number(a))) devSetLevel(this.world, me, Number(a));
+    else if (cmd === 'gold') {
+      me.gold += Math.max(0, Math.floor(Number(a ?? 0))) || 0;
+      this.world.markInventory(me.id);
+    } else if (cmd === 'item') this.devItem(me, a, b);
+    else if (cmd === 'potion') {
+      addItem(me, newPotion(a === 'resource' ? 'resource' : 'health', Math.max(1, Math.min(20, Number(b ?? 5) || 5)), this.world.rng));
+      this.world.markInventory(me.id);
+    }
+  }
+
+  private sendInventory(peer: Peer): void {
+    const u = peer.playerId !== null ? this.world.getPlayer(peer.playerId) : undefined;
+    if (u) this.sendTo(peer, { t: 'inventory', inv: inventoryInfo(this.world, u) }, 'reliable');
   }
 
   private sendProgress(peer: Peer): void {
@@ -149,10 +194,20 @@ export class HostSession {
     if (u) this.sendTo(peer, { t: 'progress', p: progressInfo(u) }, 'reliable');
   }
 
+  /** /dev item <rarity> [slot]: a random item of the player's level for its class. */
+  private devItem(me: NonNullable<ReturnType<World['getPlayer']>>, rarity?: string, slot?: string): void {
+    const r = (RARITIES as readonly string[]).includes(rarity ?? '') ? (rarity as (typeof RARITIES)[number]) : 'rare';
+    const list = basesFor(me.level, { classId: me.classId, ...(slot ? { slot: slot as ItemSlot } : {}) });
+    const base = list[Math.floor(this.world.rng() * list.length)];
+    if (!base) return;
+    addItem(me, rollGear(base, me.level, r, this.world.rng));
+    this.world.markInventory(me.id);
+  }
+
   private broadcastRoster(): void {
     const players: RosterEntry[] = this.world
       .allPlayers()
-      .map((p) => ({ id: p.id, name: p.name, classId: p.classId!, appearance: p.appearance! }));
+      .map((p) => ({ id: p.id, name: p.name, classId: p.classId!, appearance: p.appearance!, gear: gearLooksOf(p) }));
     this.broadcast({ t: 'roster', players }, 'reliable');
   }
 

@@ -1,5 +1,6 @@
 import { isClassId, type Appearance, type ClassId } from '../appearance/catalog';
-import type { ProgressInfo, ProgressRequest, RequestResult } from '../sim/progression/requests';
+import type { InventoryInfo, ProgressInfo, ProgressRequest, RequestResult } from '../sim/progression/requests';
+import { EQUIP_SLOTS, POTIONS } from '../sim/items/defs';
 import type { EntityId, PlayerInput, Press } from '../sim/types';
 import type { MeSnapshot, UnitSnapshot, WorldSnapshot } from '../sim/world';
 import type { CombatEvent } from '../sim/combat/events';
@@ -12,6 +13,8 @@ export interface NetCharacter {
   lastLocation: { mapId: string; x: number; y: number } | null;
   /** Level, xp and choices; untrusted, the host sanitizes it (sanitizeProgress). */
   progress?: unknown;
+  /** Gold, bag and equipment; untrusted, the host sanitizes it (sanitizeBelongings). */
+  belongings?: unknown;
 }
 
 export interface RosterEntry {
@@ -19,6 +22,8 @@ export interface RosterEntry {
   name: string;
   classId: ClassId;
   appearance: Appearance;
+  /** Gear look per visible slot. */
+  gear?: Record<string, string>;
 }
 
 export type ClientMessage =
@@ -30,7 +35,7 @@ export type ClientMessage =
 export type RejectReason = 'version' | 'full';
 
 export type HostMessage =
-  | { t: 'welcome'; playerId: EntityId; mapId: string }
+  | { t: 'welcome'; playerId: EntityId; mapId: string; merchant?: { x: number; y: number } }
   | { t: 'reject'; reason: RejectReason }
   | { t: 'snapshot'; s: WorldSnapshot; me?: MeSnapshot }
   | { t: 'events'; list: CombatEvent[] }
@@ -40,7 +45,9 @@ export type HostMessage =
   /** The receiving player's own progress (on join and whenever it changes). */
   | { t: 'progress'; p: ProgressInfo }
   /** Answer to a refused progress-req, for a message in the UI. */
-  | { t: 'progress-refused'; reason: Exclude<RequestResult, 'ok'> };
+  | { t: 'progress-refused'; reason: Exclude<RequestResult, 'ok'> }
+  /** The receiving player's gold, bag and equipment (on join and whenever they change). */
+  | { t: 'inventory'; inv: InventoryInfo };
 
 export function encode(msg: ClientMessage | HostMessage): string {
   return JSON.stringify(msg);
@@ -127,6 +134,20 @@ function toRequest(v: unknown): ProgressRequest | null {
       return { k: v.k };
     case 'hotbar':
       return isNum(v.slot) && (v.abilityId === null || isStr(v.abilityId)) ? { k: 'hotbar', slot: v.slot, abilityId: v.abilityId } : null;
+    case 'equip':
+      return isNum(v.index) && (v.place === undefined || isPlace(v.place)) ? { k: 'equip', index: v.index, ...(v.place ? { place: v.place } : {}) } : null;
+    case 'unequip':
+      return isPlace(v.place) ? { k: 'unequip', place: v.place } : null;
+    case 'use':
+      return isStr(v.potion) && (POTIONS as readonly string[]).includes(v.potion) ? { k: 'use', potion: v.potion as (typeof POTIONS)[number] } : null;
+    case 'buy':
+      return isStr(v.id) ? { k: 'buy', id: v.id } : null;
+    case 'sell':
+      return isNum(v.index) ? { k: 'sell', index: v.index } : null;
+    case 'repair':
+      return { k: 'repair' };
+    case 'merchant':
+      return isBool(v.open) ? { k: 'merchant', open: v.open } : null;
     default:
       return null;
   }
@@ -148,7 +169,10 @@ const isProgress = (v: unknown): v is ProgressInfo =>
   Array.isArray(v.passives) &&
   isObj(v.stats);
 
-const REFUSALS = new Set(['invalid', 'points', 'combat', 'level']);
+const REFUSALS = new Set(['invalid', 'points', 'combat', 'level', 'full', 'gold', 'class', 'far', 'cooldown', 'none']);
+const isPlace = (v: unknown): v is (typeof EQUIP_SLOTS)[number] => isStr(v) && (EQUIP_SLOTS as readonly string[]).includes(v);
+const isInventory = (v: unknown): v is InventoryInfo =>
+  isObj(v) && isNum(v.gold) && Array.isArray(v.inventory) && isObj(v.equipment) && isNum(v.potionCdMs) && (v.merchant === null || isObj(v.merchant));
 
 const isEvents = (v: unknown): v is CombatEvent[] => Array.isArray(v) && v.every((e) => isObj(e) && isStr(e.e));
 
@@ -179,7 +203,10 @@ export function decodeHost(raw: string): HostMessage | null {
   if (!m) return null;
   switch (m.t) {
     case 'welcome':
-      return isNum(m.playerId) && isStr(m.mapId) ? { t: 'welcome', playerId: m.playerId, mapId: m.mapId } : null;
+      if (!isNum(m.playerId) || !isStr(m.mapId)) return null;
+      return isObj(m.merchant) && isNum(m.merchant.x) && isNum(m.merchant.y)
+        ? { t: 'welcome', playerId: m.playerId, mapId: m.mapId, merchant: { x: m.merchant.x, y: m.merchant.y } }
+        : { t: 'welcome', playerId: m.playerId, mapId: m.mapId };
     case 'reject':
       return m.reason === 'version' || m.reason === 'full' ? { t: 'reject', reason: m.reason } : null;
     case 'snapshot':
@@ -196,6 +223,8 @@ export function decodeHost(raw: string): HostMessage | null {
       return isNum(m.playerId) && isStr(m.name) ? { t: 'left', playerId: m.playerId, name: m.name } : null;
     case 'progress':
       return isProgress(m.p) ? { t: 'progress', p: m.p } : null;
+    case 'inventory':
+      return isInventory(m.inv) ? { t: 'inventory', inv: m.inv } : null;
     case 'progress-refused':
       return isStr(m.reason) && REFUSALS.has(m.reason) ? { t: 'progress-refused', reason: m.reason as Exclude<RequestResult, 'ok'> } : null;
     default:

@@ -42,6 +42,7 @@ export function awardXp(world: World, p: Unit, amount: number): void {
   }
   if (p.level >= MAX_LEVEL) p.xp = 0;
   if (levelled) {
+    if (p.atMerchant) world.markInventory(p.id);
     rebuildPlayer(p, world.now);
     p.hp = p.stats.maxHp;
     if (p.resourceKind !== 'rage') p.resource = p.stats.maxResource;

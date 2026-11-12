@@ -3,6 +3,9 @@ import { ATTR_KEYS } from '../combat/stats';
 import { freeAttrPoints, rebuildPlayer, type Unit } from '../combat/unit';
 import type { Attributes } from '../combat/defs';
 import type { World } from '../world';
+import type { EquipSlot, Item, PotionKind } from '../items/defs';
+import { buy, equipFromBag, merchantStock, repairAll, repairCost, sell, setMerchant, unequip, usePotion, type ItemResult, type StockEntry } from '../items/inventory';
+import { equipmentLooks, type Equipment } from '../items/stats';
 import { canSpend, talentPoints } from './talents';
 import { HOTBAR_SLOTS, resolveHotbar, SPECS, unlockedActives, UNLOCK } from './unlocks';
 import { MAX_LEVEL, xpToNext } from './xp';
@@ -14,9 +17,16 @@ export type ProgressRequest =
   | { k: 'spec'; specId: string }
   | { k: 'resetTalents' }
   | { k: 'resetAttrs' }
-  | { k: 'hotbar'; slot: number; abilityId: string | null };
+  | { k: 'hotbar'; slot: number; abilityId: string | null }
+  | { k: 'equip'; index: number; place?: EquipSlot }
+  | { k: 'unequip'; place: EquipSlot }
+  | { k: 'use'; potion: PotionKind }
+  | { k: 'buy'; id: string }
+  | { k: 'sell'; index: number }
+  | { k: 'repair' }
+  | { k: 'merchant'; open: boolean };
 
-export type RequestResult = 'ok' | 'invalid' | 'points' | 'combat' | 'level';
+export type RequestResult = 'ok' | 'invalid' | 'points' | 'combat' | 'level' | Exclude<ItemResult, 'ok'>;
 
 /** The player's progress as the host sees it (sent reliably to its owner). */
 export interface ProgressInfo {
@@ -49,6 +59,20 @@ const spentTalents = (u: Unit) => Object.values(u.talents).reduce((a, b) => a + 
 export function applyProgressRequest(world: World, u: Unit, req: ProgressRequest): RequestResult {
   if (u.kind !== 'player' || !u.classId) return 'invalid';
   switch (req.k) {
+    case 'equip':
+      return equipFromBag(world, u, req.index, req.place);
+    case 'unequip':
+      return unequip(world, u, req.place);
+    case 'use':
+      return usePotion(world, u, req.potion);
+    case 'buy':
+      return buy(world, u, req.id);
+    case 'sell':
+      return sell(world, u, req.index);
+    case 'repair':
+      return repairAll(world, u);
+    case 'merchant':
+      return setMerchant(world, u, req.open);
     case 'attr':
       if (!ATTR_KEYS.includes(req.attr)) return 'invalid';
       if (freeAttrPoints(u) <= 0) return 'points';
@@ -113,6 +137,30 @@ export function progressInfo(u: Unit): ProgressInfo {
     stats,
   };
 }
+
+/** The player's gold, bag and equipment as the host sees them (sent reliably to its owner). */
+export interface InventoryInfo {
+  gold: number;
+  inventory: (Item | null)[];
+  equipment: Equipment;
+  /** Remaining shared potion cooldown (ms). */
+  potionCdMs: number;
+  /** Merchant window open: its stock and the repair price. */
+  merchant: { stock: StockEntry[]; repairCost: number } | null;
+}
+
+export function inventoryInfo(world: World, u: Unit): InventoryInfo {
+  return {
+    gold: u.gold,
+    inventory: u.inventory.map((i) => (i ? structuredClone(i) : null)),
+    equipment: structuredClone(u.equipment),
+    potionCdMs: Math.max(0, u.potionCdUntil - world.now),
+    merchant: u.atMerchant ? { stock: merchantStock(u), repairCost: repairCost(u) } : null,
+  };
+}
+
+/** Gear look per visible slot (shared with everyone in the roster). */
+export const gearLooksOf = (u: Unit) => equipmentLooks(u.equipment);
 
 /** Development: set a level directly (xp reset), keeping choices that are still valid. */
 export function devSetLevel(world: World, u: Unit, level: number): void {

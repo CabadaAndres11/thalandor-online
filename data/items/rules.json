@@ -1,0 +1,9 @@
+{
+  "armorOrder": ["cloth", "leather", "mail", "plate"],
+  "classes": {
+    "warrior": { "armor": "plate", "weapon": ["sword", "axe", "mace"], "offhand": ["shield"] },
+    "cleric": { "armor": "cloth", "weapon": ["mace", "staff"], "offhand": ["shield", "orb"] },
+    "mage": { "armor": "cloth", "weapon": ["staff"], "offhand": ["orb"] },
+    "explorer": { "armor": "mail", "weapon": ["bow", "dagger"], "offhand": ["quiver"] }
+  }
+}

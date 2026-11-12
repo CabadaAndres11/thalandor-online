@@ -1,5 +1,5 @@
 import { defaultAppearance } from '../appearance/catalog';
-import { createCharacter, CURRENT_SCHEMA, emptyProgress, parseCharacter, validateName } from './character';
+import { createCharacter, CURRENT_SCHEMA, emptyBelongings, emptyProgress, parseCharacter, validateName } from './character';
 
 const app = defaultAppearance('mage');
 
@@ -25,10 +25,10 @@ describe('validateName', () => {
   });
 });
 
-test('createCharacter sets level 1, xp 0, null location, empty progress, schemaVersion 2', () => {
+test('createCharacter sets level 1, xp 0, null location, empty progress and belongings, schemaVersion 3', () => {
   const c = createCharacter({ name: 'Ana', classId: 'mage', appearance: app }, 1000, 'id-1');
   expect(c).toEqual({
-    schemaVersion: 2,
+    schemaVersion: 3,
     id: 'id-1',
     name: 'Ana',
     classId: 'mage',
@@ -36,11 +36,12 @@ test('createCharacter sets level 1, xp 0, null location, empty progress, schemaV
     level: 1,
     xp: 0,
     ...emptyProgress(),
+    ...emptyBelongings(),
     lastLocation: null,
     createdAt: 1000,
     updatedAt: 1000,
   });
-  expect(CURRENT_SCHEMA).toBe(2);
+  expect(CURRENT_SCHEMA).toBe(3);
 });
 
 describe('parseCharacter', () => {
@@ -68,13 +69,14 @@ describe('parseCharacter', () => {
   });
 
   test('rejects future schemaVersion', () => {
-    expect(parseCharacter({ ...valid, schemaVersion: 3 })).toEqual({ ok: false, error: 'import.future' });
+    expect(parseCharacter({ ...valid, schemaVersion: 4 })).toEqual({ ok: false, error: 'import.future' });
   });
 
   test('migrations run in order', () => {
     const migrations = {
       0: (c: Record<string, unknown>) => ({ ...c, schemaVersion: 1, xp: 0 }),
       1: (c: Record<string, unknown>) => ({ ...c, schemaVersion: 2 }),
+      2: (c: Record<string, unknown>) => ({ ...c, schemaVersion: 3 }),
     };
     const { xp: _xp, ...old } = valid;
     expect(parseCharacter({ ...old, schemaVersion: 0 }, migrations)).toEqual({ ok: true, character: valid });
@@ -84,6 +86,23 @@ describe('parseCharacter', () => {
     const { attributes: _a, talents: _t, specId: _s, hotbar: _h, ...v1 } = { ...valid, level: 7, xp: 321 };
     const r = parseCharacter({ ...v1, schemaVersion: 1 });
     expect(r).toEqual({ ok: true, character: { ...valid, level: 7, xp: 321 } });
+  });
+
+  test('migrates v2 to v3', () => {
+    const { gold: _g, inventory: _i, equipment: _e, ...v2 } = { ...valid, level: 9, xp: 77, talents: { might_1: 1 } };
+    expect(parseCharacter({ ...v2, schemaVersion: 2 })).toEqual({ ok: true, character: { ...valid, level: 9, xp: 77, talents: { might_1: 1 } } });
+  });
+
+  test('keeps valid belongings and drops forged items', () => {
+    const helm = { uid: 'h1', baseId: 'cloth_head_hood', level: 1, rarity: 'common', affixes: [], durability: 90 };
+    const inventory = [...valid.inventory];
+    inventory[2] = { uid: 'p1', potion: 'health', count: 3 } as never;
+    inventory[3] = { uid: 'bad', baseId: 'cloth_head_hood', level: 99, rarity: 'common', affixes: [], durability: 90 } as never;
+    const r = parseCharacter({ ...valid, gold: 40, inventory, equipment: { head: helm } });
+    expect(r.ok && r.character.gold).toBe(40);
+    expect(r.ok && r.character.equipment.head).toEqual(helm);
+    expect(r.ok && r.character.inventory[2]).toEqual({ uid: 'p1', potion: 'health', count: 3 });
+    expect(r.ok && r.character.inventory[3]).toBeNull();
   });
 
   test('keeps valid progress and sanitizes malformed parts', () => {

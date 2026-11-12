@@ -15,6 +15,8 @@ import { Overlay } from './ui/overlay';
 import { Screens } from './ui/screens';
 import { ProgressWindows } from './ui/progress-windows';
 import { PauseMenu } from './ui/pause-menu';
+import { equipmentPanel, ItemsUi } from './ui/items-ui';
+import { itemName } from './ui/item-logic';
 import { Hud } from './hud/hud';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
@@ -49,16 +51,18 @@ interface Current {
   character: Character;
   windows: ProgressWindows;
   pause: PauseMenu;
+  items: ItemsUi;
 }
 let current: Current | null = null;
 let pendingSave: Promise<void> = Promise.resolve();
 
 function backToMenu(error?: string): void {
   if (current) {
-    const { session, host, saver, windows, pause } = current;
+    const { session, host, saver, windows, pause, items } = current;
     current = null;
     windows.destroy();
     pause.destroy();
+    items.destroy();
     saver.stop();
     pendingSave = saver.saveNow();
     session.close();
@@ -87,14 +91,22 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
         specId: character.specId,
         hotbar: character.hotbar,
       },
+      belongings: { gold: character.gold, inventory: character.inventory, equipment: character.equipment },
     },
     map,
   });
   const saver = new AutoSaver({ store, character, mapId: MAP_ID, getLocation: () => session.selfLocation() });
+  const items = new ItemsUi(uiRoot, {
+    classId: character.classId,
+    level: () => session.progress?.level ?? character.level,
+    request: (req) => session.requestProgress(req),
+    isTyping: () => overlay.chatOpen || pause.open,
+  });
   const windows = new ProgressWindows(uiRoot, {
     classId: character.classId,
     request: (req) => session.requestProgress(req),
     isTyping: () => overlay.chatOpen || pause.open,
+    equipment: () => equipmentPanel(session.inventory, items, { level: session.progress?.level ?? 1, classId: character.classId }, (r) => session.requestProgress(r)),
   });
   let othersInGame = 0;
   const pause = new PauseMenu(uiRoot, {
@@ -103,10 +115,10 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
     onCharacter: () => windows.show('character'),
     onTalents: () => windows.show('talents'),
     onLeave: () => backToMenu(),
-    busy: () => overlay.chatOpen || windows.current !== null,
+    busy: () => overlay.chatOpen || windows.current !== null || items.inventoryOpen || items.merchantOpen,
   });
   session.on('roster', ({ players }) => (othersInGame = players.length - 1));
-  current = { session, host, saver, character, windows, pause };
+  current = { session, host, saver, character, windows, pause, items };
   saver.start();
   // Events from a session that is no longer current must never touch the UI or the active game.
   const live =
@@ -127,11 +139,24 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
       windows.update(p);
     }),
   );
+  session.on(
+    'inventory',
+    live(({ inv }) => {
+      void saver.saveInventory(inv);
+      items.update(inv);
+      windows.refresh();
+    }),
+  );
   session.on('progressRefused', live(({ reason }) => overlay.addChat(null, t(`refused.${reason}`))));
   session.on(
     'combat',
     live(({ list }) => {
-      for (const e of list) if (e.e === 'levelup') overlay.addChat(null, t('chat.levelup', { name: e.name, level: e.level }));
+      for (const e of list) {
+        if (e.e === 'levelup') overlay.addChat(null, t('chat.levelup', { name: e.name, level: e.level }));
+        else if (e.e === 'pickup' && e.gold) overlay.addChat(null, t('chat.pickupGold', { n: e.gold }));
+        else if (e.e === 'pickup' && e.item) overlay.addChat(null, t('chat.pickupItem', { name: itemName(e.item) }));
+        else if (e.e === 'bagFull') overlay.addChat(null, t('chat.bagFull'));
+      }
     }),
   );
   screens.hide();
@@ -152,6 +177,7 @@ function startGame(conn: Connection, character: Character, host: WorkerHostHandl
     self: { name: character.name, classId: character.classId, appearance: character.appearance },
     hud,
     isTyping: () => overlay.chatOpen || pause.open,
+    onMerchant: () => items.openMerchant(),
   });
 }
 
@@ -208,6 +234,10 @@ if (import.meta.env.DEV) {
     me: () => current?.session.meState ?? null,
     progress: () => current?.session.progress ?? null,
     window: () => current?.windows.current ?? null,
+    inventory: () => current?.session.inventory ?? null,
+    loot: () => (current ? [...current.session.loot.values()] : []),
+    merchant: () => current?.session.merchant ?? null,
+    selfGear: () => current?.session.selfGear ?? {},
     /** World -> page pixel coordinates (the canvas sits at the page origin). */
     toScreen: (x: number, y: number) => {
       const cam = (game.scene.getScene('game') as GameScene).cameras.main;
